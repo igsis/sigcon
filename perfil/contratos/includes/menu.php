@@ -4,11 +4,12 @@
     <section class="sidebar">
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
-            <li><a href="index.php"><i class="fa fa-home"></i><span>Home</span></a></li>
+            <li><a href="?secao=perfil"><i class="fa fa-home"></i><span>Home</span></a></li>
             <li class="header">MÓDULOS</li>
-            <li><a href="?perfil=administrativo/inicio"><i class="fa fa-circle-o text-red"></i> <span>Administrativo</span></a></li>            
-            <li><a href="?perfil=contratos/inicio"><i class="fa fa-circle-o text-aqua"></i> <span>Contratos</span></a></li>
-            <li><a href="?perfil=pesquisa/inicio"><i class="fa fa-circle-o text-yellow"></i> <span>Pesquisa</span></a></li>
+            <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Cadastrar</span></a></li> <!-- Pessoa Juridica fisica-->
+            <li><a href="?perfil=evento"><i class="fa fa-circle-o text-yellow"></i> <span>asdsad</span></a></li>
+            <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Pesquisas</span></a></li>
+            <li><a href="index.php"><i class="fa fa-circle-o text-aqua"></i> <span>Voltar</span></a></li>
             <li class="header">MAIS</li>
             <li><a href="?perfil=usuario/minha_conta"><i class="fa fa-user"></i><span>Minha Conta</span></a></li>
             <li><a href="../include/ajuda.php"><i class="fa fa-question "></i><span>Ajuda</span></a></li>

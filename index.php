@@ -25,7 +25,8 @@ if(isset($_POST['login']))
 				session_start();
 				$_SESSION['login'] = $user['usuario'];
 				$_SESSION['nome'] = $user['nome_completo'];
-				$_SESSION['idUser'] = $user['id'];
+                $_SESSION['idUser'] = $user['id'];
+                $_SESSION['nivelAcesso'] = $user['nivel_acesso_id'];
 				$log = "Fez login.";
 				//gravarLog($log);
 				header("Location: visual/index.php");
