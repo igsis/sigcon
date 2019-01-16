@@ -6,9 +6,24 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li><a href="?secao=perfil"><i class="fa fa-home"></i><span>Home</span></a></li>
             <li class="header">MÓDULOS</li>
-            <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Cadastrar</span></a></li> <!-- Pessoa Juridica fisica-->
-            <li><a href="?perfil=evento"><i class="fa fa-circle-o text-yellow"></i> <span>asdsad</span></a></li>
-            <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Pesquisas</span></a></li>
+            <li class="treeview">
+                <a href=""> <i class="fa fa-cogs"></i> <span>Cadastrar</span> <i class="fa fa-angle-left pull-right"></i> </a>
+                <ul class="treeview-menu">
+                    <li class="treeview">
+                        <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Pessoa Física</span></a></li>
+                    </li>
+                    <li class="treeview">
+                        <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Pessoa Jurídica</span></a></li>
+                    </li>
+                    <li class="treeview">
+                        <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Contratos</span></a></li>
+                    </li>
+                    <li class="treeview">
+                        <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Pagamento</span></a></li>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Pesquisar Contratos</span></a></li>
             <li><a href="index.php"><i class="fa fa-circle-o text-aqua"></i> <span>Voltar</span></a></li>
             <li class="header">MAIS</li>
             <li><a href="?perfil=usuario/minha_conta"><i class="fa fa-user"></i><span>Minha Conta</span></a></li>

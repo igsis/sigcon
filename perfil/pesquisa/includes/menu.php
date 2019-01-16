@@ -6,7 +6,7 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li><a href="?secao=perfil"><i class="fa fa-home"></i><span>Home</span></a></li>
             <li class="header">MÓDULOS</li>
-            <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Pesquisas</span></a></li>
+            <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Pesquisar Contratos</span></a></li>
             <li><a href="index.php"><i class="fa fa-circle-o text-aqua"></i> <span>Voltar</span></a></li>
             <li class="header">MAIS</li>
             <li><a href="?perfil=usuario/minha_conta"><i class="fa fa-user"></i><span>Minha Conta</span></a></li>
