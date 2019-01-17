@@ -264,14 +264,9 @@ $licitacao = recuperaDados('licitacoes', 'id', $idLicitacao);
     <!-- /.content -->
 </div>
 
-6025.2018/0009999-9
-
 <script>
 
     $('#num_processo').mask('0000.0000/0000000-0', {reverse: true});
-
-
-
 
 
 

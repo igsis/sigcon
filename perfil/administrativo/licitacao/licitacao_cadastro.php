@@ -159,13 +159,13 @@
         if(document.getElementById(id).disabled==false){document.getElementById(id).disabled=true}
     }
 
-    function habilitarRadio (valor) {
+   /* function habilitarRadio (valor) {
         if (valor == 2) {
             document.status.disabled = false;
         } else {
             document.status.disabled = true;
         }
-    }
+    }*/
 
 
 
