@@ -30,8 +30,6 @@ $con = bancoMysqli();
                $mensagem = mensagem("danger", "Erro ao gravar! Tente novamente.");
            }
 
-           echo $sql;
-
         }
 
         if (isset($_POST['edita'])) {
@@ -51,20 +49,7 @@ $con = bancoMysqli();
                 $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
             }
         }
-
-        echo $sql;
     }
-
-
-/*   if (isset($_POST['procurar'])) {
-
-        $un_nome = $_POST['un_nome'];
-
-        $sql = "SELECT * FROM unidades WHERE nome = '$un_nome'";
-        $query = mysqli_query($con, $sql);
-        $array = mysqli_fetch_array($query);
-        
-    }*/
 
     $unidade = recuperaDados("unidades", "id", $idUnidade);
 
