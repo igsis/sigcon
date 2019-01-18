@@ -46,10 +46,10 @@ if (isset($_POST['cadastra'])) {
                                      numero,
                                      complemento)
                               VALUES ('$cep',
+                                      '$logradouro',
                                       '$bairro',
                                       '$cidade',
                                       '$uf',
-                                      '$logradouro',
                                       '$numero',
                                       '$complemento')";
     mysqli_query($con, $sqlEndereco);
