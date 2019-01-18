@@ -19,7 +19,7 @@ include "../perfil/includes/menu.php";
                     <form method="POST" action="?perfil=contratos/pj_edita" role="form">
                         <div class="box-body">
                             <div class="row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-5">
                                     <label for="razao_social">Razão Social *</label>
                                     <input type="text" class="form-control" id="razao_social" name="razao_social" maxlength="170" required>
                                 </div>
@@ -27,7 +27,7 @@ include "../perfil/includes/menu.php";
                                     <label for="cnpj">CNPJ *</label>
                                     <input type="text" data-mask="00.000.000/0000-00" class="form-control" id="cnpj" name="cnpj" required>
                                 </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
                                     <input type="text" class="form-control" id="cep" name="cep" data-mask="00000-000" maxlength="100" required>
                                 </div>
@@ -37,34 +37,32 @@ include "../perfil/includes/menu.php";
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-5">
                                     <label for="logradouro">Rua</label>
                                     <input type="text" class="form-control" id="rua" name="logradouro" maxlength="200" readonly>
                                 </div>
-
                                 <div class="form-group col-md-3">
                                     <label for="bairro">Bairro</label>
                                     <input type="text" class="form-control" id="bairro" name="bairro" readonly>
                                 </div>
-
-                                <div class="form-group col-md-1">
+                                <div class="form-group col-md-2">
                                     <label for="uf">Estado</label>
-                                    <input type="text" class="form-control" id="uf" name="uf" readonly>
+                                    <input type="text" class="form-control" id="estado" name="uf" readonly>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cidade">Cidade</label>
                                     <input type="text" class="form-control" id="cidade" name="cidade" readonly>
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <label for="complemento">Complemento *</label>
-                                    <input type="text" class="form-control" id="complemento" name="complemento" maxlength="25">
-                                </div>
                             </div>
 
                             <div class="row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-5">
                                     <label for="email">E-mail * </label>
                                     <input type="email" class="form-control" id="email" name="email" maxlength="60" required>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="complemento">Complemento</label>
+                                    <input type="text" class="form-control" id="complemento" name="complemento" maxlength="25">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="celular">Celular * </label>
@@ -74,14 +72,15 @@ include "../perfil/includes/menu.php";
                                     <label for="telefone">Telefone fixo * </label>
                                     <input type="text" data-mask="(00) 0000-0000" class="form-control" id="telefone" name="telefone" required>
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label for="recado">Recado (opcional) </label>
-                                    <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="recado" required>
-                                </div>
+
                             </div>
                             <div class="row">
+                                <div class="form-group col-md-2">
+                                    <label for="recado">Recado (opcional) </label>
+                                    <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="recado">
+                                </div>
                                 <div class="form-group col-md-4">
-                                    <label for="contato">Contato na empresa: </label>
+                                    <label for="contato">Contato na empresa *</label>
                                     <input type="text" class="form-control" id="contato" name="contato" maxlength="150" required>
                                 </div>
                             </div>

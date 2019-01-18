@@ -1,14 +1,17 @@
 <?php
 include "../perfil/includes/menu.php";
 
+$con = bancoMysqli();
+
 
 if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
+    $idPessoaJuridica = $_POST['idPessoaJuridica'] ?? NULL;
     $razao_social = addslashes($_POST['razao_social']);
     $cnpj = $_POST['cnpj'];
     $email = $_POST['email'];
     $telefone = $_POST['telefone'];
     $celular = $_POST['celular'];
-    $recado = $_POST['recado'];
+    $outro = $_POST['recado'];
     $contato = $_POST['contato'];
     $cep = $_POST['cep'];
     $logradouro = $_POST['logradouro'];
@@ -21,51 +24,51 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 }
 
 if (isset($_POST['cadastra'])) {
-    $ultima_atualizacao = date('Y-m-d H:i:s');
-    $sql = "INSERT INTO pessoa_juridicas 
+    $sql = "INSERT INTO pessoas_juridicas 
                                 (razao_social,
-                                 cnpj, 
-                                 ccm,
+                                 CNPJ,
                                  email,
-                                 ultima_atualizacao) 
+                                 contato,
+                                 publicado) 
                           VALUES ('$razao_social',
                                   '$cnpj',
-                                  '$ccm',
                                   '$email',
-                                  '$ultima_atualizacao')";
+                                  '$contato',
+                                  '1')";
 
     if (mysqli_query($con, $sql)) {
-        $idPessoaJuridica = recuperaUltimo('pessoa_juridicas');
-        $_SESSION['idPessoaJuridica'] = $idPessoaJuridica;
-        $_SESSION['idPj_pedido']  = $idPessoaJuridica;
-
+        $idPessoaJuridica = recuperaUltimo('pessoas_juridicas');
 
         // cadastrar o telefone de pj
         $sqlTelefone = "INSERT INTO pj_telefones
                                                 (pessoa_juridica_id,
-                                                 telefone) 
+                                                 telefone,
+                                                 celular,
+                                                 outro) 
                                           VALUES ('$idPessoaJuridica',
-                                                  '$telefone')";
+                                                  '$telefone',
+                                                  '$celular', 
+                                                  '$outro')";
         mysqli_query($con, $sqlTelefone);
 
         // cadastrar endereco de pj
         $sqlEndereco = "INSERT INTO pj_enderecos
                                                 (pessoa_juridica_id,
+                                                 cep,
                                                  logradouro,
-                                                 numero,
-                                                 complemento,
                                                  bairro,
                                                  cidade,
-                                                 uf,
-                                                 cep)
+                                                 estado,
+                                                 numero,
+                                                 complemento)
                                           VALUES ('$idPessoaJuridica',
-                                                  '$logradouro',
-                                                  '$numero',
-                                                  '$complemento',
+                                                  '$cep',
                                                   '$bairro',
                                                   '$cidade',
                                                   '$uf',
-                                                  '$cep')";
+                                                  '$logradouro',
+                                                  '$numero',
+                                                  '$complemento')";
 
         mysqli_query($con, $sqlEndereco);
 
@@ -78,24 +81,23 @@ if (isset($_POST['cadastra'])) {
 }
 
 if (isset($_POST['edita'])) {
-    $ultima_atualizacao = date('Y-m-d H:i:s');
-    $idPessoaJuridica = $_POST['idPessoaJuridica'];
-    $sql = "UPDATE pessoa_juridicas SET
-                              razao_social = '$razao_social',
-                              cnpj = '$cnpj', 
-                              ccm = '$ccm',
-                              email = '$email',
-                              ultima_atualizacao = '$ultima_atualizacao'
-                              WHERE id = '$idPessoaJuridica'";
+    $sql = "UPDATE pessoas_juridicas SET
+                              razao_social = '$razao_social', 
+                                 CNPJ = '$cnpj',
+                                 email = '$email',
+                                 contato = '$contato',                                  
+                          WHERE id = '$idPessoaJuridica'";
 
     $sqlTelefone = "UPDATE pj_telefones SET
                                           telefone = '$telefone'
+                                          celular = '$celular';
+                                          outro = '$outro'
                                           WHERE pessoa_juridica_id = '$idPessoaJuridica'";
 
     $sqlEndereco = "UPDATE pj_enderecos SET
                                           cep = '$cep',
                                           logradouro = '$logradouro',
-                                          uf = '$uf',
+                                          estado= '$uf',
                                           cidade = '$cidade',
                                           bairro = '$bairro',
                                           numero = '$numero',
@@ -111,6 +113,11 @@ if (isset($_POST['edita'])) {
     }
 }
 
+
+$pessoa_juridica = recuperaDados("pessoas_juridicas", "id", $idPessoaJuridica);
+$pj_telefone = recuperaDados("pj_telefones", "pessoa_juridica_id", $idPessoaJuridica);
+$pj_endereco = recuperaDados("pj_enderecos", "pessoa_juridica_id", $idPessoaJuridica);
+
 ?>
 <script language="JavaScript" >
     $("#cep").mask('00000-000', {reverse: true});
@@ -118,12 +125,12 @@ if (isset($_POST['edita'])) {
 
 <div class="content-wrapper">
     <section class="content">
-        <h2 class="page-header">Cadastro Pessoa Jurídica</h2>
+        <h2 class="page-header">Edição de Pessoa Jurídica</h2>
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Informações Pessoa Jurídica</h3>
+                        <h3 class="box-title">Razão Social: <?= $pessoa_juridica['razao_social'] ?></h3>
                     </div>
 
                     <form method="POST" action="?perfil=contratos/pj_edita" role="form">
@@ -131,72 +138,73 @@ if (isset($_POST['edita'])) {
                             <div class="row">
                                 <div class="form-group col-md-5">
                                     <label for="razao_social">Razão Social *</label>
-                                    <input type="text" class="form-control" id="razao_social" name="razao_social" maxlength="170" required>
+                                    <input type="text" class="form-control" id="razao_social" name="razao_social" maxlength="170" value="<?= $pessoa_juridica['razao_social'] ?>">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="cnpj">CNPJ *</label>
-                                    <input type="text" data-mask="00.000.000/0000-00" class="form-control" id="cnpj" name="cnpj" required>
+                                    <input type="text" data-mask="00.000.000/0000-00" class="form-control" id="cnpj" name="cnpj" value="<?= $pessoa_juridica['CNPJ'] ?>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
-                                    <input type="text" class="form-control" id="cep" name="cep" data-mask="00000-000" maxlength="100" required>
+                                    <input type="text" class="form-control" id="cep" name="cep" data-mask="00000-000" maxlength="100" value="<?= $pj_endereco['cep'] ?>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="numero">Número *</label>
-                                    <input type="number" class="form-control" id="numero" name="numero" required>
+                                    <input type="number" class="form-control" id="numero" name="numero" value="<?= $pj_endereco['numero'] ?>">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-5">
                                     <label for="logradouro">Rua</label>
-                                    <input type="text" class="form-control" id="rua" name="logradouro" maxlength="200" readonly>
+                                    <input type="text" class="form-control" id="rua" name="logradouro" maxlength="200" readonly value="<?= $pj_endereco['logradouro'] ?>">
                                 </div>
 
                                 <div class="form-group col-md-3">
                                     <label for="bairro">Bairro</label>
-                                    <input type="text" class="form-control" id="bairro" name="bairro" readonly>
+                                    <input type="text" class="form-control" id="bairro" name="bairro" readonly value="<?= $pj_endereco['bairro'] ?>">
                                 </div>
 
                                 <div class="form-group col-md-2">
                                     <label for="uf">Estado</label>
-                                    <input type="text" class="form-control" id="estado" name="uf" readonly>
+                                    <input type="text" class="form-control" id="estado" name="uf" readonly value="<?= $pj_endereco['estado'] ?>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cidade">Cidade</label>
-                                    <input type="text" class="form-control" id="cidade" name="cidade" readonly>
+                                    <input type="text" class="form-control" id="cidade" name="cidade" readonly value="<?= $pj_endereco['cidade'] ?>">
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="form-group col-md-5">
                                     <label for="email">E-mail * </label>
-                                    <input type="email" class="form-control" id="email" name="email" maxlength="60" required>
+                                    <input type="email" class="form-control" id="email" name="email" maxlength="60" value="<?= $pessoa_juridica['email'] ?>">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="complemento">Complemento *</label>
-                                    <input type="text" class="form-control" id="complemento" name="complemento" maxlength="25">
+                                    <input type="text" class="form-control" id="complemento" name="complemento" maxlength="25" value="<?= $pj_endereco['complemento'] ?>">
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label for="telefone">Celular * </label>
-                                    <input type="text" data-mask="(00) 0.0000-0000" class="form-control" id="telefone" name="telefone" required>
+                                    <label for="celular">Celular * </label>
+                                    <input type="text" data-mask="(00) 0.0000-0000" class="form-control" id="celular" name="celular" value="<?= $pj_telefone['celular'] ?>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="telefone">Telefone fixo * </label>
-                                    <input type="text" data-mask="(00) 0000-0000" class="form-control" id="telefone" name="telefone" required>
+                                    <input type="text" data-mask="(00) 0000-0000" class="form-control" id="telefone" name="telefone" value="<?= $pj_telefone['telefone'] ?>">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-2">
-                                    <label for="telefone">Recado (opcional) </label>
-                                    <input type="text" data-mask="(00) 0000-00000" class="form-control" id="telefone" name="telefone" required>
+                                    <label for="recado">Recado (opcional) </label>
+                                    <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="recado" value="<?= $pj_telefone['outro'] ?>">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="contato">Contato na empresa: </label>
-                                    <input type="text" class="form-control" id="contato" name="contato" maxlength="150" required>
+                                    <input type="text" class="form-control" id="contato" name="contato" maxlength="150" value="<?= $pessoa_juridica['contato'] ?>">
                                 </div>
                             </div>
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-default">Cancelar</button>
+                                <input type="hidden" name="idPessoaJuridica" value="<?= $idPessoaJuridica ?>">
                                 <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary pull-right"> Cadastrar </button>
                             </div>
                     </form>
