@@ -22,25 +22,25 @@ include "../perfil/includes/menu.php";
                     <form method="POST" action="?perfil=administrativo/usuario/usuario_edita" role="form">
                         <div class="box-body">
                             <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label for="nome">Nome *</label>
-                                    <input type="text" id="nome" name="nome" class="form-control" maxlength="20" placeholder="Nome completo" required>
+                                <div class="form-group col-md-6">
+                                    <label for="nome">Nome Completo *</label>
+                                    <input type="text" id="nome" name="nome" class="form-control" maxlength="20" required>
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label for="rg_usuario">RG *</label>
                                     <input data-mask="00.000.000-00" type="text" id="rg_usuario" name="rg_usuario" class="form-control" maxlength="100" required>
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label for="tel_usuario">Telefone *</label>
                                     <input data-mask="(00) 0000-0000" type="text" id="tel_usuario" name="tel_usuario" class="form-control" maxlength="100" required>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-4">
                                     <label for="email">E-mail *</label>
                                     <input type="text" id="email" name="email" class="form-control" maxlength="100" required>
                                 </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-offset-2 col-md-3">
                                     <label for="nivel_acesso">Nível de acesso </label> <br>
                                     <select class="form-control" id="nivel_acesso" name="nivel_acesso">
                                         <option value="">Selecione...</option>
