@@ -20,8 +20,8 @@ include "../perfil/includes/menu.php";
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-4">
-                                    <label for="pf_nome">Nome Completo *</label>
-                                    <input type="text" class="form-control" id="pf_nome" name="pf_nome" maxlength="170" required>
+                                    <label for="nome_pf">Nome Completo *</label>
+                                    <input type="text" class="form-control" id="nome_pf" name="nome_pf" maxlength="170" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cpf">CPF *</label>
