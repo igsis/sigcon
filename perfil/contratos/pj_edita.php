@@ -24,53 +24,58 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 }
 
 if (isset($_POST['cadastra'])) {
+
+    // cadastrar o telefone de pj
+    $sqlTelefone = "INSERT INTO telefones
+                                    (telefone,
+                                     celular,
+                                     outro) 
+                              VALUES ('$telefone',
+                                      '$celular', 
+                                      '$outro')";
+    mysqli_query($con, $sqlTelefone);
+
+
+    // cadastrar endereco de pj
+    $sqlEndereco = "INSERT INTO enderecos
+                                    (cep,
+                                     logradouro,
+                                     bairro,
+                                     cidade,
+                                     estado,
+                                     numero,
+                                     complemento)
+                              VALUES ('$cep',
+                                      '$bairro',
+                                      '$cidade',
+                                      '$uf',
+                                      '$logradouro',
+                                      '$numero',
+                                      '$complemento')";
+    mysqli_query($con, $sqlEndereco);
+
+    $telefone_id = recuperaUltimo('telefones');
+    $endereco_id = recuperaUltimo('enderecos');
+
+
     $sql = "INSERT INTO pessoas_juridicas 
                                 (razao_social,
                                  CNPJ,
                                  email,
                                  contato,
+                                 endereco_id,
+                                 telefone_id,
                                  publicado) 
                           VALUES ('$razao_social',
                                   '$cnpj',
                                   '$email',
                                   '$contato',
+                                  '$endereco_id',
+                                  '$telefone_id',
                                   '1')";
 
     if (mysqli_query($con, $sql)) {
         $idPessoaJuridica = recuperaUltimo('pessoas_juridicas');
-
-        // cadastrar o telefone de pj
-        $sqlTelefone = "INSERT INTO pj_telefones
-                                                (pessoa_juridica_id,
-                                                 telefone,
-                                                 celular,
-                                                 outro) 
-                                          VALUES ('$idPessoaJuridica',
-                                                  '$telefone',
-                                                  '$celular', 
-                                                  '$outro')";
-        mysqli_query($con, $sqlTelefone);
-
-        // cadastrar endereco de pj
-        $sqlEndereco = "INSERT INTO pj_enderecos
-                                                (pessoa_juridica_id,
-                                                 cep,
-                                                 logradouro,
-                                                 bairro,
-                                                 cidade,
-                                                 estado,
-                                                 numero,
-                                                 complemento)
-                                          VALUES ('$idPessoaJuridica',
-                                                  '$cep',
-                                                  '$bairro',
-                                                  '$cidade',
-                                                  '$uf',
-                                                  '$logradouro',
-                                                  '$numero',
-                                                  '$complemento')";
-
-        mysqli_query($con, $sqlEndereco);
 
         $mensagem = mensagem("success", "Cadastrado com sucesso!");
         //gravarLog($sql);
@@ -88,21 +93,25 @@ if (isset($_POST['edita'])) {
                                  contato = '$contato',                                  
                           WHERE id = '$idPessoaJuridica'";
 
-    $sqlTelefone = "UPDATE pj_telefones SET
-                                          telefone = '$telefone'
-                                          celular = '$celular';
-                                          outro = '$outro'
-                                          WHERE pessoa_juridica_id = '$idPessoaJuridica'";
+    $pj = recuperaDados('pessoas_juridicas', 'id', $idPessoaJuridica);
+    $telefone_id = $pj['telefone_id'];
+    $endereco_id = $pj['endereco_id'];
 
-    $sqlEndereco = "UPDATE pj_enderecos SET
-                                          cep = '$cep',
-                                          logradouro = '$logradouro',
-                                          estado= '$uf',
-                                          cidade = '$cidade',
-                                          bairro = '$bairro',
-                                          numero = '$numero',
-                                          complemento = '$complemento'
-                                          WHERE pessoa_juridica_id = '$idPessoaJuridica'";
+    $sqlTelefone = "UPDATE telefones SET
+                                  telefone = '$telefone'
+                                  celular = '$celular';
+                                  outro = '$outro'
+                                  WHERE id = '$telefone_id'";
+
+    $sqlEndereco = "UPDATE enderecos SET
+                                  cep = '$cep',
+                                  logradouro = '$logradouro',
+                                  estado= '$uf',
+                                  cidade = '$cidade',
+                                  bairro = '$bairro',
+                                  numero = '$numero',
+                                  complemento = '$complemento'
+                                  WHERE id = '$endereco_id'";
 
     If (mysqli_query($con, $sql) && mysqli_query($con, $sqlTelefone) && mysqli_query($con, $sqlEndereco)) {
         $mensagem = mensagem("success", "Atualizado com sucesso!");
@@ -115,8 +124,8 @@ if (isset($_POST['edita'])) {
 
 
 $pessoa_juridica = recuperaDados("pessoas_juridicas", "id", $idPessoaJuridica);
-$pj_telefone = recuperaDados("pj_telefones", "pessoa_juridica_id", $idPessoaJuridica);
-$pj_endereco = recuperaDados("pj_enderecos", "pessoa_juridica_id", $idPessoaJuridica);
+$pj_telefone = recuperaDados("telefones", "id", $telefone_id);
+$pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
 
 ?>
 <script language="JavaScript" >
@@ -180,7 +189,7 @@ $pj_endereco = recuperaDados("pj_enderecos", "pessoa_juridica_id", $idPessoaJuri
                                     <input type="email" class="form-control" id="email" name="email" maxlength="60" value="<?= $pessoa_juridica['email'] ?>">
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="complemento">Complemento *</label>
+                                    <label for="complemento">Complemento </label>
                                     <input type="text" class="form-control" id="complemento" name="complemento" maxlength="25" value="<?= $pj_endereco['complemento'] ?>">
                                 </div>
                                 <div class="form-group col-md-2">
@@ -205,7 +214,7 @@ $pj_endereco = recuperaDados("pj_enderecos", "pessoa_juridica_id", $idPessoaJuri
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-default">Cancelar</button>
                                 <input type="hidden" name="idPessoaJuridica" value="<?= $idPessoaJuridica ?>">
-                                <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary pull-right"> Cadastrar </button>
+                                <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary pull-right"> Salvar </button>
                             </div>
                     </form>
                 </div>
