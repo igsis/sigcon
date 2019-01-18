@@ -1,6 +1,5 @@
 <?php
     include "../perfil/includes/menu.php";
-    include "../include/script.php"
 
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -157,6 +156,10 @@
 
     function desabilitarCampo(id){
         if(document.getElementById(id).disabled==false){document.getElementById(id).disabled=true}
+    }
+
+    window.load function {
+
     }
 
    /* function habilitarRadio (valor) {
