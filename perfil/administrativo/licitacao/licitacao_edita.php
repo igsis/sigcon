@@ -106,10 +106,6 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     }
 }
 
-/*if (isset($_POST['cadastra'])) {
-    $idLicitacao = recuperaUltimo('licitacoes');
-}*/
-
 $licitacao = recuperaDados('licitacoes', 'id', $idLicitacao);
 
 

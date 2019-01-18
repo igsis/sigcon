@@ -16,7 +16,7 @@
                         <li class=""><a href="?perfil=administrativo/unidades/unidade_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Unidades</span></a></li>
                     </li>
                     <li class="treeview">
-                        <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Equipamentos</span></a></li>
+                        <li class=""><a href="?perfil=administrativo/equipamentos/equipamento_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Equipamentos</span></a></li>
                     </li>
                     <li class="treeview">
                         <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Usuários</span></a></li>

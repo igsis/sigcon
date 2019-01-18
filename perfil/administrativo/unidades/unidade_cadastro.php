@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-md-12">
                 <!-- general form elements -->
-                <div class="box box-info">
+                <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">Unidades</h3>
                     </div>
@@ -41,42 +41,9 @@
                         <!-- /.box-body -->
 
                         <div class="box-footer">
-                            <button type="submit" name="cadastra" class="btn btn-info pull-right">Cadastrar</button>
+                            <button type="submit" name="cadastra" class="btn btn-primary pull-right">Cadastrar</button>
                         </div>
                     </form>
-                    <hr/>
-
-                    <div class="box">
-                        <div class="box-header with-border text-center">
-                            <h3 class="box-title text-bold">Editar unidades existentes</h3>
-                        </div>
-                        <form  method="POST" action="?perfil=administrativo/unidades/unidade_edita" role="form">
-                            <div class="row">
-                                <div class="form-group col-md-12 text-center">
-                                    <label for="procurar">Buscar por nome</label>
-                                </div>
-                                <div class="form-group col-md-offset-3 col-md-6 text-center">
-                                    <input type="text" id="un_nome" name="un_nome" class="form-control" width="100px" required>
-                                </div>
-                                <div class="form-group col-md-offset-3 col-md-6 text-center">
-                                    <input type="submit" id="procurar" name="procurar" class="btn btn-info btn-primary" value="Procurar" href="?perfil=administrativo/unidades/unidade_edita">
-                                </div>
-                            </div>
-                            <hr/>
-                            <div class="row">
-                                <div class="form-group col-md-12 text-center">
-                                    <label for="listar_todas">Listar todas as unidades cadastradas</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-4  col-md-offset-4 text-center">
-                                    <input type="submit" id="listar_todas" name="listar_todas" class="btn btn-info  btn-primary " value="Listar" href="?perfil=administrativo/unidades/unidade_edita">
-                                </div>
-                            </div>
-                        </form>
-
-
-                    </div>
                 </div>
                 <!-- /.box -->
             </div>
