@@ -64,16 +64,12 @@ include "../perfil/includes/menu.php";
                                     <input type="email" class="form-control" id="email" name="email" maxlength="60" required>
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label for="celular">Celular * </label>
-                                    <input type="text" data-mask="(00) 0.0000-0000" class="form-control" id="celular" name="celular" required>
+                                    <label for="telefone">Telefone # * </label>
+                                    <input type="text" data-mask="(00) 00000-0000" class="form-control" id="telefone" name="telefone[]" required>
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <label for="telefone">Telefone fixo * </label>
-                                    <input type="text" data-mask="(00) 0000-0000" class="form-control" id="telefone" name="telefone" required>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="recado">Recado (opcional) </label>
-                                    <input type="text" class="form-control" id="recado" name="recado">
+                                <div class="form-group col-md-1">
+                                    <label for="">&emsp;</label>
+                                    <a class="btn btn-info btn-block" href="#void" id="addInput"><strong>&plus;</strong></a>
                                 </div>
                             </div>
                             <div class="box-footer">
@@ -86,3 +82,19 @@ include "../perfil/includes/menu.php";
         </div>
     </section>
 </div>
+
+<script type="text/javascript" >
+    $('#addInput').on('click', function(e) {
+        let i = $('#telefone').length;
+        $('#telefone').first().clone().find("input").attr('name', function(idx, attrVal) {
+            return attrVal.replace('[0]','')+'['+i+']';
+        }).removeAttr('checked').end().find("input[type=text]").val('').end().insertBefore('.botoes');
+    });
+
+    $('#remInput').on('click', function(e) {
+        let i = $('#telefone').length;
+        if (i > 1){
+            $('#telefone').last().remove();
+        }
+    });
+</script>

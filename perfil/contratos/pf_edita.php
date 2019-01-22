@@ -22,63 +22,77 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
 }
 
-if (isset($_POST['cadastra'])) {
+if (isset($_POST['cadastra']))
+{
+    $sqlConsultaCPF = "SELECT `cpf` FROM `pessoas_fisicas` WHERE `cpf` = '$cpf'";
+    if ($con->query($sqlConsultaCPF)->num_rows > 0)
+    {
+        $mensagem = mensagem("danger", "Erro ao gravar! CPF já cadastrado.");
+    }
+    else
+    {
+        // cadastrar endereco de pf
+        $sqlEndereco = "INSERT INTO enderecos
+                                        (cep,
+                                         logradouro,
+                                         bairro,
+                                         cidade,
+                                         estado,
+                                         numero,
+                                         complemento)
+                                  VALUES ('$cep',
+                                          '$logradouro',
+                                          '$bairro',
+                                          '$cidade',
+                                          '$uf',                                      
+                                          '$numero',
+                                          '$complemento')";
+        if ($con->query($sqlEndereco))
+        {
+            gravarLog($sqlEndereco);
+            $endereco_id = $con->insert_id;
 
-    // cadastrar o telefone de pj
-    $sqlTelefone = "INSERT INTO telefones
-                                    (telefone,
-                                     celular,
-                                     outro) 
-                              VALUES ('$telefone',
-                                      '$celular', 
-                                      '$outro')";
-    mysqli_query($con, $sqlTelefone);
+            $sql = "INSERT INTO pessoas_fisicas 
+                                    (nome,
+                                     cpf,
+                                     email,
+                                     endereco_id,
+                                     publicado) 
+                              VALUES ('$nome_pf',
+                                      '$cpf',
+                                      '$email',
+                                      '$endereco_id',
+                                      '1')";
+            if ($con->query($sql))
+            {
+                $idPessoaFisica = $con->insert_id;
+                gravarLog($sql);
 
-
-    // cadastrar endereco de pj
-    $sqlEndereco = "INSERT INTO enderecos
-                                    (cep,
-                                     logradouro,
-                                     bairro,
-                                     cidade,
-                                     estado,
-                                     numero,
-                                     complemento)
-                              VALUES ('$cep',
-                                      '$logradouro',
-                                      '$bairro',
-                                      '$cidade',
-                                      '$uf',                                      
-                                      '$numero',
-                                      '$complemento')";
-    mysqli_query($con, $sqlEndereco);
-
-    $telefone_id = recuperaUltimo('telefones');
-    $endereco_id = recuperaUltimo('enderecos');
-
-
-    $sql = "INSERT INTO pessoas_fisicas 
-                                (nome,
-                                 cpf,
-                                 email,
-                                 endereco_id,
-                                 telefone_id,
-                                 publicado) 
-                          VALUES ('$nome_pf',
-                                  '$cpf',
-                                  '$email',
-                                  '$endereco_id',
-                                  '$telefone_id',
-                                  '1')";
-
-    if (mysqli_query($con, $sql)) {
-        $idPessoaFisica = recuperaUltimo('pessoas_fisicas');
-
-        $mensagem = mensagem("success", "Cadastrado com sucesso!");
-        //gravarLog($sql);
-    } else {
-        $mensagem = mensagem("danger", "Erro ao gravar! Tente novamente.");
-        //gravarLog($sql);
+                $sqlTelefone = "INSERT INTO pf_telefones
+                                        (pessoa_fisica_id,
+                                         telefone) 
+                                  VALUES ('$idPessoaFisica', 
+                                          '$telefone')";
+                if ($con->query($sqlTelefone))
+                {
+                    gravarLog($sqlTelefone);
+                    $telefone_id = $con->insert_id;
+                    $mensagem = mensagem("success", "Cadastrado com sucesso!");
+                }
+                else
+                {
+                    $mensagem = mensagem("danger", "Erro ao gravar! Tente novamente.");
+                }
+            }
+            else
+            {
+                $mensagem = mensagem("danger", "Erro ao gravar! Tente novamente.");
+            }
+        }
+        else
+        {
+            $mensagem = mensagem("danger", "Erro ao gravar! Tente novamente.");
+        }
     }
 }
 
@@ -129,7 +143,7 @@ if (isset($_POST['edita'])) {
 
 
 $pessoa_fisica = recuperaDados("pessoas_fisicas", "id", $idPessoaFisica);
-$pf_telefone = recuperaDados("telefones", "id", $telefone_id);
+$pf_telefone = recuperaDados("pf_telefones", "id", $telefone_id);
 $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
 
 ?>
@@ -204,7 +218,7 @@ $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                     <input type="text" data-mask="(00) 0000-0000" class="form-control" id="telefone" name="telefone" value=" <?= $pf_telefone['telefone']; ?>">
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <labNúmero el for="recado">Recado (opcional) </label>
+                                    <label el for="recado">Recado (opcional) </label>
                                     <input type="text" class="form-control" id="recado" name="recado" value=" <?= $pf_telefone['outro']; ?>">
                                 </div>
                             </div>
