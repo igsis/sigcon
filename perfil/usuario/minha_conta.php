@@ -7,6 +7,8 @@ $usuario = recuperaDados('usuarios', 'id', $idUser);
 if (isset($_POST['atualizar'])) {
     $nome_completo = $_POST['nome_completo'];
     $email = $_POST['email'];
+    $fraseSecreta = $_POST['fraseSeguranca'];
+    $respostaSecreta = $_POST['respostaSecreta'];
     $telefone = $_POST['telefone'];
     $senha = $_POST['senhaAtual'];
     $novaSenha = $_POST['novaSenha'] ?? NULL;
@@ -21,13 +23,17 @@ if (isset($_POST['atualizar'])) {
 
             $sql = "UPDATE usuarios SET
                               nome_completo = '$nome_completo', 
+                              frase_seguranca_id = '$fraseSecreta',
+                              resposta_frase_seguranca = '$respostaSecreta',
                               senha = '$novaSenha',
                               email = '$email',
                               telefone = '$telefone'
                               WHERE id = '$idUser'";
         } else {
             $sql = "UPDATE usuarios SET
-                              nome_completo = '$nome_completo', 
+                              nome_completo = '$nome_completo',
+                              frase_seguranca_id = '$fraseSecreta',
+                              resposta_frase_seguranca = '$respostaSecreta', 
                               email = '$email',
                               telefone = '$telefone'
                               WHERE id = '$idUser'";
@@ -84,8 +90,24 @@ $usuario = recuperaDados('usuarios', 'id', $idUser);
 
                                 <div class="form-group col-md-2">
                                     <label for="telefone">Telefone: </label>
-                                    <input type="text" class="form-control" id="telefone" name="telefone"
+                                    <input data-mask="(00) 00000-0000" type="text" class="form-control" id="telefone" name="telefone"
                                            value="<?= $usuario['telefone'] ?>">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="fraseSegurancao">Frase Secreta: </label>
+                                    <select class="form-control" name="fraseSeguranca" id="fraseSeguranca">
+                                        <?php
+                                            geraOpcao('frase_seguranca', $usuario['frase_seguranca_id']);
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <labe for="respostaSecreta">Resposta: </labe>
+                                    <input class="form-control" type="text" id="respostaSecreta" name="respostaSecreta" value="<?= $usuario['resposta_frase_seguranca'] ?>">
                                 </div>
                             </div>
 
