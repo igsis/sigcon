@@ -32,7 +32,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                       '$logradouro',
                                       '$bairro',
                                       '$cidade',
-                                      '$uf',                                      
+                                      '$uf',
                                       '$numero',
                                       '$complemento')";
 
@@ -40,12 +40,12 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
             $endereco_id = recuperaUltimo("enderecos");
 
-            $sql = "INSERT INTO pessoas_fisicas 
+            $sql = "INSERT INTO pessoas_fisicas
                                 (nome,
                                  cpf,
                                  email,
                                  endereco_id,
-                                 publicado) 
+                                 publicado)
                           VALUES ('$nome_pf',
                                   '$cpf',
                                   '$email',
@@ -61,7 +61,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                         // cadastrar o telefone de pf
                         $sqlTelefone = "INSERT INTO pf_telefones
                                       (pessoa_fisica_id,
-                                       telefone) 
+                                       telefone)
                               VALUES  ('$idPessoaFisica',
                                        '$telefone')";
 
@@ -97,7 +97,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
             foreach ($telefones as $idTelefone => $telefone) {
                 // cadastrar o telefone de pf
                 $sqlTelefone = "UPDATE  pf_telefones SET
-                                          telefone = '$telefone' 
+                                          telefone = '$telefone'
                                   WHERE id = '$idTelefone'";
 
                 mysqli_query($con, $sqlTelefone);

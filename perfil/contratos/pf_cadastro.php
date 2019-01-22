@@ -86,3 +86,19 @@ include "../perfil/includes/menu.php";
         </div>
     </section>
 </div>
+
+<script type="text/javascript" >
+    $('#addInput').on('click', function(e) {
+        let i = $('#telefone').length;
+        $('#telefone').first().clone().find("input").attr('name', function(idx, attrVal) {
+            return attrVal.replace('[0]','')+'['+i+']';
+        }).removeAttr('checked').end().find("input[type=text]").val('').end().insertBefore('.botoes');
+    });
+
+    $('#remInput').on('click', function(e) {
+        let i = $('#telefone').length;
+        if (i > 1){
+            $('#telefone').last().remove();
+        }
+    });
+</script>
