@@ -83,23 +83,28 @@ if (isset($_POST['cadastra'])) {
 }
 
 if (isset($_POST['edita'])) {
+    
     $sql = "UPDATE pessoas_fisicas SET
                               nome = '$nome_pf',
                                  cpf = '$cpf',
                                  email = '$email',
                           WHERE id = '$idPessoaFisica'";
 
-    $pf = recuperaDados('pessoas_fisicas', 'id', $idPessoaFisica);
-    $telefone_id = $pf['telefone_id'];
-    $endereco_id = $pf['endereco_id'];
+    if (mysqli_query($con, $sql)) {
 
-    $sqlTelefone = "UPDATE telefones SET
+        $pf = recuperaDados('pessoas_fisicas', 'id', $idPessoaFisica);
+        $telefone_id = $pf['telefone_id'];
+        $endereco_id = $pf['endereco_id'];
+
+        $sqlTelefone = "UPDATE telefones SET
                                   telefone = '$telefone'
                                   celular = '$celular',
                                   outro = '$outro'
                                   WHERE id = '$telefone_id'";
 
-    $sqlEndereco = "UPDATE enderecos SET
+        if (mysqli_query($con, $sqlTelefone)) {
+
+            $sqlEndereco = "UPDATE enderecos SET
                                   cep = '$cep',
                                   logradouro = '$logradouro',
                                   estado= '$uf',
@@ -109,14 +114,16 @@ if (isset($_POST['edita'])) {
                                   complemento = '$complemento'
                                   WHERE id = '$endereco_id'";
 
-    if (mysqli_query($con, $sql) && mysqli_query($con, $sqlTelefone) && mysqli_query($con, $sqlEndereco)) {
-        $mensagem = mensagem("success", "Atualizado com sucesso!");
+            if (mysqli_query($con, $sqlEndereco)) {
 
-        //gravarLog($sql);
-    } else {
-        $mensagem = mensagem("danger", "Erro 
-        ao atualizar! Tente novamente.");
-        //gravarLog($sql);
+                $mensagem = mensagem("success", "Atualizado com sucesso!");
+
+                //gravarLog($sql);
+            } else {
+                $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
+                //gravarLog($sql);
+            }
+        }
     }
 }
 
