@@ -25,11 +25,11 @@ include "../perfil/includes/menu.php";
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="cnpj">CNPJ *</label>
-                                    <input type="text" data-mask="00.000.000/0000-00" class="form-control" id="cnpj" name="cnpj" required>
+                                    <input type="text" data-mask="00.000.000/0000-00" minlength="18" class="form-control" id="cnpj" name="cnpj" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
-                                    <input type="text" class="form-control" id="cep" name="cep" data-mask="00000-000" maxlength="100" required>
+                                    <input type="text" class="form-control" id="cep" name="cep" data-mask="00000-000" minlength="9" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="numero">Número *</label>
@@ -65,21 +65,20 @@ include "../perfil/includes/menu.php";
                                     <input type="text" class="form-control" id="complemento" name="complemento" maxlength="25">
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label for="celular">Celular * </label>
-                                    <input type="text" data-mask="(00) 0.0000-0000" class="form-control" id="celular" name="celular" required>
+                                    <label for="telefone">Telefone fixo * </label>
+                                    <input type="text" data-mask="(00) 0000-0000" class="form-control" id="telefone" name="telefone[0]" required>
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label for="telefone">Telefone fixo * </label>
-                                    <input type="text" data-mask="(00) 0000-0000" class="form-control" id="telefone" name="telefone" required>
+                                    <label for="celular">Celular * </label>
+                                    <input type="text" data-mask="(00) 0.0000-0000" class="form-control" id="celular" name="telefone[1]" required>
                                 </div>
-
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-2">
                                     <label for="recado">Recado (opcional) </label>
-                                    <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="recado">
+                                    <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="telefone[2]">
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label for="contato">Contato na empresa *</label>
                                     <input type="text" class="form-control" id="contato" name="contato" maxlength="150" required>
                                 </div>

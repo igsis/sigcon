@@ -21,19 +21,19 @@ include "../perfil/includes/menu.php";
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="nome_pf">Nome Completo *</label>
-                                    <input type="text" class="form-control" id="nome_pf" name="nome_pf" maxlength="170" required>
+                                    <input type="text" class="form-control" id="nome_pf" name="nome_pf" maxlength="170">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cpf">CPF *</label>
-                                    <input type="text" data-mask="000.000.000-00" class="form-control" id="cpf" name="cpf" required>
+                                    <input type="text" data-mask="000.000.000-00" minlength="11" class="form-control" id="cpf" name="cpf">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
-                                    <input type="text" class="form-control" id="cep" name="cep" data-mask="00000-000" maxlength="100" required>
+                                    <input type="text" class="form-control" id="cep" name="cep" minlength="9" data-mask="00000-000">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="numero">Número *</label>
-                                    <input type="number" class="form-control" id="numero" name="numero" required>
+                                    <input type="number" class="form-control" id="numero" name="numero">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="complemento">Complemento</label>
@@ -61,19 +61,19 @@ include "../perfil/includes/menu.php";
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="email">E-mail * </label>
-                                    <input type="email" class="form-control" id="email" name="email" maxlength="60" required>
+                                    <input type="email" class="form-control" id="email" name="email" maxlength="60">
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label for="celular">Celular * </label>
-                                    <input type="text" data-mask="(00) 0.0000-0000" class="form-control" id="celular" name="celular" required>
+                                    <label for="telefone">Telefone fixo *</label>
+                                    <input type="text" data-mask="(00) 0000-0000" class="form-control" id="telefone" name="telefone[0]" required>
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label for="telefone">Telefone fixo * </label>
-                                    <input type="text" data-mask="(00) 0000-0000" class="form-control" id="telefone" name="telefone" required>
+                                    <label for="celular">Celular *</label>
+                                    <input type="text" data-mask="(00) 0.0000-0000" class="form-control" id="celular" name="telefone[1]">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="recado">Recado (opcional) </label>
-                                    <input type="text" class="form-control" id="recado" name="recado">
+                                    <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="telefone[2]">
                                 </div>
                             </div>
                             <div class="box-footer">
