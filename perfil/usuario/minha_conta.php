@@ -52,6 +52,8 @@ if (isset($_POST['atualizar'])) {
 }
 
 $usuario = recuperaDados('usuarios', 'id', $idUser);
+$nivel = recuperaDados('nivel_acessos', 'id', $usuario['nivel_acesso_id']);
+
 ?>
 
 
@@ -129,13 +131,17 @@ $usuario = recuperaDados('usuarios', 'id', $idUser);
                                            onblur="comparaSenhas()" onkeypress="comparaSenhas()">
                                 </div>
                             </div>
-
-                                <div class="form-group">
+                            <div class="row">
+                                <div class="form-group col-md-6">
                                     <label for="ultimo_acesso">Último acesso: </label>
                                     <input type="text" readonly class="form-control" id="ultimo_acesso"
                                            name="ultimo_acesso" value="<?= exibirDataBr($usuario['ultimo_acesso']) ?>">
                                 </div>
-
+                                <div class="form-group col-md-6">
+                                    <label for="ultimo_acesso">Nível de acesso: </label>
+                                    <input type="text" readonly class="form-control" id="nivel_acesso" name="nivel_acesso" value="<?= $nivel['nivel_acesso'] ?>">
+                                </div>
+                            </div>
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-default">Cancelar</button>
                                 <button type="submit" name="atualizar" id="atualizar" class="btn btn-info pull-right">
