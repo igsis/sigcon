@@ -1,5 +1,5 @@
 <?php
-include "includes/menu_interno.php";
+include "../perfil/includes/menu.php";
 $con = bancoMysqli();
 $idUser = $_SESSION['idUser'];
 $usuario = recuperaDados('usuarios', 'id', $idUser);
@@ -8,6 +8,7 @@ if (isset($_POST['atualizar'])) {
     $nome_completo = $_POST['nome_completo'];
     $email = $_POST['email'];
     $telefone = $_POST['telefone'];
+    $nivel_acesso = $_POST['nivel_acesso'];
     $senha = $_POST['senhaAtual'];
     $novaSenha = $_POST['novaSenha'] ?? NULL;
 
@@ -21,13 +22,15 @@ if (isset($_POST['atualizar'])) {
 
             $sql = "UPDATE usuarios SET
                               nome_completo = '$nome_completo', 
+                              nivel_acesso_id = '$nivel_acesso',
                               senha = '$novaSenha',
                               email = '$email',
                               telefone = '$telefone'
                               WHERE id = '$idUser'";
         } else {
             $sql = "UPDATE usuarios SET
-                              nome_completo = '$nome_completo', 
+                              nome_completo = '$nome_completo',
+                              nivel_acesso_id = '$nivel_acesso', 
                               email = '$email',
                               telefone = '$telefone'
                               WHERE id = '$idUser'";
@@ -46,6 +49,8 @@ if (isset($_POST['atualizar'])) {
 }
 
 $usuario = recuperaDados('usuarios', 'id', $idUser);
+$nivel = recuperaDados('nivel_acessos', 'id', $usuario['nivel_acesso_id']);
+
 ?>
 
 
@@ -85,7 +90,7 @@ $usuario = recuperaDados('usuarios', 'id', $idUser);
                                 <div class="form-group col-md-2">
                                     <label for="telefone">Telefone: </label>
                                     <input type="text" class="form-control" id="telefone" name="telefone"
-                                           value="<?= $usuario['telefone'] ?>">
+                                           value="<?= $usuario['telefone'] ?>" data-mask="(00) 00000-0000">
                                 </div>
                             </div>
 
@@ -108,11 +113,32 @@ $usuario = recuperaDados('usuarios', 'id', $idUser);
                                 </div>
                             </div>
 
-                                <div class="form-group">
+                            <div class="row">
+                                <div class="form-group col-md-6">
                                     <label for="ultimo_acesso">Último acesso: </label>
                                     <input type="text" readonly class="form-control" id="ultimo_acesso"
                                            name="ultimo_acesso" value="<?= exibirDataBr($usuario['ultimo_acesso']) ?>">
                                 </div>
+                                <div class="form-group col-md-6">
+                                    <label for="ultimo_acesso">Nível de acesso: </label>
+                                    <?php
+                                    if($usuario['nivel_acesso_id'] == 1){
+                                    ?>
+                                    <select name="nivel_acesso" id="nivel_acesso" class="form-control">
+                                        <?php
+                                            geraOpcao('nivel_acessos', $usuario['nivel_acesso_id']);
+                                        ?>
+                                    </select>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <input type="text" readonly class="form-control" value="<?= $nivel['nivel_acesso'] ?>">
+                                        <input type="hidden" id="nivel_acesso" name="nivel_acesso" value="<?= $usuario['nivel_acesso_id'] ?>">
+                                    <?php } ?>
+
+
+                                </div>
+                            </div>
 
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-default">Cancelar</button>
