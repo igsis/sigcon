@@ -16,7 +16,7 @@ else
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>SisContrat</title>
+    <title>SigCon</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -42,10 +42,14 @@ else
     <!-- JQUEY Mask -->
     <script src="dist/js/jquery-1.12.4.min.js"></script>
     <script src="dist/js/jquery.mask.js"></script>
+
+      <?php include "../include/script.php"; ?>
+
     <!-- jQuery 3 -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
   </head>
 <body class="hold-transition skin-purple-light sidebar-mini">
 <div class="wrapper">

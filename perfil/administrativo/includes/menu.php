@@ -10,7 +10,7 @@
                 <a href=""> <i class="fa fa-cogs"></i> <span>Cadastrar</span> <i class="fa fa-angle-left pull-right"></i> </a>
                 <ul class="treeview-menu">
                     <li class="treeview">
-                        <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Licitação</span></a></li>
+                        <li class=""><a href="?perfil=administrativo/licitacao/licitacao_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Licitação</span></a></li>
                     </li>
                     <li class="treeview">
                         <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Unidades</span></a></li>
@@ -27,7 +27,7 @@
                 <a href=""> <i class="fa fa-search"></i> <span>Pesquisar</span> <i class="fa fa-angle-left pull-right"></i> </a>
                 <ul class="treeview-menu">
                     <li class="treeview">
-                        <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Licitação</span></a></li>
+                        <li class=""><a href="?perfil=administrativo/pesquisa/pesquisa_licitacao"><i class="fa fa-circle-o text-red"></i> <span>Licitação</span></a></li>
                     </li>
                     <li class="treeview">
                         <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Contratos</span></a></li>
