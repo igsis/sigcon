@@ -25,7 +25,7 @@ include "../perfil/includes/menu.php";
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cpf">CPF *</label>
-                                    <input type="text" data-mask="000.000.000-00" class="form-control" id="cpf" name="cpf" required>
+                                    <input type="text" data-mask="000.000.000-00" minlength="14" class="form-control" id="cpf" name="cpf" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
