@@ -17,6 +17,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $complemento = $_POST['complemento'] ?? NULL;
     $uf = $_POST['uf'];
     $cidade = $_POST['cidade'];
+    $contato = $_POST['contato'];
 
     if (isset($_POST['cadastra'])) {
         // cadastrar endereco de pf
@@ -44,11 +45,13 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                 (razao_social,
                                  CNPJ,
                                  email,
+                                 contato,
                                  endereco_id,
                                  publicado)
                           VALUES ('$razao_social',
                                   '$cnpj',
                                   '$email',
+                                  '$contato',
                                   '$endereco_id',
                                   '1')";
 
@@ -80,7 +83,8 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
         $sql = "UPDATE pessoas_juridicas SET
                                  razao_social = '$razao_social',
                                  CNPJ = '$cnpj',
-                                 email = '$email'
+                                 email = '$email',
+                                 contato = '$contato'
                           WHERE id = '$idPessoaJuridica'";
 
         $pj = recuperaDados('pessoas_juridicas', 'id', $idPessoaJuridica);
@@ -95,23 +99,25 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
         if (mysqli_query($con, $sql)) {
 
             foreach ($telefones as $idTelefone => $telefone) {
+
+                if (!strlen($telefone)) {
+                    // Deletar telefone do banco se for apagado.
+                    $sqlDelete = "DELETE FROM pj_telefones WHERE id = '$idTelefone'";
+                    mysqli_query($con, $sqlDelete);
+                    gravarLog($sqlDelete);
+                }
+
                 // cadastrar o telefone de pf
                 $sqlTelefone = "UPDATE  pj_telefones SET
                                           telefone = '$telefone'
                                   WHERE id = '$idTelefone'";
                 mysqli_query($con, $sqlTelefone);
+                gravarLog($sqlTelefone);
 
-                if (!strlen($telefone)) {
-                // Deletar telefone do banco se for apagado.
-                $sqlDelete = "DELETE FROM pj_telefones WHERE id = '$idTelefone'";
-
-                mysqli_query($con, $sqlDelete);
-                }
             }
 
             $sqlTelefones = "SELECT * FROM pj_telefones WHERE pessoa_juridica_id = '$idPessoaJuridica'";
-            $arrayTelefones = $conn->query($sqlTelefones)->fetchAll();         
-
+            $arrayTelefones = $conn->query($sqlTelefones)->fetchAll();
 
 
             $sqlEndereco = "UPDATE enderecos SET
@@ -141,13 +147,6 @@ $pessoa_juridica = recuperaDados("pessoas_juridicas", "id", $idPessoaJuridica);
 
 $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
 
-echo "<pre>";
-
-print_r($arrayTelefones);
-
-echo "</pre>";
-
-
 ?>
 <script language="JavaScript" >
     $("#cep").mask('00000-000', {reverse: true});
@@ -173,19 +172,19 @@ echo "</pre>";
                             <div class="row">
                                 <div class="form-group col-md-5">
                                     <label for="razao_social">Razão Social *</label>
-                                    <input type="text" class="form-control" id="razao_social" name="razao_social" maxlength="170" value="<?= $pessoa_juridica['razao_social'] ?>">
+                                    <input type="text" class="form-control" id="razao_social" name="razao_social" maxlength="170" value="<?= $pessoa_juridica['razao_social'] ?>" required>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="cnpj">CNPJ *</label>
-                                    <input type="text" data-mask="00.000.000/0000-00" minlength="18" class="form-control" id="cnpj" name="cnpj" value="<?= $pessoa_juridica['CNPJ'] ?>">
+                                    <input type="text" data-mask="00.000.000/0000-00" minlength="18" class="form-control" id="cnpj" name="cnpj" value="<?= $pessoa_juridica['CNPJ'] ?>" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
-                                    <input type="text" class="form-control" id="cep" name="cep" data-mask="00000-000" minlength="9" value="<?= $pj_endereco['cep'] ?>">
+                                    <input type="text" class="form-control" id="cep" name="cep" data-mask="00000-000" minlength="9" value="<?= $pj_endereco['cep'] ?>" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="numero">Número *</label>
-                                    <input type="number" class="form-control" id="numero" name="numero" value="<?= $pj_endereco['numero'] ?>">
+                                    <input type="number" class="form-control" id="numero" name="numero" value="<?= $pj_endereco['numero'] ?>" required>
                                 </div>
                             </div>
                             <div class="row">
@@ -211,7 +210,7 @@ echo "</pre>";
                             <div class="row">
                                 <div class="form-group col-md-5">
                                     <label for="email">E-mail * </label>
-                                    <input type="email" class="form-control" id="email" name="email" maxlength="60" value="<?= $pessoa_juridica['email'] ?>">
+                                    <input type="email" class="form-control" id="email" name="email" maxlength="60" value="<?= $pessoa_juridica['email'] ?>" required>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="complemento">Complemento </label>
@@ -219,11 +218,11 @@ echo "</pre>";
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="telefone">Telefone fixo * </label>
-                                    <input type="text" data-mask="(00) 0000-0000" class="form-control" id="telefone" name="telefone[<?= $arrayTelefones[0]['id'] ?>]" value="<?= $arrayTelefones[0]['telefone']; ?>">
+                                    <input type="text" data-mask="(00) 0000-0000" required class="form-control" id="telefone" name="telefone[<?= $arrayTelefones[0]['id'] ?>]" value="<?= $arrayTelefones[0]['telefone']; ?>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="celular">Celular * </label>
-                                    <input type="text" data-mask="(00) 0.0000-0000" class="form-control" id="celular" name="telefone[<?= $arrayTelefones[1]['id'] ?>]" value="<?= $arrayTelefones[1]['telefone']; ?>">
+                                    <input type="text" data-mask="(00)0.0000-0000" required class="form-control" id="celular" name="telefone[<?= $arrayTelefones[1]['id'] ?>]" value="<?= $arrayTelefones[1]['telefone']; ?>">
                                 </div>
                             </div>
                             <div class="row">
@@ -236,6 +235,7 @@ echo "</pre>";
                                         <?php
                                     } else {
                                         ?>
+
                                         <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="telefone3">
 
                                         <?php
@@ -244,7 +244,7 @@ echo "</pre>";
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="contato">Contato na empresa: </label>
-                                    <input type="text" class="form-control" id="contato" name="contato" maxlength="150" value="<?= $pessoa_juridica['contato'] ?>">
+                                    <input type="text" class="form-control" id="contato" name="contato" maxlength="150" value="<?= $pessoa_juridica['contato'] ?>" required>
                                 </div>
                             </div>
                             <div class="box-footer">

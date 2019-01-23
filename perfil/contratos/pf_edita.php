@@ -90,17 +90,26 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
             $telefone3 = $_POST['telefone3'];
             $sqlTelefone3 = "INSERT INTO pf_telefones (pessoa_fisica_id, telefone) VALUES ('$idPessoaFisica', '$telefone3')";
             $query = mysqli_query($con, $sqlTelefone3);
+            gravarLog($sqlTelefone3);
         }
 
         if (mysqli_query($con, $sql)) {
 
             foreach ($telefones as $idTelefone => $telefone) {
+                if (!strlen($telefone)) {
+                    // Deletar telefone do banco se for apagado.
+                    $sqlDelete = "DELETE FROM pj_telefones WHERE id = '$idTelefone'";
+                    mysqli_query($con, $sqlDelete);
+                    gravarLog($sqlDelete);
+                }
+
                 // cadastrar o telefone de pf
                 $sqlTelefone = "UPDATE  pf_telefones SET
                                           telefone = '$telefone'
                                   WHERE id = '$idTelefone'";
 
                 mysqli_query($con, $sqlTelefone);
+                gravarLog($sqlTelefone);
             }
 
             $sqlTelefones = "SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPessoaFisica'";
@@ -198,26 +207,26 @@ $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="email">E-mail * </label>
-                                    <input type="email" class="form-control" id="email" name="email" maxlength="60" required value="<?=$pessoa_fisica['email']; ?>">
+                                    <input type="email" class="form-control" id="email" name="email" maxlength="60" value="<?=$pessoa_fisica['email']; ?>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="telefone">Telefone fixo * </label>
-                                    <input type="text" data-mask="(00) 0000-0000" class="form-control" id="telefone" name="telefone[<?= $arrayTelefones[0]['id'] ?>]" value="<?= $arrayTelefones[0]['telefone']; ?>">
+                                    <input type="text" data-mask="(00)0000-0000" class="form-control" id="telefone" name="telefone[<?= $arrayTelefones[0]['id'] ?>]" value="<?= $arrayTelefones[0]['telefone']; ?>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="celular">Celular *</label>
-                                    <input type="text" data-mask="(00) 0.0000-0000" class="form-control" id="celular" name="telefone[<?= $arrayTelefones[1]['id'] ?>]" value="<?= $arrayTelefones[1]['telefone']; ?>">
+                                    <input type="text" data-mask="(00)0.0000-0000" class="form-control" id="celular" name="telefone[<?= $arrayTelefones[1]['id'] ?>]" value="<?= $arrayTelefones[1]['telefone']; ?>">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="recado">Recado (opcional) </label>
                                     <?php if (isset($arrayTelefones[2])) {
                                     ?>
-                                    <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="telefone[<?= $arrayTelefones[2]['id'] ?>]" value="<?=  $arrayTelefones[2]['telefone']; ?>">
+                                    <input type="text" data-mask="(00)0000-00000" class="form-control" id="recado" name="telefone[<?= $arrayTelefones[2]['id'] ?>]" value="<?=  $arrayTelefones[2]['telefone']; ?>">
 
                                     <?php
                                     } else {
                                     ?>
-                                    <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="telefone3">
+                                    <input type="text" data-mask="(00)0000-00000" class="form-control" id="recado" name="telefone3">
 
                                     <?php
                                     }

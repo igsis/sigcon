@@ -61,7 +61,7 @@ include "../perfil/includes/menu.php";
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="email">E-mail * </label>
-                                    <input type="email" class="form-control" id="email" name="email" maxlength="60">
+                                    <input type="email" class="form-control" id="email" name="email" maxlength="60" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="telefone">Telefone fixo *</label>
