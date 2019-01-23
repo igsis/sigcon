@@ -21,19 +21,19 @@ include "../perfil/includes/menu.php";
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="nome_pf">Nome Completo *</label>
-                                    <input type="text" class="form-control" id="nome_pf" name="nome_pf" maxlength="170">
+                                    <input type="text" class="form-control" id="nome_pf" name="nome_pf" maxlength="170" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cpf">CPF *</label>
-                                    <input type="text" data-mask="000.000.000-00" minlength="11" class="form-control" id="cpf" name="cpf">
+                                    <input type="text" data-mask="000.000.000-00" class="form-control" id="cpf" name="cpf" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
-                                    <input type="text" class="form-control" id="cep" name="cep" minlength="9" data-mask="00000-000">
+                                    <input type="text" class="form-control" id="cep" name="cep" data-mask="00000-000" maxlength="100" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="numero">Número *</label>
-                                    <input type="number" class="form-control" id="numero" name="numero">
+                                    <input type="number" class="form-control" id="numero" name="numero" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="complemento">Complemento</label>
@@ -69,7 +69,7 @@ include "../perfil/includes/menu.php";
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="celular">Celular *</label>
-                                    <input type="text" data-mask="(00) 0.0000-0000" class="form-control" id="celular" name="telefone[1]">
+                                    <input type="text" data-mask="(00) 00000-0000" class="form-control" id="celular" name="telefone[1]" required>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="recado">Recado (opcional) </label>
@@ -86,19 +86,3 @@ include "../perfil/includes/menu.php";
         </div>
     </section>
 </div>
-
-<script type="text/javascript" >
-    $('#addInput').on('click', function(e) {
-        let i = $('#telefone').length;
-        $('#telefone').first().clone().find("input").attr('name', function(idx, attrVal) {
-            return attrVal.replace('[0]','')+'['+i+']';
-        }).removeAttr('checked').end().find("input[type=text]").val('').end().insertBefore('.botoes');
-    });
-
-    $('#remInput').on('click', function(e) {
-        let i = $('#telefone').length;
-        if (i > 1){
-            $('#telefone').last().remove();
-        }
-    });
-</script>
