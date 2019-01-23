@@ -19,7 +19,7 @@
                         <li class=""><a href="?perfil=administrativo/equipamentos/equipamento_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Equipamentos</span></a></li>
                     </li>
                     <li class="treeview">
-                        <li class=""><a href="?perfil=usuario/usuario_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Usuários</span></a></li>
+                        <li class=""><a href="?perfil=administrativo/usuario/usuario_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Usuários</span></a></li>
                     </li>
                 </ul>
             </li>

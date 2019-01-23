@@ -87,7 +87,7 @@ $con = bancoMysqli();
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=usuario/usuario_edita" role="form">
+                    <form method="POST" action="?perfil=administrativo/usuario/usuario_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-4">
@@ -96,7 +96,7 @@ $con = bancoMysqli();
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="rf_usuario">RF *</label>
-                                    <input type="text" id="rf_usuario" name="rf_usuario" class="form-control" value="<?= $usuario['RF']; ?>">
+                                    <input data-mask="000.000.0" type="text" id="rf_usuario" name="rf_usuario" class="form-control" value="<?= $usuario['RF']; ?>">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="tel_usuario">Telefone *</label>
