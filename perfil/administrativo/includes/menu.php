@@ -32,6 +32,9 @@
                     <li class="treeview">
                         <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Contratos</span></a></li>
                     </li>
+                    <li class="treeview">
+                        <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Usuários</span></a></li>
+                    </li>
                 </ul>
             </li>
             <li><a href="index.php"><i class="fa fa-circle-o text-aqua"></i> <span>Voltar</span></a></li>
