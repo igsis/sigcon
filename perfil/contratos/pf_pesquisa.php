@@ -3,6 +3,10 @@
 $con = bancoMysqli();
 include "includes/menu.php";
 
+if (isset($_POST['idLicitacao'])) {
+    $idLicitacao = $_POST['idLicitacao'];
+}
+
 $exibir = ' ';
 $resultado = "<td></td>";
 
@@ -34,6 +38,7 @@ if (isset($_POST['procurar'])){
                     $resultado .= "<td>
                                      <form action='?perfil=contratos/contrato_cadastro' method='post'>
                                         <input type='hidden' name='idPf' value='".$pessoa['id']."'>
+                                        <input type='hidden' name='idLicitacao' value='".$idLicitacao."'>
                                         <input type='submit' name='carregar' class='btn btn-primary' name='selecionar' value='Selecionar'>
                                      </form>
                                </td>";
@@ -83,6 +88,7 @@ if (isset($_POST['procurar'])){
                                 <label for="procurar">Pesquisar por CPF:</label>
                                 <div class="input-group">
                                     <input type="text" data-mask="000.000.000-00" class="form-control" minlength=14 name="procurar" id="cpf" value="<?= isset($cpf) ? $cpf : NULL?>" >
+                                    <input type='hidden' name='idLicitacao' value="<?= $idLicitacao ?>">
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i> Procurar</button>
                                     </span>

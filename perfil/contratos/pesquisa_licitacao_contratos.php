@@ -113,8 +113,8 @@ if(isset($_POST['pesquisaUnidade']) && '0' != $_POST['unidade'] ){
                                     <td><?= $licitacao['objeto'] ?></td>
                                     <td><?= $unidade ?></td> 
                                     <td>
-                                        <form action="?perfil=administrativo/contratos/tipo_pessoa" method='POST'>
-                                            <input type="hidden" name='editarLicitacao' value='<?= $licitacao['id'] ?>'>
+                                        <form action="?perfil=contratos/tipo_pessoa" method='POST'>
+                                            <input type="hidden" name='idLicitacao' value='<?= $licitacao['id'] ?>'>
                                             <button type='submit' class='btn btn-info'> Carregar </button>
                                         </form>
                                     </td> 

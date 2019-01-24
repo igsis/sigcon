@@ -3,6 +3,10 @@
 $con = bancoMysqli();
 include "includes/menu.php";
 
+if (isset($_POST['idLicitacao'])) {
+    $idLicitacao = $_POST['idLicitacao'];
+}
+
 $exibir = ' ';
 $resultado = "<td></td>";
 
@@ -34,6 +38,7 @@ if (isset($_POST['procurar'])){
                     $resultado .= "<td>
                                      <form action='?perfil=contratos/contrato_cadastro' method='post'>
                                         <input type='hidden' name='idPj' value='".$pessoa['id']."'>
+                                        <input type='hidden' name='idLicitacao' value='".$idLicitacao."'>
                                         <input type='submit' name='carregar' class='btn btn-primary' name='selecionar' value='Selecionar'>
                                      </form>
                                </td>";

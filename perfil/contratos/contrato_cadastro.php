@@ -4,6 +4,14 @@ include "../perfil/includes/menu.php";
 $con = bancoMysqli();
 $conn = bancoPDO();
 
+if (isset($_POST['idLicitacao'])) {
+    $idLicitacao = $_POST['idLicitacao'];
+    $licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
+
+    echo $idLicitacao;
+
+}
+
 if (isset($_POST['idPf'])) {
     $tipoPessoa = 1;
     $idPessoa = $_POST['idPf'];
@@ -40,7 +48,7 @@ if (isset($_POST['idPf'])) {
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="num_processo">Número do processo administrativo</label>
-                                    <input type="text" data-mask="0000.0000/0000000-0" id="num_processo" name="num_processo" class="form-control" maxlength="20" readonly>
+                                    <input type="text" data-mask="0000.0000/0000000-0" id="num_processo" name="num_processo" class="form-control" maxlength="20" value="<?= $licitacao['numero_processo'] ?>" readonly>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="termo_contrato">Termo de contrato *</label>
@@ -54,7 +62,7 @@ if (isset($_POST['idPf'])) {
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="objeto">Objeto *</label>
-                                    <input type="text" id="objeto" name="objeto" class="form-control" maxlength="100" required>
+                                    <input type="text" id="objeto" name="objeto" class="form-control" maxlength="100" value="<?= $licitacao['objeto']; ?>" readonly>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <form method='POST'>
