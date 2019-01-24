@@ -70,8 +70,6 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                 '$status', 
                                 '1')";
 
-        echo $sql;
-
         if (mysqli_query($con, $sql)) {
 
             $idLicitacao = recuperaUltimo("licitacoes");
