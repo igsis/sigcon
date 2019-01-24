@@ -42,9 +42,6 @@ else
     <!-- JQUEY Mask -->
     <script src="dist/js/jquery-1.12.4.min.js"></script>
     <script src="dist/js/jquery.mask.js"></script>
-
-      <?php include "../include/script.php"; ?>
-
     <!-- jQuery 3 -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
