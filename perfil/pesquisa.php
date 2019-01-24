@@ -6,6 +6,7 @@ if(isset($_GET['p']))
 }
 else
 {
-    $p = "index";
+    $p = "inicio";
 }
-include "evento/".$p.".php";
+include "pesquisa/".$p.".php";
+include "pesquisa/includes/menu.php";
