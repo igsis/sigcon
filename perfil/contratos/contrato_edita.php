@@ -36,7 +36,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                            '$contatoFiscal',
                                            '1')";
 
-        if(mysqli_query($con, $sqlFiscal)) {
+        if (mysqli_query($con, $sqlFiscal)) {
 
             gravarLog($sqlFiscal);
             $idFiscal = recuperaUltimo("fiscais");
@@ -102,19 +102,19 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     if (isset($_POST['edita'])){
 
         $sqlContrato = "UPDATE contratos SET 
-                                                termo_contrato = '$termo_contrato', 
-                                                tipo_servico = '$tipo_servico',
-                                                tipo_pessoa_id = '$tipo_pessoa',
-                                                pessoa_id = '$pessoa_id',
-                                                unidade_id = '$idUnidade',
-                                                equipamentos_id = '$idEquipamento',
-                                                garantia =  '$garantia',
-                                                vencimento = '$vencimento',
-                                                negociacoes_reajustes =  '$negociacoes_reajustes',
-                                                nivel_de_risco = '$nivel_risco',
-                                                observacao = '$observacao',
-                                                contrato_status_id = '$status'
-                                      WHERE id = '$idContrato'";
+                                          termo_contrato = '$termo_contrato', 
+                                          tipo_servico = '$tipo_servico',
+                                          tipo_pessoa_id = '$tipo_pessoa',
+                                          pessoa_id = '$pessoa_id',
+                                          unidade_id = '$idUnidade',
+                                          equipamentos_id = '$idEquipamento',
+                                          garantia =  '$garantia',
+                                          vencimento = '$vencimento',
+                                          negociacoes_reajustes =  '$negociacoes_reajustes',
+                                          nivel_de_risco = '$nivel_risco',
+                                          observacao = '$observacao',
+                                          contrato_status_id = '$status'
+                                  WHERE id = '$idContrato'";
 
         if (mysqli_query($con, $sqlContrato)) {
 
@@ -125,8 +125,8 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
             $idSuplente = $contratos['suplente_id'];
 
             $sqlFiscal = "UPDATE fiscais SET 
-                                                nome_fiscal = '$fiscal', 
-                                                contato_fiscal = '$contatoFiscal'
+                                          nome_fiscal = '$fiscal', 
+                                          contato_fiscal = '$contatoFiscal'
                                       WHERE id = '$idFiscal'";
 
             if (mysqli_query($con, $sqlFiscal)) {
