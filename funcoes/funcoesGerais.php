@@ -13,19 +13,19 @@ date_default_timezone_set("Brazil/East");
 		$hora = date('H');
 		if(($hora > 12) AND ($hora <= 18))
 		{
-			return "Boa tarde";
+			return "Boa tarde!";
 		}
 		else if(($hora > 18) AND ($hora <= 23))
 		{
-			return "Boa noite";
+			return "Boa noite!";
 		}
 		else if(($hora >= 0) AND ($hora <= 4))
 		{
-			return "Boa noite";
+			return "Boa noite!";
 		}
 		else if(($hora > 4) AND ($hora <=12))
 		{
-			return "Bom dia";
+			return "Bom dia!";
 		}
 	}
 
