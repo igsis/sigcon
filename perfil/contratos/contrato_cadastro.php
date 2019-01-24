@@ -4,12 +4,17 @@ include "../perfil/includes/menu.php";
 $con = bancoMysqli();
 $conn = bancoPDO();
 
-if(isset($_POST['pesquisaEmpresa'])){
-    $cnpj  = $_POST['cnpj'];
-    $stmt = $conn->prepare("SELECT * FROM `pessoas_juridicas` WHERE CNPJ = :id");
-    $stmt->execute(['id' => $cnpj ]);
-    $empresas = $stmt->fetchAll();
+if (isset($_POST['idPf'])) {
+    $tipoPessoa = 1;
+    $idPessoa = $_POST['idPf'];
 
+} elseif (isset($_POST['idPj'])) {
+    $tipoPessoa = 2;
+    $idPessoa = $_POST['idPj'];
+
+} else {
+    $tipoPessoa = NULL;
+    $idPessoa = NULL;
 }
 
 ?>

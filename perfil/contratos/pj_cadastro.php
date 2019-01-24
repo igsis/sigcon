@@ -1,6 +1,11 @@
 <?php
 include "../perfil/includes/menu.php";
 
+if (isset($_POST['documentacao'])) {
+    $cnpj = $_POST['documentacao'];
+}
+
+
 ?>
 <script language="JavaScript" >
     $("#cep").mask('00000-000', {reverse: true});
@@ -25,7 +30,7 @@ include "../perfil/includes/menu.php";
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="cnpj">CNPJ *</label>
-                                    <input type="text" data-mask="00.000.000/0000-00" minlength="18" class="form-control" id="cnpj" name="cnpj" required>
+                                    <input type="text" data-mask="00.000.000/0000-00" minlength="18" class="form-control" id="cnpj" name="cnpj" value="<?= isset($cnpj) ? $cnpj : NULL?>" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>

@@ -1,5 +1,4 @@
 <?php
-
 $con = bancoMysqli();
 include "../perfil/includes/menu.php";
 
@@ -124,10 +123,8 @@ $licitacao = recuperaDados('licitacoes', 'id', $idLicitacao);
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content">
-
         <!-- START FORM-->
         <h2 class="page-header">Cadastro de Licitação</h2>
-
         <div class="row">
             <div class="col-md-12">
                 <!-- general form elements -->

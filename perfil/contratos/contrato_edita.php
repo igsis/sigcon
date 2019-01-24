@@ -4,6 +4,9 @@ include "../perfil/includes/menu.php";
 $con = bancoMysqli();
 $conn = bancoPDO();
 
+$idLicitacao = $_POST['idLicitacao'];
+$licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
+
 if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $idContrato = $_POST['idContrato'] ?? NULL;
     $termo_contrato = $_POST['termo_contrato'];
@@ -149,6 +152,11 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
         }
     }
 }
+
+$fical = recuperaDados("fiscais", "id", $idFiscal);
+$suplente = recuperaDados("suplentes", "id", $idSuplente);
+$contratos = recuperaDados("contratos", "id", $idContrato);
+
 
 
 ?>
