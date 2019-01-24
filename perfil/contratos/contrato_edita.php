@@ -151,7 +151,6 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 }
 
 
-
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -164,7 +163,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
         <div class="row">
             <div class="col-md-12">
                 <!-- general form elements -->
-                <div class="box box-info">
+                <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">
                             <?= "Número do processo administrativo: " . $contrato['numero_processo']?>
@@ -329,7 +328,8 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <button type="submit" name="edita" class="btn btn-info pull-right">Editar</button>
+                            <input type="hidden" name="idContrato" value="<?= $idContrato ?>">
+                            <button type="submit" name="edita" class="btn btn-primary pull-right">Editar</button>
                         </div>
                     </form>
                 </div>

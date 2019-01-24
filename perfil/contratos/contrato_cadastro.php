@@ -24,7 +24,7 @@ if(isset($_POST['pesquisaEmpresa'])){
         <div class="row">
             <div class="col-md-12">
                 <!-- general form elements -->
-                <div class="box box-info">
+                <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">Cadastro de Contrato</h3>
                     </div>
@@ -184,7 +184,7 @@ if(isset($_POST['pesquisaEmpresa'])){
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <button type="submit" name="cadastra" class="btn btn-info pull-right">Cadastrar</button>
+                            <button type="submit" name="cadastra" class="btn btn-primary pull-right">Cadastrar</button>
                         </div>
                     </form>
                 </div>
@@ -194,11 +194,9 @@ if(isset($_POST['pesquisaEmpresa'])){
         </div>
         <!-- /.row -->
         <!-- END ACCORDION & CAROUSEL-->
-
     </section>
     <!-- /.content -->
 </div>
-
 
 <script>
 
