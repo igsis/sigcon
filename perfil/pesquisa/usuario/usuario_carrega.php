@@ -1,6 +1,13 @@
 <?php
-include "../perfil/includes/menu.php";
+include "../perfil/pesquisa/includes/menu.php";
 
+$con = bancoMysqli();
+
+    if(isset($_POST['carrega'])){
+        $idUsuario = (isset($_POST['idUsuario']) ? $_POST['idUsuario'] : NULL);
+    }
+
+    $usuario = recuperaDados("usuarios", "id", $idUsuario);
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -8,67 +15,64 @@ include "../perfil/includes/menu.php";
     <section class="content">
 
         <!-- START FORM-->
-        <h2 class="page-header">Cadastro de Usuário</h2>
+        <h2 class="page-header">Editar Usuário</h2>
 
         <div class="row">
             <div class="col-md-12">
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Usuários</h3>
+                        <h3 class="box-title">Nome do usuário: <?= $usuario['nome_completo']; ?></h3>
                     </div>
+
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=administrativo/usuario/usuario_edita" role="form">
+                    <form method="POST" action="#" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="nome">Nome Completo *</label>
-                                    <input type="text" id="nome" name="nome" class="form-control" required>
+                                    <input type="text" id="nome" name="nome" class="form-control" value="<?= $usuario['nome_completo']; ?>" readonly>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="rf_usuario">RF *</label>
-                                    <input data-mask="000.000.0" type="text" id="rf_usuario" name="rf_usuario" class="form-control" maxlength="100" required onkeypress="geraUusario()" onblur="geraUusario()">
+                                    <input data-mask="000.000.0" type="text" id="rf_usuario" name="rf_usuario" class="form-control" value="<?= $usuario['RF']; ?>" onblur="geraUusario()" readonly>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="rf_usuario">Usuário *</label>
-                                    <input type="text" id="usuario" name="usuario" class="form-control" maxlength="7" required readonly>
+                                    <input type="text" id="usuario" name="usuario" class="form-control" maxlength="7" required readonly value="<?= $usuario['usuario']; ?>">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="tel_usuario">Telefone *</label>
-                                    <input data-mask="(00) 0000-00000" type="text" id="tel_usuario" name="tel_usuario" class="form-control" maxlength="100" required>
+                                    <input data-mask="(00) 0000-00000" type="text" id="tel_usuario" name="tel_usuario" class="form-control" maxlength="100" value="<?= $usuario['telefone']; ?>" readonly>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="email">E-mail *</label>
-                                    <input type="email" id="email" name="email" class="form-control" maxlength="100" required>
+                                    <input type="text" id="email" name="email" class="form-control" value="<?= $usuario['email']; ?>" readonly>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="unidade_id">Unidade *</label>
-                                    <select class="form-control" id="unidade_id" name="unidade_id">
+                                    <select class="form-control" id="unidade_id" name="unidade_id" disabled>
                                         <option value="">Selecione...</option>
                                         <?php
-                                        geraOpcao("unidades")
+                                        geraOpcao("unidades", $usuario['unidade_id']);
                                         ?>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="nivel_acesso">Nível de acesso </label> <br>
-                                    <select class="form-control" id="nivel_acesso" name="nivel_acesso">
+                                    <select class="form-control" id="nivel_acesso" name="nivel_acesso" disabled>
                                         <option value="">Selecione...</option>
                                         <?php
-                                        geraOpcao("nivel_acessos");
+                                        geraOpcao("nivel_acessos", $usuario['nivel_acesso_id']);
                                         ?>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <!-- /.box-body -->
-
-                        <div class="box-footer">
-                            <button type="submit" name="cadastra" class="btn btn-primary pull-right">Cadastrar</button>
-                        </div>
                     </form>
                 </div>
                 <!-- /.box -->
@@ -103,6 +107,7 @@ include "../perfil/includes/menu.php";
              document.status.disabled = true;
          }
      }*/
+
 
     function geraUusario() {
 

@@ -15,8 +15,11 @@ $con = bancoMysqli();
 
         if (isset($_POST['cadastra'])) {
 
+            $senha = md5("sigcon2019");
+
             $sql = "INSERT INTO usuarios (nome_completo, 
                                            usuario,
+                                           senha,
                                            RF,
                                            telefone, 
                                            email, 
@@ -25,6 +28,7 @@ $con = bancoMysqli();
                                            publicado) 
                                   VALUES ('$nome_completo',
                                            '$usuario',
+                                           '$senha',
                                            '$RF', 
                                            '$telefone', 
                                            '$email', 
@@ -35,6 +39,9 @@ $con = bancoMysqli();
             if (mysqli_query($con, $sql)) {
 
                 $idUsuario = recuperaUltimo("usuarios");
+
+                gravarLog($sql);
+
                 $mensagem = mensagem("success", "Usuário cadastrado com sucesso!");
 
             } else {
@@ -53,6 +60,8 @@ $con = bancoMysqli();
                                         nivel_acesso_id = '$nivel_acesso'
                                         WHERE id = '$idUsuario'";
             if (mysqli_query($con, $sql)) {
+
+                gravarLog($sql);
 
                 $mensagem = mensagem("success", "Usuário editado com sucesso!");
 
@@ -116,7 +125,7 @@ $con = bancoMysqli();
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="email">E-mail *</label>
-                                    <input type="text" id="email" name="email" class="form-control" value="<?= $usuario['email']; ?>">
+                                    <input type="email" id="email" name="email" class="form-control" value="<?= $usuario['email']; ?>">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="unidade_id">Unidade *</label>
