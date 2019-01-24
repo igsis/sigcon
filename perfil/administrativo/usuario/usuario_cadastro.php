@@ -19,16 +19,20 @@ include "../perfil/includes/menu.php";
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=usuario/usuario_edita" role="form">
+                    <form method="POST" action="?perfil=administrativo/usuario/usuario_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="nome">Nome Completo *</label>
                                     <input type="text" id="nome" name="nome" class="form-control" required>
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2">
                                     <label for="rf_usuario">RF *</label>
-                                    <input type="text" id="rf_usuario" name="rf_usuario" class="form-control" maxlength="100" required>
+                                    <input data-mask="000.000.0" type="text" id="rf_usuario" name="rf_usuario" class="form-control" maxlength="100" required onkeypress="geraUusario()" onblur="geraUusario()">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="rf_usuario">Usuário *</label>
+                                    <input type="text" id="usuario" name="usuario" class="form-control" maxlength="7" required readonly>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="tel_usuario">Telefone *</label>
@@ -38,7 +42,7 @@ include "../perfil/includes/menu.php";
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="email">E-mail *</label>
-                                    <input type="text" id="email" name="email" class="form-control" maxlength="100" required>
+                                    <input type="email" id="email" name="email" class="form-control" maxlength="100" required>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="unidade_id">Unidade *</label>
@@ -100,7 +104,23 @@ include "../perfil/includes/menu.php";
          }
      }*/
 
+    function geraUusario() {
 
+        // pega o valor do RF
+        var usuarioRf = document.querySelector("#rf_usuario").value;
 
+        // tira os pontos do valor, ficando apenas os numeros
+        usuarioRf = usuarioRf.replace(/[^0-9]/g, '');
+        usuarioRf = parseInt(usuarioRf);
+
+        // adiciona o d antes do rf
+        usuarioRf = "d" + usuarioRf;
+
+        // limita o rf a apenas o d + 6 primeiros numeros do rf
+        let usuario = usuarioRf.substr(0, 7);
+
+        // passa o valor para o input
+        document.querySelector("[name='usuario']").value = usuario;
+    }
 
 </script>

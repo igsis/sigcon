@@ -32,7 +32,7 @@ if(isset($_POST['pesquisaUnidade']) && '0' != $_POST['unidade'] ){
 <div class="content-wrapper">
 
     <section class="content-header">
-      <h1>Pesquisa Licitação</h1>
+      <h1>Pesquisa Licitação </h1>
     </section>
 
     <section class="content">

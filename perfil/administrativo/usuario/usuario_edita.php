@@ -4,7 +4,8 @@ include "../perfil/includes/menu.php";
 $con = bancoMysqli();
 
     if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
-        $idUsuario = $_POST['idUsuario'] ?? NULL;
+        $idUsuario = (isset($_POST['idUsuario']) ? $_POST['idUsuario'] : NULL);
+        $usuario = $_POST['usuario'];
         $nome_completo = $_POST['nome'];
         $RF = $_POST['rf_usuario'];
         $telefone = $_POST['tel_usuario'];
@@ -14,7 +15,11 @@ $con = bancoMysqli();
 
         if (isset($_POST['cadastra'])) {
 
+            $senha = md5("sigcon2019");
+
             $sql = "INSERT INTO usuarios (nome_completo, 
+                                           usuario,
+                                           senha,
                                            RF,
                                            telefone, 
                                            email, 
@@ -22,6 +27,8 @@ $con = bancoMysqli();
                                            nivel_acesso_id, 
                                            publicado) 
                                   VALUES ('$nome_completo',
+                                           '$usuario',
+                                           '$senha',
                                            '$RF', 
                                            '$telefone', 
                                            '$email', 
@@ -32,6 +39,9 @@ $con = bancoMysqli();
             if (mysqli_query($con, $sql)) {
 
                 $idUsuario = recuperaUltimo("usuarios");
+
+                gravarLog($sql);
+
                 $mensagem = mensagem("success", "Usuário cadastrado com sucesso!");
 
             } else {
@@ -39,10 +49,10 @@ $con = bancoMysqli();
             }
         }
 
-
         if (isset($_POST['edita'])) {
             $sql = "UPDATE usuarios SET 
-                                        nome_completo = '$nome_completo', 
+                                        nome_completo = '$nome_completo',
+                                        usuario = '$usuario', 
                                         RF = '$RF', 
                                         telefone = '$telefone', 
                                         email = '$email',
@@ -50,6 +60,8 @@ $con = bancoMysqli();
                                         nivel_acesso_id = '$nivel_acesso'
                                         WHERE id = '$idUsuario'";
             if (mysqli_query($con, $sql)) {
+
+                gravarLog($sql);
 
                 $mensagem = mensagem("success", "Usuário editado com sucesso!");
 
@@ -59,6 +71,9 @@ $con = bancoMysqli();
         }
     }
 
+    if(isset($_POST['carrega'])){
+        $idUsuario = (isset($_POST['idUsuario']) ? $_POST['idUsuario'] : NULL);
+    }
 
     $usuario = recuperaDados("usuarios", "id", $idUsuario);
 
@@ -87,16 +102,20 @@ $con = bancoMysqli();
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=usuario/usuario_edita" role="form">
+                    <form method="POST" action="?perfil=administrativo/usuario/usuario_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="nome">Nome Completo *</label>
                                     <input type="text" id="nome" name="nome" class="form-control" value="<?= $usuario['nome_completo']; ?>">
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2">
                                     <label for="rf_usuario">RF *</label>
-                                    <input type="text" id="rf_usuario" name="rf_usuario" class="form-control" value="<?= $usuario['RF']; ?>">
+                                    <input data-mask="000.000.0" type="text" id="rf_usuario" name="rf_usuario" class="form-control" value="<?= $usuario['RF']; ?>" onblur="geraUusario()">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="rf_usuario">Usuário *</label>
+                                    <input type="text" id="usuario" name="usuario" class="form-control" maxlength="7" required readonly value="<?= $usuario['usuario']; ?>">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="tel_usuario">Telefone *</label>
@@ -106,7 +125,7 @@ $con = bancoMysqli();
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="email">E-mail *</label>
-                                    <input type="text" id="email" name="email" class="form-control" value="<?= $usuario['email']; ?>">
+                                    <input type="email" id="email" name="email" class="form-control" value="<?= $usuario['email']; ?>">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="unidade_id">Unidade *</label>
@@ -170,6 +189,23 @@ $con = bancoMysqli();
      }*/
 
 
+    function geraUusario() {
 
+        // pega o valor do RF
+        var usuarioRf = document.querySelector("#rf_usuario").value;
+
+        // tira os pontos do valor, ficando apenas os numeros
+        usuarioRf = usuarioRf.replace(/[^0-9]/g, '');
+        usuarioRf = parseInt(usuarioRf);
+
+        // adiciona o d antes do rf
+        usuarioRf = "d" + usuarioRf;
+
+        // limita o rf a apenas o d + 6 primeiros numeros do rf
+        let usuario = usuarioRf.substr(0, 7);
+
+        // passa o valor para o input
+        document.querySelector("[name='usuario']").value = usuario;
+    }
 
 </script>
