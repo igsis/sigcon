@@ -16,7 +16,7 @@
                         <li class=""><a href="?perfil=contratos/pj_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Pessoa Jurídica</span></a></li>
                     </li>
                     <li class="treeview">
-                        <li class=""><a href="?perfil=contratos/tipo_pessoa"><i class="fa fa-circle-o text-red"></i> <span>Contratos</span></a></li>
+                        <li class=""><a href="?perfil=contratos/pesquisa_licitacao_contratos"><i class="fa fa-circle-o text-red"></i> <span>Contratos</span></a></li>
                     </li>
                     <li class="treeview">
                     <li class=""><a href="?perfil=contratos/aditivo_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Aditivos</span></a></li>
