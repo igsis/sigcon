@@ -97,7 +97,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
             foreach ($telefones as $idTelefone => $telefone) {
                 if (!strlen($telefone)) {
-                    // Deletar telefone do banco se for apagado.
+                    // Deletar telefone do banco se for apagado no edita.
                     $sqlDelete = "DELETE FROM pj_telefones WHERE id = '$idTelefone'";
                     mysqli_query($con, $sqlDelete);
                     gravarLog($sqlDelete);
