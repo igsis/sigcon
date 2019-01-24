@@ -5,7 +5,7 @@ $conn = bancoPDO();
 $licitacoes  = $conn->query("SELECT * FROM `licitacoes`")->fetchAll();
 $unidades    = $conn->query("SELECT * FROM `unidades`")->fetchAll();
 
-if(isset($_POST['pesquisaNumProcesso'])){
+if(isset($_POST['pesquisaNumProcesso']) && '' != $_POST['numProcesso']){
     $numProcesso  = $_POST['numProcesso'];
     $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE numero_processo = :id");
     $stmt->execute(['id' => $numProcesso ]);
@@ -20,12 +20,12 @@ if(isset($_POST['pesquisaObjeto'])){
 }
 
 
-// if(isset($_POST['pesquisaUnidade'])){
-//     $unidade  = $_POST['unidade'];
-//     $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE unidade LIKE :unidade ");
-//     $stmt->execute(['unidade' => "%$unidade%" ]);
-//     $licitacoes = $stmt->fetchAll();
-// }
+if(isset($_POST['pesquisaUnidade']) && '0' != $_POST['unidade'] ){
+    $idUnidade  = $_POST['unidade'];
+    $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE unidade_id = :unidade ");
+    $stmt->execute(['unidade' => $idUnidade ]);
+    $licitacoes = $stmt->fetchAll();   
+}
 
 ?>
 
@@ -71,15 +71,16 @@ if(isset($_POST['pesquisaObjeto'])){
                             <label for="exampleInputEmail1">Unidade</label>
                             <div class="input-group input-group-sm">
                                 <select class="form-control pull-right" name="unidade" id="">
+                                    <option value="0">Selecione a Unidade</option>
                                     <?php 
-                                        foreach($unidades as $idUnidade => $unidade){
+                                        foreach($unidades as $unidade){
                                     ?>
-                                        <option value="<?= $idUnidade ?>"><?= $unidade['nome'] ?></option>
+                                        <option value="<?= $unidade['id'] ?>"><?= $unidade['nome'] ?></option>
                                     <?php 
                                         }
                                     ?>
                                 </select>
-                                <!-- <input type="text" name="unidade" class="form-control pull-right" placeholder="Buscar"> -->
+                                
                                 <div class="input-group-btn">
                                     <button type="submit" name='pesquisaUnidade' class="btn btn-default"><i class="fa fa-search"></i></button>
                                 </div>
@@ -114,7 +115,7 @@ if(isset($_POST['pesquisaObjeto'])){
                                     <td>
                                         <form action="?perfil=administrativo/licitacao/licitacao_edita" method='POST'>
                                             <input type="hidden" name='editarLicitacao' value='<?= $licitacao['id'] ?>'>
-                                            <button type='submit' class='btn btn-info'> Editar </button>
+                                            <button type='submit' class='btn btn-info'> Carregar </button>
                                         </form>
                                     </td> 
                                 </tr>
