@@ -14,11 +14,30 @@ require "../funcoes/funcoesGerais.php";
 require "cabecalho.php";
 
 // carrega o perfil
-if(isset($_GET['perfil'])){
-    include "../perfil/".$_GET['perfil'].".php";
-}else{
-    include "../perfil/inicio.php";
+$nivelAcesso = $_SESSION['nivelAcesso'];
+
+if($nivelAcesso == 1){
+    if(isset($_GET['perfil'])){
+        include "../perfil/".$_GET['perfil'].".php";
+    }else{
+        include "../perfil/administrativo.php";
+    }
 }
+elseif ($nivelAcesso == 2){
+    if(isset($_GET['perfil'])){
+        include "../perfil/".$_GET['perfil'].".php";
+    }else{
+        include "../perfil/contratos.php";
+    }
+}
+else{
+    if(isset($_GET['perfil'])){
+        include "../perfil/".$_GET['perfil'].".php";
+    }else{
+        include "../perfil/pesquisa.php";
+    }
+}
+
 
 //carrega o rodapé
 include "rodape.php";
