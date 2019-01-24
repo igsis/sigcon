@@ -113,17 +113,20 @@
                                     <label>Ordem de Início *</label>
                                     <input type="date" name="ordem_inicio" id='ordem_inicio' class="form-control" disabled="disabled">
                                 </div>
+                                <div class="form-group col-md-3">
+                                    <label for="status">Status *</label>
+                                    <select class="form-control" id="status" name="status">
+                                        <option value="">Selecione...</option>
+                                        <?php
+                                        geraOpcao("licitacao_status")
+                                        ?>
+                                    </select>
+                                </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <label for="observacao">Observação *</label>
                                     <textarea type="text" id="observacao" name="observacao" class="form-control" maxlength="250" rows="5" required></textarea>
-                                </div>
-                                <div style="margin-top: 50px" class="form-group col-md-6">
-                                    <label for="status">Status </label> <br>
-                                    <label><input type="radio" name="status" value="3" checked> Licitação </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="status" value="2"> Contrato </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="status" value="1"> Cancelado </label>
                                 </div>
                             </div>
                         </div>
