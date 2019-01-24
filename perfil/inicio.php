@@ -7,15 +7,15 @@ $sql = "SELECT * FROM licitacoes WHERE publicado = 1";
 $query = mysqli_query($con,$sql);
 $num = mysqli_num_rows($query);
 
-$sqlStatus3 = "SELECT * FROM licitacoes WHERE status = 3";
+$sqlStatus3 = "SELECT * FROM licitacoes WHERE licitacao_status_id = 3";
 $queryStatus3 = mysqli_query($con, $sqlStatus3);
 $qtde3 = mysqli_num_rows($queryStatus3);
 
-$sqlStatus2 = "SELECT * FROM licitacoes WHERE status = 2";
+$sqlStatus2 = "SELECT * FROM licitacoes WHERE licitacao_status_id = 2";
 $queryStatus2 = mysqli_query($con, $sqlStatus2);
 $qtde2 = mysqli_num_rows($queryStatus2);
 
-$sqlStatus1 = "SELECT * FROM licitacoes WHERE status = 1";
+$sqlStatus1 = "SELECT * FROM licitacoes WHERE licitacao_status_id = 1";
 $queryStatus1 = mysqli_query($con, $sqlStatus1);
 $qtde1 = mysqli_num_rows($queryStatus1);
 
@@ -38,9 +38,7 @@ $qtde1 = mysqli_num_rows($queryStatus1);
 
                             if($num > 0)
                             {
-
                                 ?>
-
                                 <table class='table table-striped table-bordered table-responsive list_info'>
                                     <thead>
                                     <tr class='list_menu text-center text-purple text-bold'>
@@ -59,7 +57,6 @@ $qtde1 = mysqli_num_rows($queryStatus1);
                                     </tr>
 
                                 </table>
-
                                 <?php
                             }
                             else

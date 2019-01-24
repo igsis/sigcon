@@ -4,18 +4,160 @@ include "../perfil/includes/menu.php";
 $con = bancoMysqli();
 $conn = bancoPDO();
 
-if (isset($_POST['idPf'])) {
-    $tipoPessoa = 1;
-    $idPessoa = $_POST['idPf'];
+$idLicitacao = $_POST['idLicitacao'];
+$licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
 
-} elseif (isset($_POST['idPj'])) {
-    $tipoPessoa = 2;
-    $idPessoa = $_POST['idPj'];
+if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
+    $idContrato = $_POST['idContrato'] ?? NULL;
+    $termo_contrato = $_POST['termo_contrato'];
+    $tipo_servico = $_POST['tipo_servico'];
+    $objeto = $_POST['objeto'];
+    $idEmpresa = $_POST['idEmpresa'];
+    $idUnidade = $_POST['unidade'];
+    $idEquipamento = $_POST['equipamento'];
+    $fiscal = $_POST['fiscal'];
+    $contatoFiscal = $_POST['fiscal_contato'];
+    $suplente = $_POST['suplente'];
+    $contatoSuplente = $_POST['suplente_contato'];
+    $garantia = $_POST['garantia'];
+    $vigencia_inicio = $_POST['vigencia_inicio'];
+    $vigencia_fim = $_POST['vigencia_fim'];
+    $DOU = $_POST['dou'];
+    $valor_mensal = $_POST['valor_mensal'];
+    $valor_anual = $_POST['valor_anual'];
+    $negociacoes_reajustes = $_POST['negociacoes_reajustes'];
+    $nivel_risco = $_POST['nivel_risco'];
+    $observacao = $_POST['observacao'];
+    $vencimento = $_POST['vencimento'];
+    $status = $_POST['status'];
 
-} else {
-    $tipoPessoa = NULL;
-    $idPessoa = NULL;
+    if(isset($_POST['cadastra'])) {
+        $sqlFiscal = "INSERT INTO fiscais (nome_fiscal, 
+                                           contato_fiscal, 
+                                           publicado)
+                                  VALUES  ('$fiscal', 
+                                           '$contatoFiscal',
+                                           '1')";
+
+        if (mysqli_query($con, $sqlFiscal)) {
+
+            gravarLog($sqlFiscal);
+            $idFiscal = recuperaUltimo("fiscais");
+
+            $sqlSuplente = "INSERT INTO suplentes (nome_suplente, 
+                                           contato_suplente, 
+                                           publicado)
+                                  VALUES  ('$suplente', 
+                                           '$contatoSuplente',
+                                           '1')";
+
+            if (mysqli_query($con, $sqlSuplente)) {
+
+                gravarLog($sqlSuplente);
+                $idSuplente = recuperaUltimo("suplentes");
+
+                $sqlContrato = "INSERT INTO contratos (licitacao_id, 
+                                                       termo_contrato, 
+                                                       tipo_servico,
+                                                       tipo_pessoa_id,
+                                                       pessoa_id,
+                                                       unidade_id,
+                                                       equipamentos_id,
+                                                       fiscal_id,
+                                                       suplente_id,
+                                                       garantia, 
+                                                       vencimento,
+                                                       negociacoes_reajustes,
+                                                       nivel_de_risco,
+                                                       observacao,
+                                                       contrato_status_id,
+                                                       publicado)
+                                             VALUES   ('$idLicitacao', 
+                                                       '$termo_contrato',
+                                                       '$tipo_servico',
+                                                       '$tipo_pessoa',
+                                                       '$pessoa_id',
+                                                       '$idUnidade',
+                                                       '$idEquipamento',
+                                                       '$idFiscal',
+                                                       '$idSuplente',
+                                                       '$garantia',
+                                                       '$vencimento',
+                                                       '$negociacoes_reajustes',
+                                                       '$nivel_risco',
+                                                       '$observacao',
+                                                       '$status',                                                       
+                                                       '1')";
+
+                if (mysqli_query($con, $sqlContrato)) {
+
+                    gravarLog($sqlContrato);
+                    $idContrato = recuperaUltimo("contratos");
+                    $mensagem = mensagem("success", "Cadastrado com sucesso!");
+
+                } else {
+                    $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
+                }
+            }
+        }
+    }
+
+    if (isset($_POST['edita'])){
+
+        $sqlContrato = "UPDATE contratos SET 
+                                          termo_contrato = '$termo_contrato', 
+                                          tipo_servico = '$tipo_servico',
+                                          tipo_pessoa_id = '$tipo_pessoa',
+                                          pessoa_id = '$pessoa_id',
+                                          unidade_id = '$idUnidade',
+                                          equipamentos_id = '$idEquipamento',
+                                          garantia =  '$garantia',
+                                          vencimento = '$vencimento',
+                                          negociacoes_reajustes =  '$negociacoes_reajustes',
+                                          nivel_de_risco = '$nivel_risco',
+                                          observacao = '$observacao',
+                                          contrato_status_id = '$status'
+                                  WHERE id = '$idContrato'";
+
+        if (mysqli_query($con, $sqlContrato)) {
+
+            gravarLog($sqlContrato);
+
+            $contrato = recuperaDados("contratos", "id", $idContrato);
+            $idFiscal = $contrato['fiscal_id'];
+            $idSuplente = $contratos['suplente_id'];
+
+            $sqlFiscal = "UPDATE fiscais SET 
+                                          nome_fiscal = '$fiscal', 
+                                          contato_fiscal = '$contatoFiscal'
+                                      WHERE id = '$idFiscal'";
+
+            if (mysqli_query($con, $sqlFiscal)) {
+
+                gravarLog($sqlFiscal);
+
+                $sqlSuplente = "UPDATE suplentes SET 
+                                                nome_suplente = '$suplente', 
+                                                contato_suplente = '$contatoSuplente'
+                                      WHERE id = '$idSuplente'";
+
+                if (mysqli_query($con, $sqlSuplente)) {
+                    gravarLog($sqlSuplente);
+                    $mensagem = mensagem("success", "Atualizado com sucesso!");
+
+                } else {
+                    $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
+                }
+            }
+        }
+    }
 }
+
+$fical = recuperaDados("fiscais", "id", $idFiscal);
+$suplente = recuperaDados("suplentes", "id", $idSuplente);
+$contratos = recuperaDados("contratos", "id", $idContrato);
+
+
 
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -31,7 +173,14 @@ if (isset($_POST['idPf'])) {
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Cadastro de Contrato</h3>
+                        <h3 class="box-title">
+                            <?= "Número do processo administrativo: " . $contrato['numero_processo']?>
+                        </h3>
+                    </div>
+                    <div class="row" align="center">
+                        <?php if (isset($mensagem)) {
+                            echo $mensagem;
+                        }; ?>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
@@ -51,6 +200,7 @@ if (isset($_POST['idPf'])) {
                                     <input type="text" id="tipo_servico" name="tipo_servico" class="form-control" maxlength="80" required>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="objeto">Objeto *</label>
@@ -60,7 +210,7 @@ if (isset($_POST['idPf'])) {
                                     <form method='POST'>
                                         <label for="pesquisaEmpresa">Empresa</label>
                                         <div class="input-group input-group-sm">
-                                            <input type="text" name='cnpj' maxlength='19' minlength='19' class="form-control" placeholder="Buscar CNPJ">
+                                            <input type="text" name='cnpj' maxlength='19' minlength='19' class="form-control" placeholder="Buscar">
                                             <div class="input-group-btn">
                                                 <button type="submit" name='pesquisaEmpresa' class="btn btn-default"><i class="fa fa-search"></i></button>
                                             </div>
@@ -71,7 +221,7 @@ if (isset($_POST['idPf'])) {
                                     <form method='POST'>
                                         <label for="pesquisaPf">Pessoa Fisíca</label>
                                         <div class="input-group input-group-sm">
-                                            <input type="text" name='cpf' maxlength='19' minlength='11' class="form-control" placeholder="Buscar CPF">
+                                            <input type="text" name='cpf' maxlength='19' minlength='11' class="form-control" placeholder="Buscar">
                                             <div class="input-group-btn">
                                                 <button type="submit" name='pesquisaPf' class="btn btn-default"><i class="fa fa-search"></i></button>
                                             </div>
@@ -127,10 +277,10 @@ if (isset($_POST['idPf'])) {
                             </div>
 
                             <hr />
-                                <div align="center">
-                                    <h2>Informações do contrato</h2>
-                                </div>
 
+                            <div align="center">
+                                <h2>Informações do contrato</h2>
+                            </div>
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label>Vigência início</label>
@@ -153,20 +303,17 @@ if (isset($_POST['idPf'])) {
                                     <input type="text" id="valor_anual" name="valor_anual" class="form-control" placeholder="Valor em formato decimal *">
                                 </div>
                             </div>
-
                             <hr/>
-
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label for="negociacoes_reajustes">Negociações / Reajuste</label>
-                                    <textarea type="text" id="negociacoes_reajustes" name="negociacoes_reajustes" class="form-control" rows="3" maxlength="125" required></textarea>
+                                    <label for="observacao">Negociações / Reajuste</label>
+                                    <textarea type="text" id="observacao" name="observacao" class="form-control" rows="3" maxlength="125" required></textarea>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="nivel_risco">Nível de risco</label>
                                     <textarea type="text" id="nivel_risco" name="nivel_risco" class="form-control" maxlength="250" rows="3" required></textarea>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="observacao">Observação *</label>
@@ -189,7 +336,8 @@ if (isset($_POST['idPf'])) {
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <button type="submit" name="cadastra" class="btn btn-primary pull-right">Cadastrar</button>
+                            <input type="hidden" name="idContrato" value="<?= $idContrato ?>">
+                            <button type="submit" name="edita" class="btn btn-primary pull-right">Editar</button>
                         </div>
                     </form>
                 </div>
@@ -199,9 +347,11 @@ if (isset($_POST['idPf'])) {
         </div>
         <!-- /.row -->
         <!-- END ACCORDION & CAROUSEL-->
+
     </section>
     <!-- /.content -->
 </div>
+
 
 <script>
 

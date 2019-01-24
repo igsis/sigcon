@@ -1,6 +1,10 @@
 <?php
 include "../perfil/includes/menu.php";
 
+if (isset($_POST['documentacao'])) {
+    $cpf = $_POST['documentacao'];
+}
+
 ?>
 <script language="JavaScript" >
     $("#cep").mask('00000-000', {reverse: true});
@@ -25,7 +29,7 @@ include "../perfil/includes/menu.php";
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cpf">CPF *</label>
-                                    <input type="text" data-mask="000.000.000-00" minlength="14" class="form-control" id="cpf" name="cpf" required>
+                                    <input type="text" data-mask="000.000.000-00" minlength="14" class="form-control" id="cpf" name="cpf" value="<?= isset($cpf) ? $cpf : NULL ?>" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
