@@ -4,6 +4,9 @@ include "../perfil/includes/menu.php";
 $con = bancoMysqli();
 $conn = bancoPDO();
 
+$tipoPessoa = $_POST['tipoPessoa'];
+$idPessoa = $_POST['idPessoa'];
+
 $idLicitacao = $_POST['idLicitacao'];
 $licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
 
@@ -174,7 +177,7 @@ $contratos = recuperaDados("contratos", "id", $idContrato);
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">
-                            <?= "Número do processo administrativo: " . $contrato['numero_processo']?>
+                            <?= "Número do processo administrativo: " . $licitacao['numero_processo']?>
                         </h3>
                     </div>
                     <div class="row" align="center">
@@ -189,7 +192,7 @@ $contratos = recuperaDados("contratos", "id", $idContrato);
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="num_processo">Número do processo administrativo</label>
-                                    <input type="text" data-mask="0000.0000/0000000-0" id="num_processo" name="num_processo" class="form-control" maxlength="20" readonly>
+                                    <input type="text" data-mask="0000.0000/0000000-0" id="num_processo" name="num_processo" class="form-control" maxlength="20" value="<?= $licitacao['numero_processo'];  ?>" readonly>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="termo_contrato">Termo de contrato *</label>

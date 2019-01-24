@@ -189,6 +189,8 @@ if (isset($_POST['idPf'])) {
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
+                            <input type="hidden" name="tipoPessoa" value="<?= $tipoPessoa ?>">
+                            <input type="hidden" name="idPessoa" value="<?= $idPessoa ?>">
                             <button type="submit" name="cadastra" class="btn btn-primary pull-right">Cadastrar</button>
                         </div>
                     </form>

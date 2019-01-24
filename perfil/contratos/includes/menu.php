@@ -19,7 +19,7 @@
                         <li class=""><a href="?perfil=contratos/tipo_pessoa"><i class="fa fa-circle-o text-red"></i> <span>Contratos</span></a></li>
                     </li>
                     <li class="treeview">
-                    <li class=""><a href="?perfil=contratos/aditivos_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Aditivos</span></a></li>
+                    <li class=""><a href="?perfil=contratos/aditivo_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Aditivos</span></a></li>
                     </li>
                     <li class="treeview">
                         <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Pagamento</span></a></li>
