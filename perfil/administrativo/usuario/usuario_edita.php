@@ -4,7 +4,8 @@ include "../perfil/includes/menu.php";
 $con = bancoMysqli();
 
     if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
-        $idUsuario = $_POST['idUsuario'] ?? NULL;
+        $idUsuario = (isset($_POST['idUsuario']) ? $_POST['idUsuario'] : NULL);
+        $usuario = $_POST['usuario'];
         $nome_completo = $_POST['nome'];
         $RF = $_POST['rf_usuario'];
         $telefone = $_POST['tel_usuario'];
@@ -15,6 +16,7 @@ $con = bancoMysqli();
         if (isset($_POST['cadastra'])) {
 
             $sql = "INSERT INTO usuarios (nome_completo, 
+                                           usuario,
                                            RF,
                                            telefone, 
                                            email, 
@@ -22,6 +24,7 @@ $con = bancoMysqli();
                                            nivel_acesso_id, 
                                            publicado) 
                                   VALUES ('$nome_completo',
+                                           '$usuario',
                                            '$RF', 
                                            '$telefone', 
                                            '$email', 
@@ -39,10 +42,10 @@ $con = bancoMysqli();
             }
         }
 
-
         if (isset($_POST['edita'])) {
             $sql = "UPDATE usuarios SET 
-                                        nome_completo = '$nome_completo', 
+                                        nome_completo = '$nome_completo',
+                                        usuario = '$usuario', 
                                         RF = '$RF', 
                                         telefone = '$telefone', 
                                         email = '$email',
@@ -59,6 +62,9 @@ $con = bancoMysqli();
         }
     }
 
+    if(isset($_POST['carrega'])){
+        $idUsuario = (isset($_POST['idUsuario']) ? $_POST['idUsuario'] : NULL);
+    }
 
     $usuario = recuperaDados("usuarios", "id", $idUsuario);
 
@@ -94,9 +100,13 @@ $con = bancoMysqli();
                                     <label for="nome">Nome Completo *</label>
                                     <input type="text" id="nome" name="nome" class="form-control" value="<?= $usuario['nome_completo']; ?>">
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2">
                                     <label for="rf_usuario">RF *</label>
-                                    <input data-mask="000.000.0" type="text" id="rf_usuario" name="rf_usuario" class="form-control" value="<?= $usuario['RF']; ?>">
+                                    <input data-mask="000.000.0" type="text" id="rf_usuario" name="rf_usuario" class="form-control" value="<?= $usuario['RF']; ?>" onblur="geraUusario()">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label for="rf_usuario">Usuário *</label>
+                                    <input type="text" id="usuario" name="usuario" class="form-control" maxlength="7" required readonly value="<?= $usuario['usuario']; ?>">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="tel_usuario">Telefone *</label>
@@ -170,6 +180,23 @@ $con = bancoMysqli();
      }*/
 
 
+    function geraUusario() {
 
+        // pega o valor do RF
+        var usuarioRf = document.querySelector("#rf_usuario").value;
+
+        // tira os pontos do valor, ficando apenas os numeros
+        usuarioRf = usuarioRf.replace(/[^0-9]/g, '');
+        usuarioRf = parseInt(usuarioRf);
+
+        // adiciona o d antes do rf
+        usuarioRf = "d" + usuarioRf;
+
+        // limita o rf a apenas o d + 6 primeiros numeros do rf
+        let usuario = usuarioRf.substr(0, 7);
+
+        // passa o valor para o input
+        document.querySelector("[name='usuario']").value = usuario;
+    }
 
 </script>

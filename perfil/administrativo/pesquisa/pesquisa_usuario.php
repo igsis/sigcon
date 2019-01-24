@@ -87,9 +87,9 @@ if(isset($_POST['pesquisaNivel'])){
                                 <td><?= $usuario['nome_completo'] ?></td>
                                 <td><?= $nivel_acesso ?></td>
                                 <td>
-                                    <form action="?perfil=usuario/usuario_edita" method='POST'>
+                                    <form action="?perfil=administrativo/usuario/usuario_edita" method='POST'>
                                         <input type="hidden" name='idUsuario' value='<?= $usuario['id'] ?>'>
-                                        <button type='submit' class='btn btn-info'> Editar </button>
+                                        <button type="submit" class='btn btn-info' name="carrega"> Carregar </button>
                                     </form>
                                 </td>
                             </tr>
