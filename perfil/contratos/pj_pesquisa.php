@@ -37,8 +37,8 @@ if (isset($_POST['procurar'])){
                     $resultado .= "<td>".$pessoa['email']."</td>";
                     $resultado .= "<td>
                                      <form action='?perfil=contratos/contrato_cadastro' method='post'>
-                                        <input type='hidden' name='idPj' value='".$pessoa['id']."'>
-                                        <input type='hidden' name='idLicitacao' value='".$idLicitacao."'>
+                                        <input type='text' name='idPj' value='".$pessoa['id']."'>
+                                        <input type='text' name='idLicitacao' value='".$idLicitacao."'>
                                         <input type='submit' name='carregar' class='btn btn-primary' name='selecionar' value='Selecionar'>
                                      </form>
                                </td>";
@@ -88,6 +88,7 @@ if (isset($_POST['procurar'])){
                                 <label for="procurar">Pesquisar por CNPJ:</label>
                                 <div class="input-group">
                                     <input type="text" data-mask="00.000.000/0000-00" class="form-control" minlength=14 name="procurar" id="cnpj" value="<?= isset($cnpj) ? $cnpj : NULL ?>">
+                                    <input type='hidden' name='idLicitacao' value="<?= $idLicitacao ?>">
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i> Procurar</button>
                                     </span>

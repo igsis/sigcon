@@ -4,26 +4,23 @@ include "../perfil/includes/menu.php";
 $con = bancoMysqli();
 $conn = bancoPDO();
 
-if (isset($_POST['idLicitacao'])) {
-    $idLicitacao = $_POST['idLicitacao'];
-    $licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
+    if (isset($_POST['idLicitacao'])) {
+        $idLicitacao = $_POST['idLicitacao'];
+        $licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
+    }
 
-    echo $idLicitacao;
+    if (isset($_POST['idPf'])) {
+        $tipoPessoa = 1;
+        $idPessoa = $_POST['idPf'];
 
-}
+        $pessoa_fisica = recuperaDados("pessoas_fisicas", "id", $idPessoa)['cpf'];
 
-if (isset($_POST['idPf'])) {
-    $tipoPessoa = 1;
-    $idPessoa = $_POST['idPf'];
+    } elseif (isset($_POST['idPj'])) {
+        $tipoPessoa = 2;
+        $idPessoa = $_POST['idPj'];
 
-} elseif (isset($_POST['idPj'])) {
-    $tipoPessoa = 2;
-    $idPessoa = $_POST['idPj'];
-
-} else {
-    $tipoPessoa = NULL;
-    $idPessoa = NULL;
-}
+        $pessoa_juridica = recuperaDados("pessoas_juridicas", "id", $idPessoa)['CNPJ'];
+    }
 
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -50,45 +47,51 @@ if (isset($_POST['idPf'])) {
                                     <label for="num_processo">Número do processo administrativo</label>
                                     <input type="text" data-mask="0000.0000/0000000-0" id="num_processo" name="num_processo" class="form-control" maxlength="20" value="<?= $licitacao['numero_processo'] ?>" readonly>
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label for="termo_contrato">Termo de contrato *</label>
-                                    <input type="text" id="termo_contrato" name="termo_contrato" class="form-control" maxlength="100" required>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="tipo_servico">Tipo de serviço *</label>
-                                    <input type="text" id="tipo_servico" name="tipo_servico" class="form-control" maxlength="80" required>
-                                </div>
-                            </div>
-                            <div class="row">
+                                <?php
+
+                                if ($tipoPessoa == 1) {
+
+                                    ?>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="cpf">CPF: </label>
+                                        <input type="text" data-mask="000.000.000-00" id="cpf" name="cpf"
+                                               class="form-control" value="<?= $pessoa_fisica ?>" readonly>
+                                    </div>
+
+                                    <?php
+
+                                }else {
+
+                                    ?>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="cnpj">CNPJ: </label>
+                                        <input type="text" data-mask="00.000.000/0000-00" id="cnpj" name="cnpj"
+                                               class="form-control" value="<?= $pessoa_juridica ?>" readonly>
+                                    </div>
+
+                                    <?php
+                                }
+
+                                ?>
                                 <div class="form-group col-md-6">
                                     <label for="objeto">Objeto *</label>
                                     <input type="text" id="objeto" name="objeto" class="form-control" maxlength="100" value="<?= $licitacao['objeto']; ?>" readonly>
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <form method='POST'>
-                                        <label for="pesquisaEmpresa">Empresa</label>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" name='cnpj' maxlength='19' minlength='19' class="form-control" placeholder="Buscar CNPJ">
-                                            <div class="input-group-btn">
-                                                <button type="submit" name='pesquisaEmpresa' class="btn btn-default"><i class="fa fa-search"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <form method='POST'>
-                                        <label for="pesquisaPf">Pessoa Fisíca</label>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" name='cpf' maxlength='19' minlength='11' class="form-control" placeholder="Buscar CPF">
-                                            <div class="input-group-btn">
-                                                <button type="submit" name='pesquisaPf' class="btn btn-default"><i class="fa fa-search"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+
+
                             </div>
 
                             <div class="row">
+                                <div class="form-group col-md-3">
+                                    <label for="termo_contrato">Termo de contrato *</label>
+                                    <input type="text" id="termo_contrato" name="termo_contrato" class="form-control" maxlength="100" required>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="tipo_servico">Tipo de serviço *</label>
+                                    <input type="text" id="tipo_servico" name="tipo_servico" class="form-control" maxlength="80" required>
+                                </div>
                                 <div class="form-group col-md-3">
                                     <label for="unidade">Unidade *</label>
                                     <select class="form-control" id="unidade" name="unidade">
@@ -108,6 +111,10 @@ if (isset($_POST['idPf'])) {
                                         ?>
                                     </select>
                                 </div>
+                            </div>
+
+                            <div class="row">
+
                                 <div class="form-group col-md-3">
                                     <label for="fiscal">Fiscal</label>
                                     <input type="text" id="fiscal" name="fiscal" class="form-control" maxlength="60">
@@ -116,9 +123,6 @@ if (isset($_POST['idPf'])) {
                                     <label for="fiscal_contato">Contato do fiscal</label>
                                     <input type="text" id="fiscal_contato" name="fiscal_contato" class="form-control" maxlength="60">
                                 </div>
-                            </div>
-
-                            <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="suplente">Suplente</label>
                                     <input type="text" id="suplente" name="suplente" class="form-control" maxlength="60">
@@ -127,7 +131,10 @@ if (isset($_POST['idPf'])) {
                                     <label for="suplente_contato">Contato do suplente</label>
                                     <input type="text" id="suplente_contato" name="suplente_contato" class="form-control" maxlength="60">
                                 </div>
-                                <div class="form-group col-md-6" align="center" style="margin-top: 10px">
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-12" align="center" style="margin-top: 10px">
                                     <label for="garantia">Garatia? </label> <br>
                                     <label><input type="radio" name="garantia" value="2"> Sim </label>&nbsp;&nbsp;
                                     <label><input type="radio" name="garantia" value="1"> Não </label>

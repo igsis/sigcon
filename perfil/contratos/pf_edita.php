@@ -69,6 +69,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                     }
                 }
             }
+
         } else {
             $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
 
@@ -101,6 +102,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                     $sqlDelete = "DELETE FROM pj_telefones WHERE id = '$idTelefone'";
                     mysqli_query($con, $sqlDelete);
                     gravarLog($sqlDelete);
+
                 }
 
                 // cadastrar o telefone de pf
@@ -186,6 +188,7 @@ $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                     <input type="text" class="form-control" id="complemento" name="complemento" maxlength="25" value="<?= $pf_endereco['complemento']; ?>">
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="logradouro">Rua</label>
@@ -204,6 +207,7 @@ $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                     <input type="text" class="form-control" id="cidade" name="cidade" readonly value="<?= $pf_endereco['cidade']; ?>">
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="email">E-mail * </label>
@@ -221,11 +225,13 @@ $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                     <label for="recado">Recado (opcional) </label>
                                     <?php if (isset($arrayTelefones[2])) {
                                     ?>
+
                                     <input type="text" data-mask="(00)0000-00000" class="form-control" id="recado" name="telefone[<?= $arrayTelefones[2]['id'] ?>]" value="<?=  $arrayTelefones[2]['telefone']; ?>">
 
                                     <?php
                                     } else {
                                     ?>
+
                                     <input type="text" data-mask="(00)0000-00000" class="form-control" id="recado" name="telefone3">
 
                                     <?php

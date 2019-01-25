@@ -69,6 +69,8 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                        '$telefone')";
 
                         mysqli_query($con, $sqlTelefone);
+
+                        $mensagem = mensagem("success", "Cadastrado com sucesso!");
                     }
                 }
             }
