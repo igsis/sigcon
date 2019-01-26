@@ -9,35 +9,20 @@
             <li class="treeview">
                 <a href=""> <i class="fa fa-cogs"></i> <span>Cadastrar</span> <i class="fa fa-angle-left pull-right"></i> </a>
                 <ul class="treeview-menu">
-                    <li class="treeview">
-                        <li class=""><a href="?perfil=administrativo/licitacao/licitacao_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Licitação</span></a></li>
-                    </li>
-                    <li class="treeview">
-                        <li class=""><a href="?perfil=administrativo/unidades/unidade_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Unidades</span></a></li>
-                    </li>
-                    <li class="treeview">
-                        <li class=""><a href="?perfil=administrativo/equipamentos/equipamento_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Equipamentos</span></a></li>
-                    </li>
-                    <li class="treeview">
-                        <li class=""><a href="?perfil=administrativo/usuario/usuario_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Usuários</span></a></li>
-                    </li>
+                    <li><a href="?perfil=administrativo&p=licitacao/licitacao_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Licitação</span></a></li>
+                    <li><a href="?perfil=administrativo&p=unidades/unidade_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Unidades</span></a></li>
+                    <li><a href="?perfil=administrativo&p=equipamentos/equipamento_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Equipamentos</span></a></li>
+                    <li><a href="?perfil=administrativo&p=usuario/usuario_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Usuários</span></a></li>
                 </ul>
             </li>
             <li class="treeview">
                 <a href=""> <i class="fa fa-search"></i> <span>Pesquisar</span> <i class="fa fa-angle-left pull-right"></i> </a>
                 <ul class="treeview-menu">
-                    <li class="treeview">
-                        <li class=""><a href="?perfil=administrativo/pesquisa/pesquisa_licitacao"><i class="fa fa-circle-o text-red"></i> <span>Licitação</span></a></li>
-                    </li>
-                    <li class="treeview">
-                        <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Contratos</span></a></li>
-                    </li>
-                    <li class="treeview">
-                        <li class=""><a href="?perfil=administrativo/pesquisa/pesquisa_usuario"><i class="fa fa-circle-o text-red"></i> <span>Usuários</span></a></li>
-                    </li>
+                    <li><a href="?perfil=administrativo&p=pesquisa/pesquisa_licitacao"><i class="fa fa-circle-o text-red"></i> <span>Licitação</span></a></li>
+                    <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Contratos</span></a></li>
+                    <li><a href="?perfil=administrativo&p=pesquisa/pesquisa_usuario"><i class="fa fa-circle-o text-red"></i> <span>Usuários</span></a></li>
                 </ul>
             </li>
-            <li><a href="index.php"><i class="fa fa-circle-o text-aqua"></i> <span>Voltar</span></a></li>
             <li class="header">MAIS</li>
             <li><a href="?perfil=usuario/minha_conta"><i class="fa fa-user"></i><span>Minha Conta</span></a></li>
             <li><a href="../include/ajuda.php"><i class="fa fa-question "></i><span>Ajuda</span></a></li>

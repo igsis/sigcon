@@ -1,8 +1,3 @@
-<?php
-    include "../perfil/includes/menu.php";
-    include "../include/script.php"
-
-?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Main content -->
