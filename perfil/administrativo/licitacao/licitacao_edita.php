@@ -1,6 +1,5 @@
 <?php
 $con = bancoMysqli();
-include "../perfil/includes/menu.php";
 
 // Carrega Licitação do Pesquisa
 if(isset($_POST['editarLicitacao'])){
@@ -27,7 +26,6 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $entrega = $_POST['entrega'];
     $ordem_inicio = $_POST['ordem_inicio'] ?? NULL;
     $observacoes = addslashes($_POST['observacao']) ?? NULL;
-    $status = $_POST['status'];
 
     if(isset($_POST['cadastra'])){
         $sql = "
@@ -66,7 +64,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                 '$entrega', 
                                 '$ordem_inicio', 
                                 '$observacoes', 
-                                '$status', 
+                                '1', 
                                 '1')";
 
         if (mysqli_query($con, $sql)) {
@@ -98,8 +96,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                 empenho_observacao = '$obs_empenho', 
                                 entrega = '$entrega', 
                                 ordem_inicio = '$ordem_inicio', 
-                                observacao = '$observacoes', 
-                                licitacao_status_id = '$status' 
+                                observacao = '$observacoes'
                                 WHERE id = '$idLicitacao'";
 
         if (mysqli_query($con, $sql)) {
@@ -111,13 +108,8 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     }
 }
 
-/*if (isset($_POST['cadastra'])) {
-    $idLicitacao = recuperaUltimo('licitacoes');
-}*/
-
 $licitacao = recuperaDados('licitacoes', 'id', $idLicitacao);
-
-
+$status = recuperaDados("licitacao_status","id",$licitacao['licitacao_status_id']);
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -131,17 +123,15 @@ $licitacao = recuperaDados('licitacoes', 'id', $idLicitacao);
                 <div class="box box-info">
                     <div class="box-header with-border">
                         <h3 class="box-title">
-                            <?= "Número do processo administrativo: " . $licitacao['numero_processo']?>
+                            <?= "Status: " . $status['status']?>
                         </h3>
                     </div>
                     <div class="row" align="center">
-                        <?php if (isset($mensagem)) {
-                            echo $mensagem;
-                        }; ?>
+                        <?php if (isset($mensagem)) {echo $mensagem;} ?>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=administrativo/licitacao/licitacao_edita" role="form">
+                    <form method="POST" action="?perfil=administrativo&p=licitacao/licitacao_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-6">
@@ -168,6 +158,7 @@ $licitacao = recuperaDados('licitacoes', 'id', $idLicitacao);
                                     </select>
                                 </div>
                             </div>
+                            <hr/>
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="levantamento_preco">Levantamento de preço? </label> <br>
@@ -190,64 +181,52 @@ $licitacao = recuperaDados('licitacoes', 'id', $idLicitacao);
                                     <label><input type="radio" name="analise_edital" value="1" <?= $licitacao['analise_edital'] == 1 ? 'checked' : NULL ?>> Não </label>
                                 </div>
                             </div>
-                            <hr />
+                            <hr/>
                             <div class="row">
-                                <div class="form-group col-md-3">
-                                    <label for="licitacao">Licitação * </label>
-                                    <input type="date" name="licitacao" class="form-control" value="<?=$licitacao['licitacao']?>">
+                                <div class="form-group col-md-2">
+                                    <label for="licitacao">Licitação </label>
+                                    <input type="date" name="licitacao" id="licitacao" class="form-control" value="<?=$licitacao['licitacao']?>">
                                 </div>
-                                <div class="form-group col-md-offset-3 col-md-6">
+                                <div class="form-group col-md-4">
+                                    <label for="obs_licitacao">Licitação Observação</label>
+                                    <input type="text" id="obs_licitacao" name="obs_licitacao" class="form-control" maxlength="60" value="<?= $licitacao['licitacao_observacao'] ?>">
+                                </div>
+                                <div class="form-group col-md-2">
                                     <label for="homologacao">Homologação / Recurso? </label> <br>
                                     <label><input type="radio" name="homologacao" value="2" <?= $licitacao['homologacao'] == 2 ? 'checked' : NULL ?> onclick="habilitaCampo('obs_homologacao')"> Sim </label>&nbsp;&nbsp;
                                     <label><input type="radio" name="homologacao" value="1" <?= $licitacao['homologacao'] == 1 ? 'checked' : NULL ?> onclick="desabilitarCampo('obs_homologacao')"> Não </label>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="obs_licitacao">Licitação Observação *</label>
-                                    <input type="text" id="obs_licitacao" name="obs_licitacao" class="form-control" maxlength="60" value="<?= $licitacao['licitacao_observacao'] ?>">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="obs_homologacao">Homologação Observação *</label>
+                                <div class="form-group col-md-4">
+                                    <label for="obs_homologacao">Homologação Observação</label>
                                     <input type="text" id="obs_homologacao" name="obs_homologacao" class="form-control" maxlength="60" value="<?= $licitacao['homologacao_observacao']  ?>" disabled="disabled">
 
                                 </div>
                             </div>
+                            <hr/>
                             <div class="row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-2">
                                     <label for="empenho">Empenho? </label> <br>
                                     <label><input type="radio" name="empenho" value="2" <?= $licitacao['empenho'] == 2 ? 'checked' : NULL ?> onclick="habilitaCampo('obs_empenho')"> Sim </label>&nbsp;&nbsp;
                                     <label><input type="radio" name="empenho" value="1" <?= $licitacao['empenho'] == 1 ? 'checked' : NULL ?> onclick="desabilitarCampo('obs_empenho')"> Não </label>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="obs_empenho">Empenho Observação</label>
+                                    <input type="text" id="obs_empenho" name="obs_empenho" class="form-control" disabled="disabled" maxlength="60" value="<?= $licitacao['empenho_observacao']  ?>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="entrega">Entrega? </label> <br>
                                     <label><input type="radio" name="entrega" value="2" <?= $licitacao['entrega'] == 2 ? 'checked' : NULL ?> onclick="habilitaCampo('ordem_inicio')"> Sim </label>&nbsp;&nbsp;
                                     <label><input type="radio" name="entrega" value="1" <?= $licitacao['entrega'] == 1 ? 'checked' : NULL ?> onclick="desabilitarCampo('ordem_inicio')"> Não </label>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="obs_empenho">Empenho Observação *</label>
-                                    <input type="text" id="obs_empenho" name="obs_empenho" class="form-control" disabled="disabled" maxlength="60" value="<?= $licitacao['empenho_observacao']  ?>">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Ordem de Início *</label>
+                                <div class="form-group col-md-4">
+                                    <label for="ordem_inicio">Ordem de Início</label>
                                     <input type="date" name="ordem_inicio" id='ordem_inicio' class="form-control" disabled="disabled" value="<?= $licitacao['licitacao']?>">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="status">Status *</label>
-                                    <select class="form-control" id="status" name="status">
-                                        <option value="">Selecione...</option>
-                                        <?php
-                                        geraOpcao("licitacao_status", $licitacao['licitacao_status_id'])
-                                        ?>
-                                    </select>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-12">
-                                    <label for="observacao">Observação *</label>
-                                    <textarea type="text" id="observacao" name="observacao" class="form-control" maxlength="250" rows="5"><?= $licitacao['observacao'] ?></textarea>
+                                    <label for="observacao">Observação</label>
+                                    <input type="text" id="observacao" name="observacao" class="form-control" maxlength="250" value="<?= $licitacao['observacao'] ?>">
                                 </div>
                             </div>
                         </div>
@@ -256,6 +235,7 @@ $licitacao = recuperaDados('licitacoes', 'id', $idLicitacao);
                         <div class="box-footer">
                             <input type="hidden" name="idLicitacao" value="<?= $idLicitacao ?>">
                             <button type="submit" name="edita" class="btn btn-info pull-right">Editar</button>
+                            <button type="button" class="btn btn-danger pull-left" data-toggle="modal" data-target="#modal-danger">Cancelar</button>
                         </div>
                     </form>
                 </div>
@@ -265,7 +245,31 @@ $licitacao = recuperaDados('licitacoes', 'id', $idLicitacao);
         </div>
         <!-- /.row -->
         <!-- END ACCORDION & CAROUSEL-->
-
+        <!-- Confirmação de Exclusão -->
+        <div class="modal modal-danger fade" id="modal-danger">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Confirmação de cancelamento</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Deseja realmente cancelar?<br/></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Voltar</button>
+                        <form method="POST" action="?perfil=administrativo&p=licitacao/licitacao_visualiza" role="form">
+                            <input type="hidden" name="idLicitacao" value="<?= $idLicitacao ?>">
+                            <button type="submit" name="apagar" class="btn btn-outline">Sim</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- Fim Confirmação de Exclusão -->
     </section>
     <!-- /.content -->
 </div>
