@@ -32,6 +32,10 @@ if(isset($_POST['excluiUsuario'])){
 
     <section class="content-header">
         <h1>Pesquisa Usuário</h1>
+        <div class="row" align="center" >
+            <?php if (isset($mensagem)) {
+                echo $mensagem;
+            }; ?>
     </section>
 
     <section class="content">
@@ -74,10 +78,6 @@ if(isset($_POST['excluiUsuario'])){
 
             <div class="box">
                 <div class="box-header">
-                    <div class="row center" >
-                        <?php if (isset($mensagem)) {
-                            echo $mensagem;
-                        }; ?>
                     <h3 class="box-title">Pesquisa Usuário</h3>
                 </div>
                 <!-- /.box-header -->
@@ -117,18 +117,18 @@ if(isset($_POST['excluiUsuario'])){
                     </table>
                 </div>
                     <!-- Confirmação de Exclusão -->
-                    <div class="modal fade" id="confirmApagar" name="confirmApagar">
+                    <div class="modal fade modal-danger" id="confirmApagar" name="confirmApagar">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h4 class="modal-title" id="titulo">Excluir?</h4>
+                                    <h4 class="modal-title" id="titulo"> </h4>
                                 </div>
                                 <div class="modal-body">
                                     <p>Confirma?</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
                                     <form method="POST" id="formExcliuir">
                                         <input type="hidden" name='idUsuario'>
                                         <button type="submit" class="btn btn-danger" id="excluiUsuario" name="excluiUsuario">Remover</button>
@@ -148,7 +148,7 @@ if(isset($_POST['excluiUsuario'])){
 
     $('#confirmApagar').on('show.bs.modal', (e) =>
     {
-        document.querySelector('#titulo').innerHTML += ` ${e.relatedTarget.dataset.nome}?`
+        document.querySelector('#titulo').innerHTML = "Excluir " + ` ${e.relatedTarget.dataset.nome}?`
         document.querySelector('#formExcliuir input[name="idUsuario"]').value = e.relatedTarget.dataset.id
     });
 
