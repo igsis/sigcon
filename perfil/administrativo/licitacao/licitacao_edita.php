@@ -193,12 +193,12 @@ $status = recuperaDados("licitacao_status","id",$licitacao['licitacao_status_id'
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="homologacao">Homologação / Recurso? </label> <br>
-                                    <label><input type="radio" name="homologacao" value="2" <?= $licitacao['homologacao'] == 2 ? 'checked' : NULL ?> onclick="habilitaCampo('obs_homologacao')"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="homologacao" value="1" <?= $licitacao['homologacao'] == 1 ? 'checked' : NULL ?> onclick="desabilitarCampo('obs_homologacao')"> Não </label>
+                                    <label><input type="radio" name="homologacao" value="2" <?= $licitacao['homologacao'] == 2 ? 'checked' : NULL ?> > Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="homologacao" value="1" <?= $licitacao['homologacao'] == 1 ? 'checked' : NULL ?> > Não </label>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="obs_homologacao">Homologação Observação</label>
-                                    <input type="text" id="obs_homologacao" name="obs_homologacao" class="form-control" maxlength="60" value="<?= $licitacao['homologacao_observacao']  ?>" disabled="disabled">
+                                    <input type="text" id="obs_homologacao" name="obs_homologacao" class="form-control" maxlength="60" value="<?= $licitacao['homologacao_observacao']  ?>">
 
                                 </div>
                             </div>
@@ -206,21 +206,21 @@ $status = recuperaDados("licitacao_status","id",$licitacao['licitacao_status_id'
                             <div class="row">
                                 <div class="form-group col-md-2">
                                     <label for="empenho">Empenho? </label> <br>
-                                    <label><input type="radio" name="empenho" value="2" <?= $licitacao['empenho'] == 2 ? 'checked' : NULL ?> onclick="habilitaCampo('obs_empenho')"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="empenho" value="1" <?= $licitacao['empenho'] == 1 ? 'checked' : NULL ?> onclick="desabilitarCampo('obs_empenho')"> Não </label>
+                                    <label><input type="radio" name="empenho" value="2"  <?= $licitacao['empenho'] == 2 ? 'checked' : NULL ?>> Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="empenho" value="1"  <?= $licitacao['empenho'] == 1 ? 'checked' : NULL ?>> Não </label>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="obs_empenho">Empenho Observação</label>
-                                    <input type="text" id="obs_empenho" name="obs_empenho" class="form-control" disabled="disabled" maxlength="60" value="<?= $licitacao['empenho_observacao']  ?>">
+                                    <input type="text" id="obs_empenho" name="obs_empenho" class="form-control" maxlength="60" value="<?= $licitacao['empenho_observacao']  ?>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="entrega">Entrega? </label> <br>
-                                    <label><input type="radio" name="entrega" value="2" <?= $licitacao['entrega'] == 2 ? 'checked' : NULL ?> onclick="habilitaCampo('ordem_inicio')"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="entrega" value="1" <?= $licitacao['entrega'] == 1 ? 'checked' : NULL ?> onclick="desabilitarCampo('ordem_inicio')"> Não </label>
+                                    <label><input type="radio" name="entrega" value="2"  <?= $licitacao['entrega'] == 2 ? 'checked' : NULL ?>> Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="entrega" value="1"  <?= $licitacao['entrega'] == 1 ? 'checked' : NULL ?>> Não </label>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="ordem_inicio">Ordem de Início</label>
-                                    <input type="date" name="ordem_inicio" id='ordem_inicio' class="form-control" disabled="disabled" value="<?= $licitacao['licitacao']?>">
+                                    <input type="date" name="ordem_inicio" id='ordem_inicio' class="form-control" value="<?= $licitacao['licitacao']?>">
                                 </div>
                             </div>
                             <div class="row">

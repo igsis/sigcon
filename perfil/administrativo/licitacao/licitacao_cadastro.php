@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="unidade">Unidade *</label>
-                                    <select class="form-control" id="unidade" name="unidade" requiredU>
+                                    <select class="form-control" id="unidade" name="unidade" required>
                                         <option value="">Selecione...</option>
                                         <?php
                                         geraOpcao("unidades")
@@ -77,33 +77,33 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="homologacao">Homologação / Recurso?</label> <br>
-                                    <label><input type="radio" name="homologacao" value="2" onclick="habilitaCampo('obs_homologacao')"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="homologacao" value="1" checked onclick="desabilitarCampo('obs_homologacao')"> Não </label>
+                                    <label><input type="radio" name="homologacao" value="2"> Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="homologacao" value="1" checked> Não </label>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="obs_homologacao">Homologação Observação</label>
-                                    <input type="text" id="obs_homologacao" name="obs_homologacao" class="form-control" maxlength="60" disabled="disabled">
+                                    <input type="text" id="obs_homologacao" name="obs_homologacao" class="form-control" maxlength="60">
                                 </div>
                             </div>
                             <hr/>
                             <div class="row">
                                 <div class="form-group col-md-2">
                                     <label for="empenho">Empenho?</label> <br>
-                                    <label><input type="radio" name="empenho" value="2" onclick="habilitaCampo('obs_empenho')"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="empenho" value="1" checked onclick="desabilitarCampo('obs_empenho')"> Não </label>
+                                    <label><input type="radio" name="empenho" value="2"> Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="empenho" value="1" checked> Não </label>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="obs_empenho">Empenho Observação</label>
-                                    <input type="text" id="obs_empenho" name="obs_empenho" class="form-control" maxlength="60" disabled="disabled">
+                                    <input type="text" id="obs_empenho" name="obs_empenho" class="form-control" maxlength="60">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="entrega">Entrega? </label> <br>
-                                    <label><input type="radio" name="entrega" value="2" onclick="habilitaCampo('ordem_inicio')"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="entrega" value="1" checked onclick="desabilitarCampo('ordem_inicio')"> Não </label>
+                                    <label><input type="radio" name="entrega" value="2"> Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="entrega" value="1" checked> Não </label>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="ordem_inicio">Ordem de Início</label>
-                                    <input type="date" name="ordem_inicio" id='ordem_inicio' class="form-control" disabled="disabled">
+                                    <input type="date" name="ordem_inicio" id='ordem_inicio' class="form-control">
                                 </div>
                             </div>
                             <div class="row">
