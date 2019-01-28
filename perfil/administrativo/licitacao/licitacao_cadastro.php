@@ -61,15 +61,15 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="analise_edital">Análise / Ajuste do Edital? </label> <br>
-                                    <label><input type="radio" name="analise_edital" class="analise_edital" value="2" disabled>  Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="analise_edital" class="analise_edital" value="1" disabled checked> Não </label>
+                                    <label><input type="radio" name="analise_edital" class="analise_edital" value="2" disabled  onclick="habilitarDesabilitarCampo('.licitacao', false)">  Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="analise_edital" class="analise_edital" value="1" disabled checked onclick="habilitarDesabilitarCampo('.licitacao', true)"> Não </label>
                                 </div>
                             </div>
                             <hr/>
                             <div class="row">
                                 <div class="form-group col-md-2">
                                     <label for="licitacao">Licitação</label> <br>
-                                    <input type="date" name="licitacao" id="licitacao" class="form-control">
+                                    <input type="date" name="licitacao" id="licitacao" class="form-control licitacao" disabled onchange="habilitarDesabilitarCampo('.homologacao', false)">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="obs_licitacao">Licitação Observação</label>
@@ -77,8 +77,8 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="homologacao">Homologação / Recurso?</label> <br>
-                                    <label><input type="radio" name="homologacao" value="2"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="homologacao" value="1" checked> Não </label>
+                                    <label><input type="radio" name="homologacao" class="homologacao" value="2" disabled onclick="habilitarDesabilitarCampo('.empenho', false)"> Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="homologacao" class="homologacao" value="1" disabled checked onclick="habilitarDesabilitarCampo('.empenho', true)"> Não </label>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="obs_homologacao">Homologação Observação</label>
@@ -89,8 +89,8 @@
                             <div class="row">
                                 <div class="form-group col-md-2">
                                     <label for="empenho">Empenho?</label> <br>
-                                    <label><input type="radio" name="empenho" value="2"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="empenho" value="1" checked> Não </label>
+                                    <label><input type="radio" name="empenho" class="empenho" value="2" disabled onclick="habilitarDesabilitarCampo('.entrega', false)"> Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="empenho" class="empenho" value="1" disabled onclick="habilitarDesabilitarCampo('.entrega', true)" checked> Não </label>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="obs_empenho">Empenho Observação</label>
@@ -98,8 +98,8 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="entrega">Entrega? </label> <br>
-                                    <label><input type="radio" name="entrega" value="2"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="entrega" value="1" checked> Não </label>
+                                    <label><input type="radio" name="entrega" class="entrega" value="2" disabled> Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="entrega" class="entrega" value="1" disabled checked> Não </label>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="ordem_inicio">Ordem de Início</label>
