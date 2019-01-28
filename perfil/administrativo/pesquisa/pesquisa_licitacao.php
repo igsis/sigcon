@@ -30,12 +30,11 @@ if(isset($_POST['pesquisaUnidade']) && '0' != $_POST['unidade'] ){
 
 if(isset($_POST['excluirLicitacao'])){
     $idLicitacao  = $_POST['excluirLicitacao'];
-    $stmt = $conn->prepare("UPDATE`licitacoes` SET publicado = '1' WHERE id = :idLicitacao ");
-    $stmt->execute(['idLicitacao' => $idLicitacao ]);
-    $licitacoes = $stmt->fetchAll();  
+    $stmt = $conn->prepare("UPDATE`licitacoes` SET publicado = '0' WHERE id = :id ");
+    $stmt->execute(['id' => $idLicitacao ]);
+    // $mensagem = mensagem("success", "Usuário excluido com sucesso!");
     $licitacoes  = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1' ")->fetchAll(); 
 }
-
 
 ?>
 
