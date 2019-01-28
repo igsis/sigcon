@@ -2,19 +2,19 @@
 include "../perfil/includes/menu.php";
 $conn = bancoPDO();
 
-$licitacoes  = $conn->query("SELECT * FROM `licitacoes`")->fetchAll();
+$licitacoes  = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1' ")->fetchAll();
 $unidades    = $conn->query("SELECT * FROM `unidades`")->fetchAll();
 
 if(isset($_POST['pesquisaNumProcesso']) && '' != $_POST['numProcesso']){
     $numProcesso  = $_POST['numProcesso'];
-    $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE numero_processo = :id");
+    $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE publicado = '1' AND numero_processo = :id");
     $stmt->execute(['id' => $numProcesso ]);
     $licitacoes = $stmt->fetchAll();
 }
 
 if(isset($_POST['pesquisaObjeto'])){
     $objeto  = $_POST['objeto'];
-    $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE objeto LIKE :objeto ");
+    $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE  publicado = '1' AND objeto LIKE :objeto ");
     $stmt->execute(['objeto' => "%$objeto%" ]);
     $licitacoes = $stmt->fetchAll();
 }
@@ -22,9 +22,18 @@ if(isset($_POST['pesquisaObjeto'])){
 
 if(isset($_POST['pesquisaUnidade']) && '0' != $_POST['unidade'] ){
     $idUnidade  = $_POST['unidade'];
-    $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE unidade_id = :unidade ");
+    $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE  publicado = '1' AND unidade_id = :unidade ");
     $stmt->execute(['unidade' => $idUnidade ]);
     $licitacoes = $stmt->fetchAll();   
+}
+
+
+if(isset($_POST['excluirLicitacao'])){
+    $idLicitacao  = $_POST['excluirLicitacao'];
+    $stmt = $conn->prepare("UPDATE`licitacoes` SET publicado = '0' WHERE id = :id ");
+    $stmt->execute(['id' => $idLicitacao ]);
+    // $mensagem = mensagem("success", "Usuário excluido com sucesso!");
+    $licitacoes  = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1' ")->fetchAll(); 
 }
 
 ?>
@@ -102,6 +111,7 @@ if(isset($_POST['pesquisaUnidade']) && '0' != $_POST['unidade'] ){
                                 <th>Objeto</th>
                                 <th>Unidade</th>
                                 <th>Editar</th>
+                                <th>Excluir</th>
                             </tr>
 
                             <?php 
@@ -118,6 +128,11 @@ if(isset($_POST['pesquisaUnidade']) && '0' != $_POST['unidade'] ){
                                             <button type='submit' class='btn btn-info'> Carregar </button>
                                         </form>
                                     </td> 
+                                    <td>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#excluirLicitacao" data-id='<?= $licitacao['id'] ?>' data-objeto='<?= $licitacao['objeto'] ?>'>
+                                        Excluir
+                                    </button>
+                                    </td> 
                                 </tr>
                             <?php  
                                 }                                
@@ -129,3 +144,36 @@ if(isset($_POST['pesquisaUnidade']) && '0' != $_POST['unidade'] ){
         </div>
     </section>    
 </div>
+
+<div class="modal modal-danger fade in" id="excluirLicitacao" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Danger Modal</h4>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir a licitação <span> </span> </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Sair</button>
+                <form method='POST' id='formExcliuir'>
+                    <input type="hidden" name='excluirLicitacao' >
+                    <button type='submit' class="btn btn-outline"> Excluir </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $('#excluirLicitacao').on('show.bs.modal', (e) =>
+    {
+        document.querySelector('#excluirLicitacao .modal-body p span').innerHTML = ` ${e.relatedTarget.dataset.objeto}?`
+        document.querySelector('#formExcliuir input[name="excluirLicitacao"]').value = e.relatedTarget.dataset.id
+    });
+
+</script>
+

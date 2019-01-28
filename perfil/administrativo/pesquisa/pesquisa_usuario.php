@@ -2,20 +2,28 @@
 include "../perfil/includes/menu.php";
 $conn = bancoPDO();
 
-$usuarios  = $conn->query("SELECT * FROM `usuarios`")->fetchAll();
+$usuarios  = $conn->query("SELECT * FROM `usuarios` WHERE publicado = 1")->fetchAll();
 
 if(isset($_POST['pesquisaUsuario'])){
     $usuario  = $_POST['usuario'];
-    $stmt = $conn->prepare("SELECT * FROM `usuarios` WHERE usuario = :usuario");
+    $stmt = $conn->prepare("SELECT * FROM `usuarios` WHERE publicado = 1 AND usuario = :usuario");
     $stmt->execute(['usuario' => $usuario ]);
     $usuarios = $stmt->fetchAll();
 }
 
 if(isset($_POST['pesquisaNivel'])){
     $nivel_acesso = $_POST['nivel_acesso'];
-    $stmt = $conn->prepare("SELECT * FROM `usuarios` WHERE nivel_acesso_id = :id");
+    $stmt = $conn->prepare("SELECT * FROM `usuarios` WHERE publicado = 1 AND nivel_acesso_id = :id");
     $stmt->execute(['id' => $nivel_acesso ]);
     $usuarios = $stmt->fetchAll();
+}
+
+if(isset($_POST['excluiUsuario'])){
+    $usuario = $_POST['idUsuario'];
+    $stmt = $conn->prepare("UPDATE `usuarios` SET publicado = 0 WHERE id = :id");
+    $stmt->execute(['id' => $usuario ]);
+    $mensagem = mensagem("success", "Usuário excluido com sucesso!");
+    $usuarios  = $conn->query("SELECT * FROM `usuarios` WHERE publicado = 1")->fetchAll();
 }
 
 ?>
@@ -24,6 +32,10 @@ if(isset($_POST['pesquisaNivel'])){
 
     <section class="content-header">
         <h1>Pesquisa Usuário</h1>
+        <div class="row" align="center" >
+            <?php if (isset($mensagem)) {
+                echo $mensagem;
+            }; ?>
     </section>
 
     <section class="content">
@@ -63,6 +75,7 @@ if(isset($_POST['pesquisaNivel'])){
 
                 </div>
             </div>
+
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Pesquisa Usuário</h3>
@@ -76,6 +89,7 @@ if(isset($_POST['pesquisaNivel'])){
                             <th>Usuário</th>
                             <th>Nivel de Acesso</th>
                             <th>Editar</th>
+                            <th>Excluir</th>
                         </tr>
 
                         <?php
@@ -92,6 +106,9 @@ if(isset($_POST['pesquisaNivel'])){
                                         <button type="submit" class='btn btn-info' name="carrega"> Carregar </button>
                                     </form>
                                 </td>
+                                <td>
+                                    <button type="button" class='btn btn-danger' data-toggle="modal" data-target="#confirmApagar" data-id="<?= $usuario['id'] ?>" data-nome="<?= $usuario['nome_completo'] ?>"> Excluir </button>
+                                </td>
                             </tr>
                             <?php
                         }
@@ -99,7 +116,40 @@ if(isset($_POST['pesquisaNivel'])){
                         </tbody>
                     </table>
                 </div>
+                    <!-- Confirmação de Exclusão -->
+                    <div class="modal fade modal-danger" id="confirmApagar" name="confirmApagar">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="titulo"> </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Confirma?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                                    <form method="POST" id="formExcliuir">
+                                        <input type="hidden" name='idUsuario'>
+                                        <button type="submit" class="btn btn-danger" id="excluiUsuario" name="excluiUsuario">Remover</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fim Confirmação de Exclusão -->
             </div>
         </div>
     </section>
+
 </div>
+
+<script type="text/javascript">
+
+    $('#confirmApagar').on('show.bs.modal', (e) =>
+    {
+        document.querySelector('#titulo').innerHTML = "Excluir " + ` ${e.relatedTarget.dataset.nome}?`
+        document.querySelector('#formExcliuir input[name="idUsuario"]').value = e.relatedTarget.dataset.id
+    });
+
+</script>
