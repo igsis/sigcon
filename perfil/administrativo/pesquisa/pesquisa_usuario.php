@@ -74,7 +74,7 @@ if(isset($_POST['excluiUsuario'])){
 
             <div class="box">
                 <div class="box-header">
-                    <div class="row" align="center">
+                    <div class="row center" >
                         <?php if (isset($mensagem)) {
                             echo $mensagem;
                         }; ?>
@@ -107,7 +107,7 @@ if(isset($_POST['excluiUsuario'])){
                                     </form>
                                 </td>
                                 <td>
-                                    <button type="button" class='btn btn-danger' data-toggle="modal" data-target="confirmApagar" data-id="<?= $usuario['id'] ?>" data-nome="<?= $usuario['nome_completo'] ?>"> Excluir </button>
+                                    <button type="button" class='btn btn-danger' data-toggle="modal" data-target="#confirmApagar" data-id="<?= $usuario['id'] ?>" data-nome="<?= $usuario['nome_completo'] ?>"> Excluir </button>
                                 </td>
                             </tr>
                             <?php
@@ -130,8 +130,8 @@ if(isset($_POST['excluiUsuario'])){
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                                     <form method="POST" id="formExcliuir">
-                                        <input type="text" name='idUsuario'>
-                                        <button type="button" class="btn btn-danger" id="excluiUsuario" name="excluiUsuario">Remover</button>
+                                        <input type="hidden" name='idUsuario'>
+                                        <button type="submit" class="btn btn-danger" id="excluiUsuario" name="excluiUsuario">Remover</button>
                                     </form>
                                 </div>
                             </div>
@@ -148,8 +148,8 @@ if(isset($_POST['excluiUsuario'])){
 
     $('#confirmApagar').on('show.bs.modal', (e) =>
     {
-        //document.querySelector('#titulo').innerHTML += ` ${e.relatedTarget.dataset.nome}?`
-        //document.querySelector('#formExcliuir input[name="idUsuario"]').value = e.relatedTarget.dataset.id
+        document.querySelector('#titulo').innerHTML += ` ${e.relatedTarget.dataset.nome}?`
+        document.querySelector('#formExcliuir input[name="idUsuario"]').value = e.relatedTarget.dataset.id
     });
 
 </script>
