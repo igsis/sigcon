@@ -23,6 +23,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
            $idUnidade = recuperaUltimo("unidades");
 
            $mensagem = mensagem("success", "Unidade cadastrada com sucesso!");
+           gravarLog($sql);
 
        } else {
            $mensagem = mensagem("danger", "Erro ao gravar! Tente novamente.");
@@ -41,6 +42,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
         if (mysqli_query($con, $sql)) {
 
             $mensagem = mensagem("success", "Unidade editada com sucesso!");
+            gravarLog($sql);
 
         } else {
 
@@ -91,14 +93,6 @@ $unidade = recuperaDados("unidades", "id", $idUnidade);
                                     <label for="un_orcamentaria">Unidade Orçamentária *</label>
                                     <input type="text" data-mask="00.00" id="un_orcamentaria" name="un_orcamentaria" class="form-control" maxlength="100" value="<?= $unidade['unidade_orcamentaria']  ?>">
                                 </div>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="un_sigla">Sigla *</label>
-                                <input type="text" id="un_sigla" name="un_sigla" class="form-control" maxlength="10" value="<?= $unidade['sigla']  ?>">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="un_orcamentaria">Unidade Orçamentária *</label>
-                                <input type="text" data-mask="00.00" id="un_orcamentaria" name="un_orcamentaria" class="form-control" maxlength="100" value="<?= $unidade['unidade_orcamentaria']  ?>">
                             </div>
                         </div>
                         <!-- /.box-body -->
