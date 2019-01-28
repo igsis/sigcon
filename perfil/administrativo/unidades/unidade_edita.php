@@ -76,11 +76,21 @@ $unidade = recuperaDados("unidades", "id", $idUnidade);
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=administrativo&p=unidades/unidade_edita" role="form">
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label for="un_nome">Nome da Unidade *</label>
-                                <input type="text" id="un_nome" name="un_nome" class="form-control" maxlength="60" value="<?= $unidade['nome']  ?>">
+                    <form method="POST" action="?perfil=administrativo&p=unidades&sp=unidade_edita" role="form">
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label for="un_nome">Nome da Unidade *</label>
+                                    <input type="text" id="un_nome" name="un_nome" class="form-control" maxlength="60" value="<?= $unidade['nome']  ?>">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="un_sigla">Sigla *</label>
+                                    <input type="text" id="un_sigla" name="un_sigla" class="form-control" maxlength="10" value="<?= $unidade['sigla']  ?>">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="un_orcamentaria">Unidade Orçamentária *</label>
+                                    <input type="text" data-mask="00.00" id="un_orcamentaria" name="un_orcamentaria" class="form-control" maxlength="100" value="<?= $unidade['unidade_orcamentaria']  ?>">
+                                </div>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="un_sigla">Sigla *</label>

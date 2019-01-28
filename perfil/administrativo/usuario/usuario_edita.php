@@ -102,7 +102,7 @@ $con = bancoMysqli();
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=administrativo/usuario/usuario_edita" role="form">
+                    <form method="POST" action="?perfil=administrativo&p=usuario&sp=usuario_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-4">

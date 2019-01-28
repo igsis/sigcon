@@ -131,7 +131,7 @@ $status = recuperaDados("licitacao_status","id",$licitacao['licitacao_status_id'
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=administrativo&p=licitacao/licitacao_edita" role="form">
+                    <form method="POST" action="?perfil=administrativo&p=licitacao&sp=licitacao_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-6">
