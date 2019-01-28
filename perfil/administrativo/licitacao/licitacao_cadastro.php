@@ -46,23 +46,23 @@
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="levantamento_preco">Levantamento de preço? </label> <br>
-                                    <label><input type="radio" name="levantamento_preco" value="2"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="levantamento_preco" value="1" checked> Não </label>
+                                    <label><input type="radio" name="levantamento_preco" value="2" onclick="habilitarDesabilitarCampo('.reserva', false)"> Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="levantamento_preco" value="1" checked onclick="habilitarDesabilitarCampo('.reserva', true)"> Não </label>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="reserva">Reserva? </label> <br>
-                                    <label><input type="radio" name="reserva" value="2"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="reserva" value="1" checked> Não </label>
+                                    <label><input type="radio" name="reserva" value="2" class="reserva" disabled onclick="habilitarDesabilitarCampo('.elaboracao_edital', false)"> Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="reserva" value="1" class="reserva" checked disabled onclick="habilitarDesabilitarCampo('.elaboracao_edital', true)"> Não </label>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="elaboracao_edital">Elaboração de Edital? </label> <br>
-                                    <label><input type="radio" name="elaboracao_edital" value="2"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="elaboracao_edital" value="1" checked> Não </label>
+                                    <label><input type="radio" name="elaboracao_edital" value="2" class="elaboracao_edital" disabled onclick="habilitarDesabilitarCampo('.analise_edital', false)"> Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="elaboracao_edital" value="1" class="elaboracao_edital" disabled onclick="habilitarDesabilitarCampo('.analise_edital', true)" checked> Não </label>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="analise_edital">Análise / Ajuste do Edital? </label> <br>
-                                    <label><input type="radio" name="analise_edital" value="2"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="analise_edital" value="1" checked> Não </label>
+                                    <label><input type="radio" name="analise_edital" class="analise_edital" value="2" disabled>  Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="analise_edital" class="analise_edital" value="1" disabled checked> Não </label>
                                 </div>
                             </div>
                             <hr/>
@@ -137,22 +137,11 @@
     $('#num_processo').mask('0000.0000/0000000-0', {reverse: true});
 
 
-    function habilitaCampo(id) {
-        if(document.getElementById(id).disabled==true){document.getElementById(id).disabled=false}
+
+    function habilitarDesabilitarCampo(target, prop)
+    {
+        $(target).prop('disabled',prop);
     }
-
-    function desabilitarCampo(id){
-        if(document.getElementById(id).disabled==false){document.getElementById(id).disabled=true}
-    }
-
-   /* function habilitarRadio (valor) {
-        if (valor == 2) {
-            document.status.disabled = false;
-        } else {
-            document.status.disabled = true;
-        }
-    }*/
-
 
 
 

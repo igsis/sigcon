@@ -278,13 +278,21 @@ $status = recuperaDados("licitacao_status","id",$licitacao['licitacao_status_id'
 
     $('#num_processo').mask('0000.0000/0000000-0', {reverse: true});
 
+    function habilitarDesabilitarCampo(target, prop)
+    {
+        $(target).prop('disabled',prop);
+    }
+
     function habilitaCampo(id) {
+        $('#' + id).prop('disabled');
         if(document.getElementById(id).disabled==true){document.getElementById(id).disabled=false}
     }
 
     function desabilitarCampo(id){
         if(document.getElementById(id).disabled==false){document.getElementById(id).disabled=true}
     }
+
+
 
     // 2 = habilitado
     // 1 = desaboçotado
