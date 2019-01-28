@@ -15,7 +15,11 @@ if (isset($_POST['pesquisarUnidade'])){
 if (isset($_POST['exluir'])){
     $idUnidade = $_POST['idUnidadeExcluir'];
 
-    
+    $sql = "UPDATE unidades SET publicado = 0 WHERE id = :ident ";
+    $query = $conn->prepare($sql);
+    $query->execute(['ident'=>$idUnidade]);
+
+    $unidades = $conn->query("SELECT * FROM unidades")->fetchAll();
 }
 
 
