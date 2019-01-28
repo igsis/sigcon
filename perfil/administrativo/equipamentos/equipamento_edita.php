@@ -17,6 +17,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
         if (mysqli_query($con, $sql)) {
 
+            gravarLog($sql);
             $idEquipamento = recuperaUltimo("equipamentos");
             $mensagem = mensagem("success", "Equipamento cadastrado com sucesso!");
 
@@ -34,7 +35,8 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
         if (mysqli_query($con, $sql)) {
 
-            $mensagem = mensagem("successs", "Dados atualizados com sucesso!");
+            gravarLog($sql);
+            $mensagem = mensagem("success", "Dados atualizados com sucesso!");
 
         } else {
             $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
@@ -62,6 +64,11 @@ $equipamento = recuperaDados("equipamentos", "id", $idEquipamento);
                     <div class="box-header with-border">
                         <h3 class="box-title"><?= "Nome do equipamento: " . $equipamento['nome'];  ?></h3>
                     </div>
+                    <div class="row" align="center">
+                        <?php if (isset($mensagem)) {
+                            echo $mensagem;
+                        }; ?>
+                    </div>
                     <!-- /.box-header -->
                     <!-- form start -->
                     <form method="POST" action="?perfil=administrativo&p=equipamentos&sp=equipamento_edita" role="form">
@@ -73,7 +80,7 @@ $equipamento = recuperaDados("equipamentos", "id", $idEquipamento);
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="unidade">Unidade a qual pertence *</label>
-                                    <select class="form-control" id="unidade" name="unidade">
+                                    <select class="form-control" id="unidade_id" name="unidade_id">
                                         <option value="">Selecione...</option>
                                         <?php
                                         geraOpcao("unidades", $equipamento['unidade_id']);
