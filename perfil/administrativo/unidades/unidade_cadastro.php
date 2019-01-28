@@ -15,7 +15,7 @@
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=administrativo&p=unidades/unidade_edita" role="form">
+                    <form method="POST" action="?perfil=administrativo&p=unidades&sp=unidade_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-4">

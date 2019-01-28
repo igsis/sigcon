@@ -64,7 +64,7 @@ $equipamento = recuperaDados("equipamentos", "id", $idEquipamento);
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=administrativo/equipamentos/equipamento_edita" role="form">
+                    <form method="POST" action="?perfil=administrativo&p=equipamentos&sp=equipamento_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-6">

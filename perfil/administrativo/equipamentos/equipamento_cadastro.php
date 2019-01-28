@@ -11,7 +11,7 @@ $con = bancoMysqli();
     <section class="content">
 
         <!-- START FORM-->
-        <h2 class="page-header">Cadastro de Unidade</h2>
+        <h2 class="page-header">Edição de Equipamento</h2>
 
         <div class="row">
             <div class="col-md-12">
@@ -22,7 +22,7 @@ $con = bancoMysqli();
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=administrativo/equipamentos/equipamento_edita" role="form">
+                    <form method="POST" action="?perfil=administrativo&p=equipamentos&sp=equipamento_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-6">
