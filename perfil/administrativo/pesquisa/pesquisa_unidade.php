@@ -60,8 +60,6 @@ $count = mysqli_num_rows($result);
                             </thead>
                             <tbody>
                             <?php
-                            if ($count > 0){
-
                             foreach ($unidades as $unidade)
                             {
                                 ?>
@@ -81,7 +79,7 @@ $count = mysqli_num_rows($result);
                                 <?php
                             }
                             ?>
-
+                            </tbody>
                             <tfoot>
                             <tr>
                                 <th>Nome da unidade</th>
@@ -90,14 +88,6 @@ $count = mysqli_num_rows($result);
                                 <th>Ação</th>
                             </tr>
                             </tfoot>
-                            <?php }
-                                    else{
-                            ?>
-                                <tr>
-                                    <td colspan="5" class="text-center">Não há registros cadastrados</td>
-                                </tr>
-                            <?php }?>
-                            </tbody>
                         </table>
 
                     </div>
