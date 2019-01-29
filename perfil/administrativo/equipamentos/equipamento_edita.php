@@ -1,6 +1,4 @@
 <?php
-include "../perfil/includes/menu.php";
-
 $con = bancoMysqli();
 $idEquipamento = $_POST['idEquipamento'] ?? NULL;
 

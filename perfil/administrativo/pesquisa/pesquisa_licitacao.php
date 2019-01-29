@@ -1,5 +1,4 @@
 <?php
-include "../perfil/includes/menu.php";
 $conn = bancoPDO();
 
 $licitacoes  = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1' ")->fetchAll();
