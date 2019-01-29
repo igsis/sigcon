@@ -1,11 +1,11 @@
 <?php
 $con = bancoMysqli();
 
-if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
+if (isset($_POST['cadastra']) || isset($_POST['edita']) || isset($_POST['idUnidade'])) {
     $idUnidade = $_POST['idUnidade'] ?? NULL;
-    $un_nome = $_POST['un_nome'];
-    $un_sigla = $_POST['un_sigla'];
-    $un_orcamentaria = $_POST['un_orcamentaria'];
+    $un_nome = $_POST['un_nome'] ?? null;
+    $un_sigla = $_POST['un_sigla'] ?? null;
+    $un_orcamentaria = $_POST['un_orcamentaria'] ?? null;
 
     if (isset($_POST['cadastra'])) {
 
