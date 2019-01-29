@@ -1,28 +1,27 @@
 <?php
 include "../perfil/includes/menu.php";
 $conn = bancoPDO();
+$con = bancoMysqli();
 
-$unidades = $conn->query("SELECT * FROM unidades WHERE publicado = 1");
-
-if (isset($_POST['pesquisarUnidade'])){
-    $unidade = $_POST['unidade'];
-
-    $query = $conn->prepare("SELECT * FROM unidades WHERE nome = :unidade");
-    $query->execute(['unidade' => $unidade]);
-    $unidades = $query->fetchAll();
-}
+$sql = "SELECT * FROM unidades WHERE publicado = 1";
+$unidades = $conn->query($sql)->fetchAll();
 
 if (isset($_POST['excluir'])){
-    $idUnidade = $_POST['idUnidadeExcluir'];
+    $idUnidade = $_POST['idUnidadeModal'];
 
     $sql = "UPDATE unidades SET publicado = 0 WHERE id = '$idUnidade'";
-    $query = $conn->prepare($sql);
-    $query->execute();
+    if (mysqli_query($con,$sql)){
+        $mensagem = mensagem("success","Uniadde apagada com sucesso.");
+        gravarLog($sql);
+    }else{
+        $mensagem = mensagem("danger",die(mysqli_errno($con)));
+    }
 
-    $unidades = $conn->query("SELECT * FROM unidades WHERE publicado = 1");
+    $unidades = $conn->query("SELECT * FROM unidades WHERE publicado = 1")->fetchAll();
 }
 
-$count = $unidades->rowCount();
+$unidade = $conn->query($sql);
+$count = $unidade->rowCount();
 
 
 ?>
@@ -73,10 +72,10 @@ $count = $unidades->rowCount();
                                     <td><?=$unidade['unidade_orcamentaria']?></td>
                                     <td>
                                         <form action="?perfil=administrativo&p=unidades&sp=unidade_edita" method="post">
-                                            <input type="hidden" name="idEquipamento" id="idEquipamento" value="<?=$unidade['id']?>">
+                                            <input type="hidden" name="idUnidade" id="idUnidade" value="<?=$unidade['id']?>">
                                             <input type="hidden" name="carregar" id="carregar">
                                             <input class="btn btn-primary" type="submit" value="Carregar">
-                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exclusao">Apagar</button>
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exclusao" data-nome="<?=$unidade['nome']?>" data-id="<?=$unidade['id']?>">Apagar</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -121,14 +120,14 @@ $count = $unidades->rowCount();
                         <h4 class="modal-title">Confirmação de Exclusão</h4>
                     </div>
                     <div class="modal-body">
-                        <p>Deseja Realmente Excluir?</p>
+                        <p>Tem certeza que deseja excluir a unidade?</p>
                     </div>
                     <div class="modal-footer">
-                        <form action="?perfil=administrativo&p=pesquisa&sp=pesquisa_equipamento" method="post">
-                            <input type="hidden" name="idEquipamento" id="idEquipamento" value="<?=$unidade['id']?>">
+                        <form action="?perfil=administrativo&p=pesquisa&sp=pesquisa_unidade" method="post">
+                            <input type="hidden" name="idUnidadeModal" id="idUnidadeModal" value="">
                             <input type="hidden" name="apagar" id="apagar">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                            <input class="btn btn-danger" type="submit" value="Apagar">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                            <input class="btn btn-danger btn-outline" type="submit" name="excluir" value="Apagar">
                         </form>
                     </div>
                 </div>
@@ -165,6 +164,14 @@ $count = $unidades->rowCount();
                 "infoFiltered": "(filtrado de _MAX_ registros totais)"
             },
             responsive: true
+        })
+
+        $('#exclusao').on('show.bs.modal', function (e) {
+            let nome = $(e.relatedTarget).attr('data-nome');
+            let id = $(e.relatedTarget).attr('data-id');
+
+            $(this).find('p').text(`Tem certeza que deseja excluir a unidade ${nome} ?`);
+            $(this).find('#idUnidadeModal').attr('value', `${id}`);
         })
     })
 </script>
