@@ -2,45 +2,23 @@
 include "../perfil/includes/menu.php";
 
 $con = bancoMysqli();
+$idEquipamento = $_POST['idEquipamento'] ?? NULL;
 
-if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
+if (isset($_POST['editar'])) {
     $idEquipamento = $_POST['idEquipamento'] ?? NULL;
     $equip_nome = $_POST['equip_nome'];
     $unidade_id = $_POST['unidade_id'];
+    
+    $sql = "UPDATE equipamentos SET nome = '$equip_nome', unidade_id = '$unidade_id' WHERE id = '$idEquipamento'";
 
-    if (isset($_POST['cadastra'])) {
-
-        $sql = "INSERT INTO equipamentos (nome,  
-                                          unidade_id) 
-                                  VALUES ('$equip_nome',
-                                          '$unidade_id')";
-
-        if (mysqli_query($con, $sql)) {
-
-            gravarLog($sql);
-            $idEquipamento = recuperaUltimo("equipamentos");
-            $mensagem = mensagem("success", "Equipamento cadastrado com sucesso!");
-
-        } else {
-            $mensagem = mensagem("danger", "Erro ao gravar! Tente novamente.");
-        }
+    if ($con->query($sql))
+    {
+        gravarLog($sql);
+        $mensagem = mensagem("success", "Equipamento atualizado com sucesso!");
     }
-
-    if (isset($_POST['edita'])) {
-
-        $sql = "UPDATE equipamentos SET
-                                    nome = '$equip_nome', 
-                                    unidade_id = '$unidade_id'
-                              WHERE id = '$idEquipamento'";
-
-        if (mysqli_query($con, $sql)) {
-
-            gravarLog($sql);
-            $mensagem = mensagem("success", "Dados atualizados com sucesso!");
-
-        } else {
-            $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
-        }
+    else
+    {
+        $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
     }
 }
 
@@ -91,8 +69,9 @@ $equipamento = recuperaDados("equipamentos", "id", $idEquipamento);
                             <!-- /.box-body -->
 
                             <div class="box-footer">
+                                <a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_equipamento" class="btn btn-default">Voltar a Pesquisa</a>
                                 <input type="hidden" name="idEquipamento" value="<?= $idEquipamento ?>">
-                                <button type="submit" name="edita" class="btn btn-primary pull-right">Editar</button>
+                                <button type="submit" name="editar" class="btn btn-primary pull-right">Editar</button>
                             </div>
                     </form>
                 </div>

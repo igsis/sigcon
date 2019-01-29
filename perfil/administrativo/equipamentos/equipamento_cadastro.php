@@ -22,7 +22,7 @@ $con = bancoMysqli();
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=administrativo&p=equipamentos&sp=equipamento_edita" role="form">
+                    <form method="POST" action="?perfil=administrativo&p=pesquisa&sp=pesquisa_equipamento" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-6">
@@ -42,7 +42,8 @@ $con = bancoMysqli();
                             <!-- /.box-body -->
 
                             <div class="box-footer">
-                                <button type="submit" name="cadastra" class="btn btn-primary pull-right">Cadastrar</button>
+                                <a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_equipamento" class="btn btn-default">Voltar a Pesquisa</a>
+                                <button type="submit" name="cadastrar" class="btn btn-primary pull-right">Cadastrar</button>
                             </div>
                     </form>
                 </div>

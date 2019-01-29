@@ -71,6 +71,25 @@ $con = bancoMysqli();
         }
     }
 
+    if(isset($_POST['resetarSenha'])){
+        $idUsuario = (isset($_POST['idUsuario']) ? $_POST['idUsuario'] : NULL);
+
+        $senha = md5("sigcon2019");
+
+        $sql = "UPDATE usuarios SET senha = '$senha' WHERE id = '$idUsuario'";
+
+        if (mysqli_query($con, $sql)) {
+
+            gravarLog($sql);
+
+            $mensagem = mensagem("success", "Senha resetada com sucesso!");
+
+        } else {
+            $mensagem = mensagem("danger", "Erro ao resetar a senha! Tente novamente.");
+        }
+
+    }
+
     if(isset($_POST['carrega'])){
         $idUsuario = (isset($_POST['idUsuario']) ? $_POST['idUsuario'] : NULL);
     }
@@ -111,7 +130,7 @@ $con = bancoMysqli();
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="rf_usuario">RF *</label>
-                                    <input data-mask="000.000.0" type="text" id="rf_usuario" name="rf_usuario" class="form-control" value="<?= $usuario['RF']; ?>" onblur="geraUusario()">
+                                    <input data-mask="000.000.0" type="text" id="rf_usuario" name="rf_usuario" class="form-control" value="<?= $usuario['RF']; ?>" onblur="geraUusario()" minlength="9">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="rf_usuario">Usuário *</label>
@@ -151,6 +170,7 @@ $con = bancoMysqli();
 
                         <div class="box-footer">
                             <input type="hidden" name="idUsuario" value="<?= $idUsuario ?>">
+                            <button type="button" class='btn btn-danger' data-toggle="modal" data-target="#resetarSenha" data-id="<?= $usuario['id'] ?>" data-nome="<?= $usuario['nome_completo'] ?>"> Resetar Senha </button>
                             <button type="submit" name="edita" class="btn btn-primary pull-right">Editar</button>
                         </div>
                     </form>
@@ -158,6 +178,30 @@ $con = bancoMysqli();
                 <!-- /.box -->
             </div>
             <!-- /.col -->
+
+            <!-- Confirmação de Resetar senha -->
+            <div class="modal fade modal-danger" id="resetarSenha" name="resetarSenha">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="titulo"> </h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Confirma?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                            <form method="POST" id="formResetaSenha">
+                                <input type="hidden" name='idUsuario'>
+                                <button type="submit" class="btn btn-danger" id="resetarSenha" name="resetarSenha">Reiniciar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Fim Confirmação de Resetar senha -->
+
         </div>
         <!-- /.row -->
         <!-- END ACCORDION & CAROUSEL-->
@@ -207,5 +251,15 @@ $con = bancoMysqli();
         // passa o valor para o input
         document.querySelector("[name='usuario']").value = usuario;
     }
+
+</script>
+
+<script type="text/javascript">
+
+    $('#resetarSenha').on('show.bs.modal', (e) =>
+    {
+        document.querySelector('#titulo').innerHTML = "Resetar senha do: " + ` ${e.relatedTarget.dataset.nome}?`
+        document.querySelector('#formResetaSenha input[name="idUsuario"]').value = e.relatedTarget.dataset.id
+    });
 
 </script>

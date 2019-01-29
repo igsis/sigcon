@@ -28,7 +28,7 @@ include "../perfil/includes/menu.php";
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="rf_usuario">RF *</label>
-                                    <input data-mask="000.000.0" type="text" id="rf_usuario" name="rf_usuario" class="form-control" maxlength="100" required onkeypress="geraUusario()" onblur="geraUusario()">
+                                    <input data-mask="000.000.0" type="text" id="rf_usuario" name="rf_usuario" class="form-control" minlength="9" required onkeypress="geraUusario()" onblur="geraUusario()">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="rf_usuario">Usuário *</label>
