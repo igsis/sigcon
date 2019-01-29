@@ -32,7 +32,7 @@ if(isset($_POST['excluirLicitacao'])){
     $idLicitacao  = $_POST['excluirLicitacao'];
     $stmt = $conn->prepare("UPDATE`licitacoes` SET publicado = '0' WHERE id = :id ");
     $stmt->execute(['id' => $idLicitacao ]);
-    // $mensagem = mensagem("success", "Usuário excluido com sucesso!");
+    $mensagem = mensagem("success", "Licitação excluida com sucesso!");
     $licitacoes  = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1' ")->fetchAll(); 
 }
 
@@ -42,6 +42,10 @@ if(isset($_POST['excluirLicitacao'])){
 
     <section class="content-header">
       <h1>Pesquisa Licitação</h1>
+        <div class="row" align="center" >
+            <?php if (isset($mensagem)) {
+                echo $mensagem;
+            }; ?>
     </section>
 
     <section class="content">
