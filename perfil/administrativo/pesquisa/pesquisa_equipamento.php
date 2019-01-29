@@ -3,6 +3,25 @@ include "../perfil/includes/menu.php";
 
 $con = bancoMysqli();
 
+if (isset($_POST['cadastrar'])) {
+    $idEquipamento = $_POST['idEquipamento'] ?? NULL;
+    $equip_nome = $_POST['equip_nome'];
+    $unidade_id = $_POST['unidade_id'];
+
+    $sql = "INSERT INTO equipamentos (nome, unidade_id) VALUES ('$equip_nome', '$unidade_id')";
+
+    if ($con->query($sql))
+    {
+        gravarLog($sql);
+        $idEquipamento = $con->insert_id;
+        $mensagem = mensagem("success", "Equipamento cadastrado com sucesso!");
+    }
+    else
+    {
+        $mensagem = mensagem("danger", "Erro ao gravar! Tente novamente.");
+    }
+}
+
 if (isset($_POST['apagar']))
 {
     $idEquipamento = $_POST['idEquipamento'];
@@ -12,6 +31,10 @@ if (isset($_POST['apagar']))
     {
         gravarLog($sqlApagar);
         $mensagem = mensagem("success", "Equipamento apagado com sucesso!");
+    }
+    else
+    {
+        $mensagem = mensagem("danger", "Erro ao apagar equipamento! Tente novamente.");
     }
 }
 
@@ -30,7 +53,7 @@ $lista = ($queryEquipamento->num_rows > 0) ? true : false;
     <section class="content-header">
         <h1>
             Pesquisar
-            <small>Pessoa Jurídica</small>
+            <small>Equipamento</small>
         </h1>
     </section>
 
@@ -39,7 +62,7 @@ $lista = ($queryEquipamento->num_rows > 0) ? true : false;
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title text-left">Lista Pessoa Jurídica</h3>
+                        <h3 class="box-title text-left">Lista de Equipamentos</h3>
                         <a href="?perfil=administrativo&p=equipamentos&sp=equipamento_cadastro" class="text-right btn btn-success" style="float: right">Adicionar Equipamento</a>
                     </div>
 
@@ -72,8 +95,8 @@ $lista = ($queryEquipamento->num_rows > 0) ? true : false;
                                         <form action="?perfil=administrativo&p=equipamentos&sp=equipamento_edita" method="post">
                                             <input type="hidden" name="idEquipamento" id="idEquipamento" value="<?=$equipamento['id']?>">
                                             <input type="hidden" name="carregar" id="carregar">
-                                            <input class="btn btn-primary" type="submit" value="Carregar">
-                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exclusao">Apagar</button>
+                                            <input class="btn btn-primary" type="submit" value="Editar">
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exclusao" data-nome="<?=$equipamento['equipamento']?>" data-id="<?=$equipamento['id']?>">Apagar</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -125,14 +148,13 @@ $lista = ($queryEquipamento->num_rows > 0) ? true : false;
                     </div>
                     <div class="modal-footer">
                         <form action="?perfil=administrativo&p=pesquisa&sp=pesquisa_equipamento" method="post">
-                            <input type="hidden" name="idEquipamento" id="idEquipamento" value="<?=$equipamento['id']?>">
+                            <input type="hidden" name="idEquipamento" id="idEquipamento" >
                             <input type="hidden" name="apagar" id="apagar">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                             <input class="btn btn-danger" type="submit" value="Apagar">
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -165,6 +187,14 @@ $lista = ($queryEquipamento->num_rows > 0) ? true : false;
                 "infoFiltered": "(filtrado de _MAX_ registros totais)"
             },
             responsive: true
+        });
+
+        $('#exclusao').on('show.bs.modal', function (e) {
+            let nome = $(e.relatedTarget).attr('data-nome');
+            let id = $(e.relatedTarget).attr('data-id');
+
+            $(this).find('p').text(`Deseja realmente excluir o equipamento: ${nome}`);
+            $(this).find('#idEquipamento').attr('value', `${id}`);
         })
     })
 </script>
