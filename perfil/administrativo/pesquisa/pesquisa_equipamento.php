@@ -65,15 +65,16 @@ $lista = ($queryEquipamento->num_rows > 0) ? true : false;
                         <h3 class="box-title text-left">Lista de Equipamentos</h3>
                         <a href="?perfil=administrativo&p=equipamentos&sp=equipamento_cadastro" class="text-right btn btn-success" style="float: right">Adicionar Equipamento</a>
                     </div>
+                    <!-- /.box-header -->
 
                     <div class="row" align="center">
                         <?php if (isset($mensagem)) {
                             echo $mensagem;
                         }; ?>
                     </div>
-                    <!-- /.box-header -->
+
                     <div class="box-body">
-                        <table id="tblEquipamento" class="table table-bordered table-striped">
+                        <table id="tblEquipamento" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
                                 <th>Nome do Equipamento</th>

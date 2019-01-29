@@ -3,73 +3,40 @@ include "../perfil/includes/menu.php";
 
 $con = bancoMysqli();
 
-    if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
-        $idUsuario = (isset($_POST['idUsuario']) ? $_POST['idUsuario'] : NULL);
-        $usuario = $_POST['usuario'];
-        $nome_completo = $_POST['nome'];
-        $RF = $_POST['rf_usuario'];
-        $telefone = $_POST['tel_usuario'];
-        $email = $_POST['email'];
-        $unidade_id = $_POST['unidade_id'];
-        $nivel_acesso = $_POST['nivel_acesso'];
+$idUsuario = (isset($_POST['idUsuario']) ? $_POST['idUsuario'] : NULL);
 
-        if (isset($_POST['cadastra'])) {
+if (isset($_POST['edita'])) {
+    $idUsuario = (isset($_POST['idUsuario']) ? $_POST['idUsuario'] : NULL);
+    $usuario = $_POST['usuario'];
+    $nome_completo = $_POST['nome'];
+    $RF = $_POST['rf_usuario'];
+    $telefone = $_POST['tel_usuario'];
+    $email = $_POST['email'];
+    $unidade_id = $_POST['unidade_id'];
+    $nivel_acesso = $_POST['nivel_acesso'];
 
-            $senha = md5("sigcon2019");
+    $sql = "UPDATE usuarios SET 
+                nome_completo = '$nome_completo',
+                usuario = '$usuario', 
+                RF = '$RF', 
+                telefone = '$telefone', 
+                email = '$email',
+                unidade_id = '$unidade_id',
+                nivel_acesso_id = '$nivel_acesso'
+            WHERE id = '$idUsuario'";
 
-            $sql = "INSERT INTO usuarios (nome_completo, 
-                                           usuario,
-                                           senha,
-                                           RF,
-                                           telefone, 
-                                           email, 
-                                           unidade_id, 
-                                           nivel_acesso_id, 
-                                           publicado) 
-                                  VALUES ('$nome_completo',
-                                           '$usuario',
-                                           '$senha',
-                                           '$RF', 
-                                           '$telefone', 
-                                           '$email', 
-                                           '$unidade_id',
-                                           '$nivel_acesso',
-                                            1)";
+    if ($con->query($sql))
+    {
+        gravarLog($sql);
+        $mensagem = mensagem("success", "Usuário editado com sucesso!");
 
-            if (mysqli_query($con, $sql)) {
-
-                $idUsuario = recuperaUltimo("usuarios");
-
-                gravarLog($sql);
-
-                $mensagem = mensagem("success", "Usuário cadastrado com sucesso!");
-
-            } else {
-                $mensagem = mensagem("danger", "Erro ao gravar! Tente novamente.");
-            }
-        }
-
-        if (isset($_POST['edita'])) {
-            $sql = "UPDATE usuarios SET 
-                                        nome_completo = '$nome_completo',
-                                        usuario = '$usuario', 
-                                        RF = '$RF', 
-                                        telefone = '$telefone', 
-                                        email = '$email',
-                                        unidade_id = '$unidade_id',
-                                        nivel_acesso_id = '$nivel_acesso'
-                                        WHERE id = '$idUsuario'";
-            if (mysqli_query($con, $sql)) {
-
-                gravarLog($sql);
-
-                $mensagem = mensagem("success", "Usuário editado com sucesso!");
-
-            } else {
-                $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
-            }
-        }
     }
+    else
+    {
+        $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
+    }
+}
+
 
     if(isset($_POST['resetarSenha'])){
         $idUsuario = (isset($_POST['idUsuario']) ? $_POST['idUsuario'] : NULL);
@@ -170,6 +137,7 @@ $con = bancoMysqli();
 
                         <div class="box-footer">
                             <input type="hidden" name="idUsuario" value="<?= $idUsuario ?>">
+                            <a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_usuario" class="btn btn-default">Voltar a Pesquisa</a>
                             <button type="button" class='btn btn-danger' data-toggle="modal" data-target="#resetarSenha" data-id="<?= $usuario['id'] ?>" data-nome="<?= $usuario['nome_completo'] ?>"> Resetar Senha </button>
                             <button type="submit" name="edita" class="btn btn-primary pull-right">Editar</button>
                         </div>
