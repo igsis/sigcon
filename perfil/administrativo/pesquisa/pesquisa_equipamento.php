@@ -136,6 +136,7 @@ $lista = ($queryEquipamento->num_rows > 0) ? true : false;
             </div>
         </div>
     </section>
+<!--    @TODO: Alinhar Pesquisar do plugin DataTable a direita-->
     <!-- /.content -->
 </div>
 
