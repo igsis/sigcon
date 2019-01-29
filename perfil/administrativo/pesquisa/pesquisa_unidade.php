@@ -3,8 +3,7 @@ include "../perfil/includes/menu.php";
 $conn = bancoPDO();
 $con = bancoMysqli();
 
-$sql = "SELECT * FROM unidades WHERE publicado = 1";
-$unidades = $conn->query($sql)->fetchAll();
+$unidades = $conn->query("SELECT * FROM unidades WHERE publicado = 1")->fetchAll();
 
 if (isset($_POST['excluir'])){
     $idUnidade = $_POST['idUnidadeModal'];
@@ -17,11 +16,12 @@ if (isset($_POST['excluir'])){
         $mensagem = mensagem("danger",die(mysqli_errno($con)));
     }
 
-    $unidades = $conn->query("SELECT * FROM unidades WHERE publicado = 1")->fetchAll();
+    $unidades = $conn->query('SELECT * FROM unidades WHERE publicado = 1')->fetchAll();
 }
 
-$unidade = $conn->query($sql);
-$count = $unidade->rowCount();
+$sql = "SELECT * FROM unidades WHERE publicado = 1";
+$result = mysqli_query($con,$sql);
+$count = mysqli_num_rows($result);
 
 
 ?>
