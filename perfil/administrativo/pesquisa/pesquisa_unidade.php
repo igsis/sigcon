@@ -72,7 +72,7 @@ $count = $unidade->rowCount();
                                     <td><?=$unidade['unidade_orcamentaria']?></td>
                                     <td>
                                         <form action="?perfil=administrativo&p=unidades&sp=unidade_edita" method="post">
-                                            <input type="text" name="idUnidade" id="idUnidade" value="<?=$unidade['id']?>">
+                                            <input type="hidden" name="idUnidade" id="idUnidade" value="<?=$unidade['id']?>">
                                             <input type="hidden" name="carregar" id="carregar">
                                             <input class="btn btn-primary" type="submit" value="Carregar">
                                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exclusao" data-nome="<?=$unidade['nome']?>" data-id="<?=$unidade['id']?>">Apagar</button>
