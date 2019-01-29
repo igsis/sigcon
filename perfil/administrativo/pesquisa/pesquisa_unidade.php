@@ -12,12 +12,10 @@ if (isset($_POST['pesquisarUnidade'])){
     $unidades = $query->fetchAll();
 }
 
-if (isset($_POST['exluir'])){
+if (isset($_POST['excluir'])){
     $idUnidade = $_POST['idUnidadeExcluir'];
-
-    $sql = "UPDATE unidades SET publicado = 0 WHERE id = :ident ";
-    $query = $conn->prepare($sql);
-    $query->execute(['ident'=>$idUnidade]);
+    $query = $conn->prepare("UPDATE unidades SET publicado = 0 WHERE id = :ident");
+    $query->execute(['ident' => $idUnidade]);
 
     $unidades = $conn->query("SELECT * FROM unidades")->fetchAll();
 }
@@ -75,13 +73,13 @@ if (isset($_POST['exluir'])){
                                 <td><?= $unidade['sigla'] ?></td>
                                 <td><?= $unidade['unidade_orcamentaria'] ?></td>
                                 <td>
-                                    <form action="?perfil=administrativo/licitacao/unidade_edita" method='POST'>
+                                    <form action="?perfil=administrativo/unidade/unidade_edita" method='POST'>
                                         <input type="hidden" name='idUnidadeEdita' value='<?= $unidade['id'] ?>'>
                                         <button type='submit' name="carregar" class='btn btn-info'> Carregar </button>
                                     </form>
                                 </td>
                                 <td>
-                                    <form action="?perfil=administrativo/licitacao/pesquisa_unidade">
+                                    <form action="?perfil=administrativo/unidade/pesquisa_unidade" method="post">
                                         <input type="hidden" name="idUnidadeExcluir" value='<?= $unidade['id']?>'>
                                         <button type="submit" name="excluir" class='btn btn-danger'>Excluir</button>
                                     </form>
