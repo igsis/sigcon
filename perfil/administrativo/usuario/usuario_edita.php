@@ -111,7 +111,7 @@ $con = bancoMysqli();
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="rf_usuario">RF *</label>
-                                    <input data-mask="000.000.0" type="text" id="rf_usuario" name="rf_usuario" class="form-control" value="<?= $usuario['RF']; ?>" onblur="geraUusario()">
+                                    <input data-mask="000.000.0" type="text" id="rf_usuario" name="rf_usuario" class="form-control" value="<?= $usuario['RF']; ?>" onblur="geraUusario()" minlength="9">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="rf_usuario">Usuário *</label>
