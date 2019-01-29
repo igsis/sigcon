@@ -151,7 +151,7 @@ $lista = ($queryEquipamento->num_rows > 0) ? true : false;
 <script defer src="../visual/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script defer src="../visual/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 
-<script defer>
+<script type="text/javascript" defer>
     $(function () {
         $('#tblEquipamento').DataTable({
             "language": {
