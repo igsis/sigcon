@@ -19,7 +19,7 @@
             <li class="treeview">
                 <a href=""> <i class="fa fa-cogs"></i> <span>Gerenciamento do Sistema</span> <i class="fa fa-angle-left pull-right"></i> </a>
                 <ul class="treeview-menu">
-                    <li><a href="?perfil=administrativo&p=unidades&sp=unidade_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Unidades</span></a></li>
+                    <li><a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_unidade"><i class="fa fa-circle-o text-red"></i> <span>Unidades</span></a></li>
                     <li><a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_equipamento"><i class="fa fa-circle-o text-red"></i> <span>Equipamentos</span></a></li>
                     <li><a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_usuario"><i class="fa fa-circle-o text-red"></i> <span>Usuários</span></a></li>
                 </ul>
