@@ -269,6 +269,25 @@ date_default_timezone_set("Brazil/East");
 		$mysqli->query($sql);
 	}
 
+	function interpolateQuery($query, $params) {
+		$keys = array();
+	
+		# build a regular expression for each parameter
+		foreach ($params as $key => $value) {
+			if (is_string($key)) {
+				$keys[] = '/:'.$key.'/';
+			} else {
+				$keys[] = '/[?]/';
+			}
+		}
+	
+		$query = preg_replace($keys, $params, $query, 1, $count);
+	
+		#trigger_error('replaced '.$count.' keys');
+	
+		return $query;
+	}
+
 	function gravarLogSenha($log, $idUsuario)
 	{
 		//grava na tabela log as alterações de senha
