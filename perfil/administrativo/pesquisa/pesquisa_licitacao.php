@@ -1,173 +1,124 @@
 <?php
 $conn = bancoPDO();
 
-$licitacoes  = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1' ")->fetchAll();
-$unidades    = $conn->query("SELECT * FROM `unidades`")->fetchAll();
-
-if(isset($_POST['pesquisaNumProcesso']) && '' != $_POST['numProcesso']){
-    $numProcesso  = $_POST['numProcesso'];
-    $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE publicado = '1' AND numero_processo = :id");
-    $stmt->execute(['id' => $numProcesso ]);
-    $licitacoes = $stmt->fetchAll();
+if (isset($_POST['excluirLicitacao'])) {
+    $idLicitacao = $_POST['excluirLicitacao'];
+    $stmt = $conn->prepare("UPDATE`licitacoes` SET licitacao_status_id = '3' WHERE id = :id ");
+    $stmt->execute(['id' => $idLicitacao]);
+    if ($stmt->execute(['id' => $idLicitacao])) {
+        $mensagem = mensagem("success", "Licitação cancelada com sucesso!");
+        //gravarLog($sql);
+    } else {
+        $mensagem = mensagem("danger", "Erro ao cancelar licitação. Tente novamente!");
+    }
 }
 
-if(isset($_POST['pesquisaObjeto'])){
-    $objeto  = $_POST['objeto'];
-    $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE  publicado = '1' AND objeto LIKE :objeto ");
-    $stmt->execute(['objeto' => "%$objeto%" ]);
-    $licitacoes = $stmt->fetchAll();
-}
-
-
-if(isset($_POST['pesquisaUnidade']) && '0' != $_POST['unidade'] ){
-    $idUnidade  = $_POST['unidade'];
-    $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE  publicado = '1' AND unidade_id = :unidade ");
-    $stmt->execute(['unidade' => $idUnidade ]);
-    $licitacoes = $stmt->fetchAll();   
-}
-
-
-if(isset($_POST['excluirLicitacao'])){
-    $idLicitacao  = $_POST['excluirLicitacao'];
-    $stmt = $conn->prepare("UPDATE`licitacoes` SET publicado = '0' WHERE id = :id ");
-    $stmt->execute(['id' => $idLicitacao ]);
-    $mensagem = mensagem("success", "Licitação excluida com sucesso!");
-    $licitacoes  = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1' ")->fetchAll(); 
-}
-
+$licitacoes = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1'")->fetchAll();
 ?>
-
 <div class="content-wrapper">
-
+    <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Pesquisa Licitação</h1>
-        <div class="row" align="center" >
-            <?php if (isset($mensagem)) {
-                echo $mensagem;
-            }; ?>
+        <h1>Pesquisar</h1>
     </section>
 
     <section class="content">
-        <div class="col-xs-12">
-            <div class="box-body">
-                <div class='col-md-6'>
-                
-                    <div class="form-group">
-                        <div class="form-group">
-                            <form method='POST'>
-                                <label for="exampleInputEmail1">Número do processo</label>
-                                <div class="input-group input-group-sm">
-                                    <input type="text" name='numProcesso' maxlength='19' minlength='19' class="form-control pull-right" placeholder="Buscar">
-                                    <div class="input-group-btn">
-                                        <button type="submit" name='pesquisaNumProcesso' class="btn btn-default"><i class="fa fa-search"></i></button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title text-left">Lista de Licitações</h3>
+                        <a href="?perfil=administrativo&p=licitacao&sp=licitacao_cadastro"
+                           class="text-right btn btn-success" style="float: right">Adicionar Licitação</a>
                     </div>
 
-                    <div class="form-group">
-                        <form method='POST'>
-                            <label for="exampleInputEmail1">Objeto</label>
-                            <div class="input-group input-group-sm">
-                                <input type="text" name="objeto" class="form-control pull-right" placeholder="Buscar">
-                                <div class="input-group-btn">
-                                    <button type="submit" name='pesquisaObjeto' class="btn btn-default"><i class="fa fa-search"></i></button>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="row" align="center">
+                        <?php if (isset($mensagem)) {
+                            echo $mensagem;
+                        }; ?>
                     </div>
-
-                    <div class="form-group">
-                        <form method='POST'>
-                            <label for="exampleInputEmail1">Unidade</label>
-                            <div class="input-group input-group-sm">
-                                <select class="form-control pull-right" name="unidade" id="">
-                                    <option value="0">Selecione a Unidade</option>
-                                    <?php 
-                                        foreach($unidades as $unidade){
-                                    ?>
-                                        <option value="<?= $unidade['id'] ?>"><?= $unidade['nome'] ?></option>
-                                    <?php 
-                                        }
-                                    ?>
-                                </select>
-                                
-                                <div class="input-group-btn">
-                                    <button type="submit" name='pesquisaUnidade' class="btn btn-default"><i class="fa fa-search"></i></button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <div class="box-header">
-                <h3 class="box-title">Pesquisa Licitação</h3>            
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover">
-                        <tbody>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="tblEquipamento" class="table table-bordered table-striped">
+                            <thead>
                             <tr>
-                                <th>Número do processo administrativo</th>
+                                <th>Nº SEI administrativo</th>
                                 <th>Objeto</th>
                                 <th>Unidade</th>
+                                <th>Status</th>
                                 <th>Editar</th>
-                                <th>Excluir</th>
+                                <th>Cancelar</th>
                             </tr>
-
-                            <?php 
-                                foreach ($licitacoes as $licitacao) {
-                                    $unidade = recuperaDados('unidades', 'id', $licitacao['unidade_id'] )['nome'];
-                            ?>
+                            </thead>
+                            <tbody>
+                            <?php
+                            foreach ($licitacoes as $licitacao) {
+                                $unidade = recuperaDados('unidades', 'id', $licitacao['unidade_id'])['nome'];
+                                $status = recuperaDados('licitacao_status', 'id', $licitacao['licitacao_status_id'])['status'];
+                                ?>
                                 <tr>
                                     <td><?= $licitacao['numero_processo'] ?></td>
                                     <td><?= $licitacao['objeto'] ?></td>
-                                    <td><?= $unidade ?></td> 
+                                    <td><?= $unidade ?></td>
+                                    <td><?= $status ?></td>
                                     <td>
-                                        <form action="?perfil=administrativo/licitacao/licitacao_edita" method='POST'>
+                                        <form action="?perfil=administrativo&p=licitacao&sp=licitacao_edita" method='POST'>
                                             <input type="hidden" name='editarLicitacao' value='<?= $licitacao['id'] ?>'>
-                                            <button type='submit' class='btn btn-info'> Carregar </button>
+                                            <button type='submit' class='btn btn-info'> Carregar</button>
                                         </form>
-                                    </td> 
+                                    </td>
                                     <td>
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#excluirLicitacao" data-id='<?= $licitacao['id'] ?>' data-objeto='<?= $licitacao['objeto'] ?>'>
-                                        Excluir
-                                    </button>
-                                    </td> 
+                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#excluirLicitacao" data-id='<?= $licitacao['id'] ?>' data-objeto='<?= $licitacao['objeto'] ?>' <?php if($licitacao['licitacao_status_id'] == 3) echo "disabled" ?> > Cancelar
+                                        </button>
+                                    </td>
                                 </tr>
-                            <?php  
-                                }                                
+                                <?php
+                            }
                             ?>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>            
-        </div>
-    </section>    
-</div>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Nº SEI administrativo</th>
+                                <th>Objeto</th>
+                                <th>Unidade</th>
+                                <th>Status</th>
+                                <th>Editar</th>
+                                <th>Cancelar</th>
+                            </tr>
+                            </tfoot>
 
-<div class="modal modal-danger fade in" id="excluirLicitacao" >
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Danger Modal</h4>
+                        </table>
+
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
             </div>
-            <div class="modal-body">
-                <p>Tem certeza que deseja excluir a licitação <span> </span> </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Sair</button>
-                <form method='POST' id='formExcliuir'>
-                    <input type="hidden" name='excluirLicitacao' >
-                    <button type='submit' class="btn btn-outline"> Excluir </button>
-                </form>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <!--.modal-->
+        <div class="modal modal-danger fade in" id="excluirLicitacao" >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Cancelar Licitação</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Tem certeza que deseja cancelar a licitação? <span> </span> </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Sair</button>
+                        <form method='POST' id='formExcliuir'>
+                            <input type="hidden" name='excluirLicitacao' value="<?= $licitacao['id'] ?>" >
+                            <button type='submit' class="btn btn-outline"> Cancelar </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 <script type="text/javascript">
