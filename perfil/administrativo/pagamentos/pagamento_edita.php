@@ -2,6 +2,20 @@
 include "../perfil/includes/menu.php";
 
 $con = bancoMysqli();
+$coon = bancoPDO();
+
+if (isset($_POST['cadastrar']) || isset($_POST['editar'])){
+    $nProcesso = $_POST['nProcessoPagamento'] ?? null;
+    $notaFiscal = $_POST['notaFiscal'] ?? null;
+    $valor = $_POST['valor'] ?? null;
+    $mesReferencia = $_POST['mesReferencia'] ?? null;
+    $dataRecebimento = $_POST['dataRecebimento'] ?? null;
+    $dataEmcaminhamento = $_POST['dataEncaminhamentoPg'] ?? null;
+    $dataPagamento = $_POST['dataPagamento'] ?? null;
+    $observacao = $_POST['observacao'] ?? null;
+
+
+}
 
 ?>
 
@@ -27,7 +41,7 @@ $con = bancoMysqli();
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="nProcessoPagamento">Número do processo de pagamento *</label>
-                                    <input type="text" id="nProcessoPagamento" name="nProcessoPagamento" class="form-control" maxlength="19" placeholder="0000.0000/0000000-0">
+                                    <input type="text" id="nProcessoPagamento" name="nProcessoPagamento" class="form-control" maxlength="19" placeholder="0000.0000/0000000-0" value="" disabled>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="notaFiscal">Número da nota fiscal *</label>
@@ -69,7 +83,7 @@ $con = bancoMysqli();
 
                             <div class="box-footer">
                                 <a class="btn btn-default" onclick="window.history.back()">Voltar</a>
-                                <button type="submit" name="cadastrar" class="btn btn-primary pull-right">Cadastrar</button>
+                                <button type="submit" name="editar" class="btn btn-primary pull-right">Atualizar</button>
                             </div>
                     </form>
                 </div>
