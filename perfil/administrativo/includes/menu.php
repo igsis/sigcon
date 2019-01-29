@@ -13,7 +13,6 @@
                 <ul class="treeview-menu">
                     <li><a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_licitacao"><i class="fa fa-circle-o text-red"></i> <span>Licitação</span></a></li>
                     <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Contratos</span></a></li>
-                    <li><a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_usuario"><i class="fa fa-circle-o text-red"></i> <span>Usuários</span></a></li>
                 </ul>
             </li>
 
