@@ -34,6 +34,7 @@
                         <!-- /.box-body -->
 
                         <div class="box-footer">
+                            <a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_unidade" class="btn btn-default">Voltar a Pesquisa</a>
                             <button type="submit" name="cadastra" class="btn btn-primary pull-right">Cadastrar</button>
                         </div>
                     </form>

@@ -1,5 +1,4 @@
 <?php
-include "../perfil/includes/menu.php";
 $conn = bancoPDO();
 $con = bancoMysqli();
 
@@ -38,7 +37,7 @@ if (isset($_POST['cadastra'])) {
     {
         $idUsuario = $con->insert_id;
         gravarLog($sql);
-        $mensagem = mensagem("success", "Usuário cadastrado com sucesso!");
+        $mensagem = mensagem("success", "Usuário cadastrado com sucesso! Senha padrão: sigcon2019");
     }
     else
     {
@@ -79,7 +78,7 @@ $usuarios  = $conn->query("SELECT * FROM `usuarios` WHERE publicado = 1")->fetch
                 </div>
 
                 <div class="box-body table-responsive">
-                    <table id="tblUsuarios" class="table table-bordered table-striped table-hover">
+                    <table id="tblUsuario" class="table table-bordered table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>Nome Completo</th>
@@ -100,7 +99,7 @@ $usuarios  = $conn->query("SELECT * FROM `usuarios` WHERE publicado = 1")->fetch
                                 <td>
                                     <form action="?perfil=administrativo&p=usuario&sp=usuario_edita" method='POST'>
                                         <input type="hidden" name='idUsuario' value='<?= $usuario['id'] ?>'>
-                                        <button type="submit" class='btn btn-info' name="carrega"> Carregar </button>
+                                        <button type="submit" class='btn btn-info' name="carrega"> Editar </button>
                                         <button type="button" class='btn btn-danger' data-toggle="modal" data-target="#confirmApagar" data-id="<?= $usuario['id'] ?>" data-nome="<?= $usuario['nome_completo'] ?>"> Excluir </button>
                                     </form>
                                 </td>
@@ -108,15 +107,15 @@ $usuarios  = $conn->query("SELECT * FROM `usuarios` WHERE publicado = 1")->fetch
                             <?php
                         }
                         ?>
-                            <tfoot>
-                                <tr>
-                                    <th>Nome Completo</th>
-                                    <th>Usuário</th>
-                                    <th>Nivel de Acesso</th>
-                                    <th>Ação</th>
-                                </tr>
-                            </tfoot>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Nome Completo</th>
+                                <th>Usuário</th>
+                                <th>Nivel de Acesso</th>
+                                <th>Ação</th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
                     <!-- Confirmação de Exclusão -->
@@ -147,32 +146,19 @@ $usuarios  = $conn->query("SELECT * FROM `usuarios` WHERE publicado = 1")->fetch
 
 </div>
 
-<script defer src="../visual/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-<script defer src="../visual/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" defer src="../visual/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" defer src="../visual/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 
-<script defer>
+<script type="text/javascript" defer>
     $(function () {
-        $('#tblUsuarios').DataTable({
+        $('#tblUsuario').DataTable({
             "language": {
-                "paginate": {
-                    "previous": "Anterior",
-                    "next": "Próximo"
-                },
-                "search": "Pesquisar: ",
-                "lengthMenu": 'Exibir <select>'+
-                    '<option value="10">10</option>'+
-                    '<option value="20">20</option>'+
-                    '<option value="30">30</option>'+
-                    '<option value="40">40</option>'+
-                    '<option value="50">50</option>'+
-                    '<option value="-1">Todos</option>'+
-                    '</select> Registros',
-                "info": "Exibindo página _PAGE_ de _PAGES_",
-                "infoEmpty": "Exibindo _START_ a _END_ de _TOTAL_ registros",
-                "infoFiltered": "(filtrado de _MAX_ registros totais)",
-                "zeroRecords": "Nenhum registro encontrado para esta pesquisa"
+                "url": 'bower_components/datatables.net/Portuguese-Brasil.json'
             },
-            responsive: true
+            "responsive": true,
+            "dom": "<'row'<'col-sm-6'l><'col-sm-6 text-right'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7 text-right'p>>",
         });
     })
 </script>

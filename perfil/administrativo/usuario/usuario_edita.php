@@ -1,5 +1,4 @@
 <?php
-include "../perfil/includes/menu.php";
 
 $con = bancoMysqli();
 
@@ -138,7 +137,7 @@ if (isset($_POST['edita'])) {
                         <div class="box-footer">
                             <input type="hidden" name="idUsuario" value="<?= $idUsuario ?>">
                             <a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_usuario" class="btn btn-default">Voltar a Pesquisa</a>
-                            <button type="button" class='btn btn-danger' data-toggle="modal" data-target="#resetarSenha" data-id="<?= $usuario['id'] ?>" data-nome="<?= $usuario['nome_completo'] ?>"> Resetar Senha </button>
+                            <button type="button" class='btn btn-warning' data-toggle="modal" data-target="#resetarSenha" data-id="<?= $usuario['id'] ?>" data-nome="<?= $usuario['nome_completo'] ?>"> Resetar Senha </button>
                             <button type="submit" name="edita" class="btn btn-primary pull-right">Editar</button>
                         </div>
                     </form>
@@ -148,7 +147,7 @@ if (isset($_POST['edita'])) {
             <!-- /.col -->
 
             <!-- Confirmação de Resetar senha -->
-            <div class="modal fade modal-danger" id="resetarSenha" name="resetarSenha">
+            <div class="modal fade modal-warning" id="resetarSenha" name="resetarSenha">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -156,13 +155,13 @@ if (isset($_POST['edita'])) {
                             <h4 class="modal-title" id="titulo"> </h4>
                         </div>
                         <div class="modal-body">
-                            <p>Confirma?</p>
+                            <p>Confirma o resete da senha para <strong>sigcon2019</strong>?</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
                             <form method="POST" id="formResetaSenha">
                                 <input type="hidden" name='idUsuario'>
-                                <button type="submit" class="btn btn-danger" id="resetarSenha" name="resetarSenha">Reiniciar</button>
+                                <button type="submit" class="btn btn-success" id="resetarSenha" name="resetarSenha">Reiniciar</button>
                             </form>
                         </div>
                     </div>

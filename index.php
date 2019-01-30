@@ -28,10 +28,12 @@ if(isset($_POST['login']))
                 $_SESSION['idUser'] = $user['id'];
                 $_SESSION['nivelAcesso'] = $user['nivel_acesso_id'];
 				$log = "Fez login.";
-				//gravarLog($log);
-				header("Location: visual/index.php");
-				gravarLog($sql);
-			}
+                $dataAtual = date('Y-m-d');
+                $sqlUltimoAcesso = "UPDATE `usuarios` SET `ultimo_acesso` = '$dataAtual' WHERE `id` = '".$user['id']."'";
+                $con->query($sqlUltimoAcesso);
+                gravarLog($sql);
+                header("Location: visual/index.php");
+            }
 			else
 			{
 			$mensagem = "<span style=\"color: #FF0000; \"><strong>A senha está incorreta!</strong></span>";

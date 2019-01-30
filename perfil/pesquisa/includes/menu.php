@@ -5,7 +5,7 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li><a href="?secao=perfil"><i class="fa fa-home"></i><span>Home</span></a></li>
-            <li class="header">MÓDULOS</li>
+            <li class="header">MÓDULO DE PESQUISA</li>
 
             <li><a href="?perfil=pesquisa/usuario/pesquisa_usuario"><i class="fa fa-circle-o text-aqua"></i> <span>Pesquisar Usuários</span></a></li>
             <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Pesquisar Licitações</span></a></li>
