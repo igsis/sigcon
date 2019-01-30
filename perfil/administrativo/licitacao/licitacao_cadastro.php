@@ -192,7 +192,7 @@
             }else{
                 checks[(i + 1 )].disabled = true
             }
-            funDoida()
+            disableMaiorqueAtual()
         })  
     }
 
