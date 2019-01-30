@@ -1,5 +1,4 @@
 <?php
-include "../perfil/includes/menu.php";
 $conn = bancoPDO();
 $con = bancoMysqli();
 
@@ -50,7 +49,7 @@ $count = mysqli_num_rows($result);
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table id="tblEquipamento" class="table table-bordered table-striped">
+                        <table id="tblUnidade" class="table table-bordered table-striped">
                             <thead>
                             <tr>
                                 <th>Nome da unidade</th>
@@ -61,8 +60,6 @@ $count = mysqli_num_rows($result);
                             </thead>
                             <tbody>
                             <?php
-                            if ($count > 0){
-
                             foreach ($unidades as $unidade)
                             {
                                 ?>
@@ -82,7 +79,7 @@ $count = mysqli_num_rows($result);
                                 <?php
                             }
                             ?>
-
+                            </tbody>
                             <tfoot>
                             <tr>
                                 <th>Nome da unidade</th>
@@ -91,14 +88,6 @@ $count = mysqli_num_rows($result);
                                 <th>Ação</th>
                             </tr>
                             </tfoot>
-                            <?php }
-                                    else{
-                            ?>
-                                <tr>
-                                    <td colspan="5" class="text-center">Não há registros cadastrados</td>
-                                </tr>
-                            <?php }?>
-                            </tbody>
                         </table>
 
                     </div>
@@ -144,27 +133,15 @@ $count = mysqli_num_rows($result);
 
 <script defer>
     $(function () {
-        $('#tblEquipamento').DataTable({
+        $('#tblUnidade').DataTable({
             "language": {
-                "paginate": {
-                    "previous": "Anterior",
-                    "next": "Próximo"
-                },
-                "search": "Pesquisar: ",
-                "lengthMenu": 'Exibir <select>'+
-                    '<option value="10">10</option>'+
-                    '<option value="20">20</option>'+
-                    '<option value="30">30</option>'+
-                    '<option value="40">40</option>'+
-                    '<option value="50">50</option>'+
-                    '<option value="-1">Todos</option>'+
-                    '</select> Registros',
-                "info": "Exibindo página _PAGE_ de _PAGES_",
-                "infoEmpty": "Exibindo _START_ a _END_ de _TOTAL_ registros",
-                "infoFiltered": "(filtrado de _MAX_ registros totais)"
+                "url": 'bower_components/datatables.net/Portuguese-Brasil.json'
             },
-            responsive: true
-        })
+            "responsive": true,
+            "dom": "<'row'<'col-sm-6'l><'col-sm-6 text-right'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7 text-right'p>>",
+        });
 
         $('#exclusao').on('show.bs.modal', function (e) {
             let nome = $(e.relatedTarget).attr('data-nome');

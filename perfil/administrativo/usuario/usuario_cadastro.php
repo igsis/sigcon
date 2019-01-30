@@ -1,5 +1,4 @@
 <?php
-include "../perfil/includes/menu.php";
 
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -19,7 +18,7 @@ include "../perfil/includes/menu.php";
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=administrativo&p=usuario&sp=usuario_edita" role="form">
+                    <form method="POST" action="?perfil=administrativo&p=pesquisa&sp=pesquisa_usuario" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-4">

@@ -1,5 +1,4 @@
 <?php
-include "../perfil/includes/menu.php";
 
 $con = bancoMysqli();
 
@@ -65,15 +64,16 @@ $lista = ($queryEquipamento->num_rows > 0) ? true : false;
                         <h3 class="box-title text-left">Lista de Equipamentos</h3>
                         <a href="?perfil=administrativo&p=equipamentos&sp=equipamento_cadastro" class="text-right btn btn-success" style="float: right">Adicionar Equipamento</a>
                     </div>
+                    <!-- /.box-header -->
 
                     <div class="row" align="center">
                         <?php if (isset($mensagem)) {
                             echo $mensagem;
                         }; ?>
                     </div>
-                    <!-- /.box-header -->
+
                     <div class="box-body">
-                        <table id="tblEquipamento" class="table table-bordered table-striped">
+                        <table id="tblEquipamento" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
                                 <th>Nome do Equipamento</th>
@@ -83,27 +83,25 @@ $lista = ($queryEquipamento->num_rows > 0) ? true : false;
                             </thead>
                             <tbody>
                             <?php
-                            if ($lista)
-                            {
                             foreach ($queryEquipamento as $equipamento)
                             {
-                                ?>
-                                <tr>
-                                    <td><?=$equipamento['equipamento']?></td>
-                                    <td><?=$equipamento['unidade']?></td>
-                                    <td>
-                                        <form action="?perfil=administrativo&p=equipamentos&sp=equipamento_edita" method="post">
-                                            <input type="hidden" name="idEquipamento" id="idEquipamento" value="<?=$equipamento['id']?>">
-                                            <input type="hidden" name="carregar" id="carregar">
-                                            <input class="btn btn-primary" type="submit" value="Editar">
-                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exclusao" data-nome="<?=$equipamento['equipamento']?>" data-id="<?=$equipamento['id']?>">Apagar</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                <?php
+                            ?>
+                            <tr>
+                                <td><?=$equipamento['equipamento']?></td>
+                                <td><?=$equipamento['unidade']?></td>
+                                <td>
+                                    <form action="?perfil=administrativo&p=equipamentos&sp=equipamento_edita" method="post">
+                                        <input type="hidden" name="idEquipamento" id="idEquipamento" value="<?=$equipamento['id']?>">
+                                        <input type="hidden" name="carregar" id="carregar">
+                                        <input class="btn btn-info" type="submit" value="Editar">
+                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exclusao" data-nome="<?=$equipamento['equipamento']?>" data-id="<?=$equipamento['id']?>">Apagar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <?php
                             }
                             ?>
-
+                            </tbody>
                             <tfoot>
                             <tr>
                                 <th>Nome do Equipamento</th>
@@ -111,18 +109,6 @@ $lista = ($queryEquipamento->num_rows > 0) ? true : false;
                                 <th>Ação</th>
                             </tr>
                             </tfoot>
-                            <?php
-                            }
-                            else
-                            {
-                                ?>
-                                <tr>
-                                    <td colspan="5" class="text-center">Não há registros cadastrados</td>
-                                </tr>
-                                <?php
-                            }
-                            ?>
-                            </tbody>
                         </table>
 
                     </div>
@@ -165,28 +151,16 @@ $lista = ($queryEquipamento->num_rows > 0) ? true : false;
 <script defer src="../visual/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script defer src="../visual/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 
-<script defer>
+<script type="text/javascript" defer>
     $(function () {
         $('#tblEquipamento').DataTable({
             "language": {
-                "paginate": {
-                    "previous": "Anterior",
-                    "next": "Próximo"
-                },
-                "search": "Pesquisar: ",
-                "lengthMenu": 'Exibir <select>'+
-                    '<option value="10">10</option>'+
-                    '<option value="20">20</option>'+
-                    '<option value="30">30</option>'+
-                    '<option value="40">40</option>'+
-                    '<option value="50">50</option>'+
-                    '<option value="-1">Todos</option>'+
-                    '</select> Registros',
-                "info": "Exibindo página _PAGE_ de _PAGES_",
-                "infoEmpty": "Exibindo _START_ a _END_ de _TOTAL_ registros",
-                "infoFiltered": "(filtrado de _MAX_ registros totais)"
+                "url": 'bower_components/datatables.net/Portuguese-Brasil.json'
             },
-            responsive: true
+            "responsive": true,
+            "dom": "<'row'<'col-sm-6'l><'col-sm-6 text-right'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7 text-right'p>>",
         });
 
         $('#exclusao').on('show.bs.modal', function (e) {
