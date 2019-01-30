@@ -47,28 +47,28 @@
                                 <div class="form-group col-md-3">
                                     <div class="checkbox">
                                         <label for="levantamento_preco" class='text-center'><strong>Levantamento de preço?</strong>
-                                            <input type="checkbox" name='levantamento_preco' id='levantamento_preco' />
+                                            <input type="checkbox" class="check" name='levantamento_preco' id='levantamento_preco' />
                                         </label>                                        
                                     </div>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <div class="checkbox">
                                         <label for="reserva" class='text-center'><strong>Reserva? </strong>
-                                            <input type="checkbox" name="reserva" id='reserva'  />
+                                            <input type="checkbox" class="check" name="reserva" id='reserva'  />
                                         </label>                                      
                                     </div>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <div class="checkbox">
                                         <label for="elaboracao_edital" class='text-center'><strong>Elaboração de Edital?</strong>
-                                            <input type="checkbox" name="elaboracao_edital" id="elaboracao_edital" />
+                                            <input type="checkbox" class="check" name="elaboracao_edital" id="elaboracao_edital" />
                                         </label> 
                                     </div>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <div class="checkbox">
                                         <label for="analise_edital" class='text-center'><strong>Análise / Ajuste do Edital? </strong>
-                                            <input type="checkbox" name="analise_edital"  id='analise_edital' /> 
+                                            <input type="checkbox" class="check" name="analise_edital"  id='analise_edital' /> 
                                         </label>
                                     </div>
                                 </div>
@@ -86,7 +86,7 @@
                                 <div class="form-group col-md-3">
                                     <div class="checkbox">
                                         <label for="homologacao" class='text-center'><strong>Homologação / Recurso?</strong>
-                                            <input type="checkbox" name="homologacao" id='homologacao' />
+                                            <input type="checkbox" class="check" name="homologacao" id='homologacao' />
                                         </label>
                                     </div>
                                 </div>
@@ -100,7 +100,7 @@
                                 <div class="form-group col-md-2">
                                     <div class="checkbox">
                                         <label for="empenho" class='text-center'><strong>Empenho?</strong>
-                                            <input type="checkbox" name="empenho" id='empenho' />
+                                            <input type="checkbox" class="check" name="empenho" id='empenho' />
                                         </label>
                                     </div>                                        
                                 </div>
@@ -111,7 +111,7 @@
                                 <div class="form-group col-md-2">
                                     <div class="checkbox">
                                         <label for="entrega" class='text-center'> <strong>Entrega? </strong>
-                                            <input type="checkbox" name="entrega" id='entrega' />
+                                            <input type="checkbox" class="check" name="entrega" id='entrega' />
                                         </label>                                    
                                     </div>
                                 </div>
@@ -148,14 +148,52 @@
 
 <script>
 
-    $('#num_processo').mask('0000.0000/0000000-0', {reverse: true});
+    // $('#num_processo').mask('0000.0000/0000000-0', {reverse: true});
 
 
-    function habilitarDesabilitarCampo(target, prop)
-    {
-        $(target).prop('disabled',prop);
+    // function habilitarDesabilitarCampo(target, prop)
+    // {
+    //     $(target).prop('disabled',prop);
+    // }
+
+
+
+</script>
+
+<script>
+
+    let checks = document.querySelectorAll('.check');
+
+    for (const key in checks) {
+        if(key != 0){
+            checks[key].disabled = true           
+        }
     }
 
+    // Função que desabilita todos os checkbox que forem maiores que a checkbox === false
+    const disableMaiorqueAtual = () => {
+        for (const key in checks) {
+            if(checks[key].disabled == true && checks[key].checked == true){
+                let cont = key
+                do {
+                    checks[cont].checked = false
+                    checks[cont].disabled = true
+                    cont ++
+                }while(cont <= 6)
+            }
+        }
+    }
 
+    for (let i = 0; i < checks.length; i++) {
+        const check = checks[i];
+        check.addEventListener('change', () => {
+            if(checks[i].checked === true){
+                checks[(i + 1 )].disabled = false
+            }else{
+                checks[(i + 1 )].disabled = true
+            }
+            funDoida()
+        })  
+    }
 
 </script>
