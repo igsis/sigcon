@@ -41,11 +41,6 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
             gravarLog($sqlEndereco);
 
-
-            echo "<pre>";
-            print_r($telefones);
-            echo "</pre>";
-
             $endereco_id = recuperaUltimo("enderecos");
 
             $sql = "INSERT INTO pessoa_juridicas
