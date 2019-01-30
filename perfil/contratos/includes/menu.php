@@ -9,26 +9,11 @@
             <li class="treeview">
                 <a href=""> <i class="fa fa-cogs"></i> <span>Cadastrar</span> <i class="fa fa-angle-left pull-right"></i> </a>
                 <ul class="treeview-menu">
-                    <li><a href="?perfil=contratos&p=pf_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Pessoa Física</span></a></li>
+                    <li><a href="?perfil=contratos&p=pesquisa&sp=pf_pesquisa"><i class="fa fa-circle-o text-red"></i> <span>Pessoa Física</span></a></li>
                     <li><a href="?perfil=contratos&p=pj_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Pessoa Jurídica</span></a></li>
                     <li><a href="?perfil=contratos&p=pesquisa_licitacao_contratos"><i class="fa fa-circle-o text-red"></i> <span>Contratos</span></a></li>
                     <li><a href="?perfil=contratos&p=aditivo_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Aditivos</span></a></li>
                     <li><a href="?perfil=contratos&p=pagamento_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Pagamento</span></a></li>
-                    <li class="treeview">
-                        <li class=""><a href="?perfil=contratos&p=pf_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Pessoa Física</span></a></li>
-                    </li>
-                    <li class="treeview">
-                        <li class=""><a href="?perfil=contratos&p=pj_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Pessoa Jurídica</span></a></li>
-                    </li>
-                    <li class="treeview">
-                        <li class=""><a href="?perfil=contratos&p=pesquisa_licitacao_contratos"><i class="fa fa-circle-o text-red"></i> <span>Contratos</span></a></li>
-                    </li>
-                    <li class="treeview">
-                    <li class=""><a href="?perfil=contratos&p=aditivo_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Aditivos</span></a></li>
-                    </li>
-                    <li class="treeview">
-                        <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Pagamento</span></a></li>
-                    </li>
                 </ul>
             </li>
             <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Pesquisar</span></a></li>
