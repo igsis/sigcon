@@ -25,9 +25,6 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $empenho = isset($_POST['empenho']) ? 1 : 0;
     $obs_empenho = $_POST['obs_empenho'] ?? NULL;
     $entrega = isset($_POST['entrega']) ? 1 :  0;
-    // echo "<pre>";
-    // print_r($entrega);
-    // echo "</pre>";
     $ordem_inicio = $_POST['ordem_inicio'] ?? NULL;
     $observacoes = addslashes($_POST['observacao']) ?? NULL;
 
@@ -166,8 +163,7 @@ $status = recuperaDados("licitacao_status","id",$licitacao['licitacao_status_id'
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <div class="checkbox">
-                                        <label for="levantamento_preco" class='text-center'><strong>Levantamento de preço?</strong>
-                                            <?php  //echo "<pre>"; print_r($licitacao['levantamento_preco']); echo "</pre>"; ?>
+                                        <label for="levantamento_preco" class='text-center'><strong>Levantamento de preço?</strong>                                
                                             <input type="checkbox" name='levantamento_preco' id='levantamento_preco'  <?= $licitacao['levantamento_preco'] ? 'checked' : NULL ?>/>
                                         </label>                                        
                                     </div>
