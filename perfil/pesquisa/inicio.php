@@ -57,12 +57,12 @@ $licitacoes = $conn->query("SELECT * FROM `licitacoes` AS lic LEFT JOIN (SELECT 
                                 $status = recuperaDados('licitacao_status', 'id', $licitacao['licitacao_status_id'])['status'];
                                 if($licitacao['tipo_pessoa_id'] != NULL){
                                     if($licitacao['tipo_pessoa_id'] == 1){
-                                        $proponente = recuperaDados('pessoas_fisicas','id',$licitacao['pessoa_id'])['nome'];
-                                        $documento = recuperaDados('pessoas_fisicas','id',$licitacao['pessoa_id'])['cpf'];
+                                        $proponente = recuperaDados('pessoa_fisicas','id',$licitacao['pessoa_id'])['nome'];
+                                        $documento = recuperaDados('pessoa_fisicas','id',$licitacao['pessoa_id'])['cpf'];
                                     }
                                     else{
-                                        $proponente = recuperaDados('pessoas_juridicas','id',$licitacao['pessoa_id'])['razao_social'];
-                                        $documento = recuperaDados('pessoas_juridicas','id',$licitacao['pessoa_id'])['CNPJ'];
+                                        $proponente = recuperaDados('pessoa_juridicas','id',$licitacao['pessoa_id'])['razao_social'];
+                                        $documento = recuperaDados('pessoa_juridicas','id',$licitacao['pessoa_id'])['cnpj'];
                                     }
                                 }
                                 else{
@@ -80,7 +80,7 @@ $licitacoes = $conn->query("SELECT * FROM `licitacoes` AS lic LEFT JOIN (SELECT 
                                     <td><?= $documento ?></td>
                                     <td><?= $status ?></td>
                                     <td>
-                                        <form action="?perfil=administrativo&p=licitacao&sp=licitacao_edita" method='POST'>
+                                        <form action="?perfil=pesquisa&p=pesquisa_carregar" method='POST'>
                                             <input type="hidden" name='editarLicitacao' value='<?= $licitacao['id'] ?>'>
                                             <button type='submit' class='btn btn-info'> Carregar</button>
                                         </form>
