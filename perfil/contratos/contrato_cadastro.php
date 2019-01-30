@@ -90,7 +90,7 @@ $conn = bancoPDO();
                                     <label for="tipo_servico">Tipo de serviço *</label>
                                     <input type="text" id="tipo_servico" name="tipo_servico" class="form-control" maxlength="80" required>
                                 </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-6">
                                     <label for="unidade">Unidade *</label>
                                     <select class="form-control" id="unidade" name="unidade">
                                         <option value="">Selecione...</option>
@@ -99,20 +99,38 @@ $conn = bancoPDO();
                                         ?>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <!-- Campo populado de acordo com a escolha da unidade -->
-                                    <label for="equipamento">Equipamentos atendidos</label> <br>
-                                    <select class="form-control" id="equipamento" name="equipamento">
-                                        <option value="">Selecione...</option>
-                                        <?php
-                                        geraOpcao("equipamentos")
-                                        ?>
-                                    </select>
+                            </div>
+
+                            <div class="equipamentos">
+                                <div class="row">
+                                    <hr>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <!-- Campo populado de acordo com a escolha da unidade -->
+                                            <label for="equipamento">Equipamentos atendidos</label> <br>
+                                            <select class="form-control" id="equipamento" name="equipamento[0]">
+                                                <option value="">Selecione...</option>
+                                                <?php
+                                                geraOpcao("equipamentos")
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="botoes">
+
+                            <div class="row">
+                                <div class="form-group col-md-offset-2 col-md-4">
+                                    <a class="btn btn-info btn-block" href="#void" id="addInput">Adicionar Equipamento</a>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <a class="btn btn-info btn-block" href="#void" id="remInput">Remover Ultimo Equipamento</a>
                                 </div>
                             </div>
 
                             <div class="row">
-
                                 <div class="form-group col-md-3">
                                     <label for="fiscal">Fiscal</label>
                                     <input type="text" id="fiscal" name="fiscal" class="form-control" maxlength="60">
@@ -221,6 +239,21 @@ $conn = bancoPDO();
 
 <script>
 
+    $('#addInput').on('click', function(e) {
+        let i = $('.equipamentos').length;
+        $('.equipamentos').first().clone().find("input").attr('name', function(idx, attrVal) {
+            return attrVal.replace('[0]','')+'['+i+']';
+        }).removeAttr('checked').end().find("input[type=select]").val('').end().insertBefore('.botoes');
+    });
+
+    $('#remInput').on('click', function(e) {
+        let i = $('.equipamentos').length;
+        if (i > 1){
+            $('.equipamentos').last().remove();
+        }
+    });
+
+
     $('#num_processo').mask('0000.0000/0000000-0', {reverse: true});
 
 
@@ -239,8 +272,6 @@ $conn = bancoPDO();
              document.status.disabled = true;
          }
      }*/
-
-
 
 
 </script>

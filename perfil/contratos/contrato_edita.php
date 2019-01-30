@@ -24,7 +24,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $tipo_servico = $_POST['tipo_servico'] ?? NULL;
     $objeto = $_POST['objeto'] ?? NULL;
     $idUnidade = $_POST['unidade'] ?? NULL;
-    $idEquipamento = $_POST['equipamento'] ?? NULL;
+    $equipamentos = $_POST['equipamento'] ?? NULL;
     $fiscal = $_POST['fiscal'] ?? NULL;
     $contatoFiscal = $_POST['fiscal_contato'] ?? NULL;
     $suplente = $_POST['suplente'] ?? NULL;
@@ -72,7 +72,6 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                                        tipo_pessoa_id,
                                                        pessoa_id,
                                                        unidade_id,
-                                                       equipamentos_id,
                                                        fiscal_id,
                                                        suplente_id,
                                                        garantia, 
@@ -88,7 +87,6 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                                        '$tipoPessoa',
                                                        '$idPessoa',
                                                        '$idUnidade',
-                                                       '$idEquipamento',
                                                        '$idFiscal',
                                                        '$idSuplente',
                                                        '$garantia',
@@ -266,7 +264,18 @@ $contratos = recuperaDados("contratos", "id", $idContrato);
                                         ?>
                                     </select>
                                 </div>
-                            </div>
+
+                                    <hr class="botoes">
+
+                                    <div class="row">
+                                        <div class="form-group col-md-offset-2 col-md-4">
+                                            <a class="btn btn-info btn-block" href="#void" id="addInput">Adicionar Equipamento</a>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <a class="btn btn-info btn-block" href="#void" id="remInput">Remover Ultimo Equipamento</a>
+                                        </div>
+                                    </div>
+                                </div>
 
                             <div class="row">
                                 <div class="form-group col-md-3">
