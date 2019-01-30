@@ -13,7 +13,10 @@ if (isset($_POST['excluirLicitacao'])) {
     }
 }
 
-$licitacoes = $conn->query("SELECT * FROM `licitacoes` AS lic LEFT JOIN (SELECT * FROM contratos WHERE publicado = '1') As con ON lic.id = con.licitacao_id WHERE lic.publicado = '1'")->fetchAll();
+$licitacoes = $conn->query("
+  SELECT lic.id AS idLicitacao, licitacao_id, numero_processo, termo_contrato, objeto, lic.unidade_id, tipo_pessoa_id, pessoa_id, licitacao_status_id FROM `licitacoes` AS lic 
+    LEFT JOIN (SELECT * FROM contratos WHERE publicado = '1') As con ON lic.id = con.licitacao_id 
+  WHERE lic.publicado = '1'")->fetchAll();
 ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -71,6 +74,7 @@ $licitacoes = $conn->query("SELECT * FROM `licitacoes` AS lic LEFT JOIN (SELECT 
                                 }
                                 ?>
                                 <tr>
+                                    <!--    @TODO: Terminar de colocar o resultado nos campos -->
                                     <td><?= $licitacao['numero_processo'] ?></td>
                                     <td><?= $licitacao['termo_contrato'] ?></td>
                                     <td><?= $licitacao['objeto'] ?></td>
@@ -81,7 +85,7 @@ $licitacoes = $conn->query("SELECT * FROM `licitacoes` AS lic LEFT JOIN (SELECT 
                                     <td><?= $status ?></td>
                                     <td>
                                         <form action="?perfil=pesquisa&p=pesquisa_carregar" method='POST'>
-                                            <input type="hidden" name='editarLicitacao' value='<?= $licitacao['id'] ?>'>
+                                            <input type="hidden" name='idLicitacao' value='<?= $licitacao['idLicitacao'] ?>'>
                                             <button type='submit' class='btn btn-info'> Carregar</button>
                                         </form>
                                     </td>
