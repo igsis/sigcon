@@ -1,122 +1,67 @@
 <?php
-include "../perfil/includes/menu.php";
 
 $con = bancoMysqli();
 $conn = bancoPDO();
 
-if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
-    $idPessoaFisica = $_POST['idPessoaFisica'] ?? NULL;
+$idPessoaFisica = $_POST['idPf'];
+
+if (isset($_POST['edita'])) {
+    $idPessoaFisica = $_POST['idPf'] ?? NULL;
     $nome_pf = addslashes($_POST['nome_pf']);
     $cpf = $_POST['cpf'];
-    $email = $_POST['email'];
+    $email = trim($_POST['email']);
     $telefones = $_POST['telefone'];
     $cep = $_POST['cep'];
-    $logradouro = $_POST['logradouro'];
-    $bairro = $_POST['bairro'];
+    $logradouro = addslashes($_POST['logradouro']);
+    $bairro = addslashes($_POST['bairro']);
     $numero = $_POST['numero'];
     $complemento = $_POST['complemento'] ?? NULL;
     $uf = $_POST['uf'];
-    $cidade = $_POST['cidade'];
+    $cidade = addslashes($_POST['cidade']);
 
-    if (isset($_POST['cadastra'])) {
-        // cadastrar endereco de pf
-        $sqlEndereco = "INSERT INTO enderecos
-                                    (cep,
-                                     logradouro,
-                                     bairro,
-                                     cidade,
-                                     estado,
-                                     numero,
-                                     complemento)
-                              VALUES ('$cep',
-                                      '$logradouro',
-                                      '$bairro',
-                                      '$cidade',
-                                      '$uf',
-                                      '$numero',
-                                      '$complemento')";
+    $pf = recuperaDados('pessoa_fisicas', 'id', $idPessoaFisica);
+    $endereco_id = $pf['endereco_id'];
 
-        if (mysqli_query($con, $sqlEndereco)) {
-
-            $endereco_id = recuperaUltimo("enderecos");
-
-            $sql = "INSERT INTO pessoa_fisicas
-                                (nome,
-                                 cpf,
-                                 email,
-                                 endereco_id,
-                                 publicado)
-                          VALUES ('$nome_pf',
-                                  '$cpf',
-                                  '$email',
-                                  '$endereco_id',
-                                  '1')";
-
-            if (mysqli_query($con, $sql)) {
-
-                $idPessoaFisica = recuperaUltimo('pessoa_fisicas');
-
-                foreach ($telefones as $telefone) {
-                    if ($telefone != '') {
-                        // cadastrar o telefone de pf
-                        $sqlTelefone = "INSERT INTO pf_telefones
-                                      (pessoa_fisica_id,
-                                       telefone)
-                              VALUES  ('$idPessoaFisica',
-                                       '$telefone')";
-
-                        mysqli_query($con, $sqlTelefone);
-                        gravarLog($sqlTelefone);
-                    }
-                }
-            }
-
-        } else {
-            $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
-
+    if (isset($_POST['telefone3']))
+    {
+        $telefone3 = $_POST['telefone3'];
+        $sqlTelefone3 = "INSERT INTO pf_telefones (pessoa_fisica_id, telefone) VALUES ('$idPessoaFisica', '$telefone3')";
+        if ($con->query($sqlTelefone3))
+        {
+            gravarLog($sqlTelefone3);
         }
     }
 
-    if (isset($_POST['edita'])) {
-
-        $sql = "UPDATE pessoa_fisicas SET
+    $sql = "UPDATE pessoa_fisicas SET
                                  nome = '$nome_pf',
                                  cpf = '$cpf',
                                  email = '$email'
                           WHERE id = '$idPessoaFisica'";
 
-        $pf = recuperaDados('pessoa_fisicas', 'id', $idPessoaFisica);
-        $endereco_id = $pf['endereco_id'];
-
-        if (isset($_POST['telefone3'])) {
-            $telefone3 = $_POST['telefone3'];
-            $sqlTelefone3 = "INSERT INTO pf_telefones (pessoa_fisica_id, telefone) VALUES ('$idPessoaFisica', '$telefone3')";
-            $query = mysqli_query($con, $sqlTelefone3);
-            gravarLog($sqlTelefone3);
-        }
-
-        if (mysqli_query($con, $sql)) {
-
-            foreach ($telefones as $idTelefone => $telefone) {
-                if (!strlen($telefone)) {
-                    // Deletar telefone do banco se for apagado no edita.
-                    $sqlDelete = "DELETE FROM pf_telefones WHERE id = '$idTelefone'";
-                    mysqli_query($con, $sqlDelete);
+    if ($con->query($sql))
+    {
+        foreach ($telefones as $idTelefone => $telefone)
+        {
+            if (!strlen($telefone))
+            {
+                // Deletar telefone do banco se for apagado no edita.
+                $sqlDelete = "DELETE FROM pj_telefones WHERE id = '$idTelefone'";
+                if ($con->query($sqlDelete))
+                {
                     gravarLog($sqlDelete);
-                }
-
-                if ($telefone != '') {
-                    // editar telefone de pf
-                    $sqlTelefone = "UPDATE  pf_telefones SET
-                                          telefone = '$telefone'
-                                  WHERE id = '$idTelefone'";
-
-                    mysqli_query($con, $sqlTelefone);
-                    gravarLog($sqlTelefone);
                 }
             }
 
-            $sqlEndereco = "UPDATE enderecos SET
+            // cadastrar o telefone de pf
+            $sqlTelefone = "UPDATE pf_telefones SET telefone = '$telefone' WHERE id = '$idTelefone'";
+
+            if ($con->query($sqlTelefone))
+            {
+                gravarLog($sqlTelefone);
+            }
+        }
+
+        $sqlEndereco = "UPDATE enderecos SET
                                   cep = '$cep',
                                   logradouro = '$logradouro',
                                   estado= '$uf',
@@ -126,25 +71,28 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                   complemento = '$complemento'
                                   WHERE id = '$endereco_id'";
 
-            if (mysqli_query($con, $sqlEndereco)) {
-
-                $mensagem = mensagem("success", "Atualizado com sucesso!");
-
-                //gravarLog($sql);
-            } else {
-                $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
-                //gravarLog($sql);
-            }
+        if (mysqli_query($con, $sqlEndereco))
+        if ($con->query($sqlEndereco))
+        {
+            gravarLog($sqlEndereco);
+            $mensagem = mensagem("success", "Atualizado com sucesso!");
         }
+        else
+        {
+            $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
+        }
+    }
+    else
+    {
+        $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
     }
 }
 
-$sqlTelefones = "SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPessoaFisica'";
-$arrayTelefones = $conn->query($sqlTelefones)->fetchAll();
 
 $pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoaFisica);
+$pf_endereco = recuperaDados("enderecos", "id", $pessoa_fisica['endereco_id']);
 
-$pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
+$arrayTelefones = $conn->query("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPessoaFisica'")->fetchAll();
 
 ?>
 <script language="JavaScript" >
@@ -166,7 +114,7 @@ $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
                         }; ?>
                     </div>
 
-                    <form method="POST" action="?perfil=contratos/pf_edita" role="form">
+                    <form method="POST" action="?perfil=contratos&p=pessoa_fisica&sp=pf_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-4">
@@ -221,20 +169,20 @@ $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="celular">Celular *</label>
-                                    <input type="text" data-mask="(00)0.0000-0000" class="form-control" id="celular" name="telefone[<?= $arrayTelefones[1]['id'] ?>]" value="<?= $arrayTelefones[1]['telefone']; ?>">
+                                    <input type="text" data-mask="(00)00000-0000" class="form-control" id="celular" name="telefone[<?= $arrayTelefones[1]['id'] ?>]" value="<?= $arrayTelefones[1]['telefone']; ?>">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="recado">Recado (opcional) </label>
                                     <?php if (isset($arrayTelefones[2])) {
                                     ?>
 
-                                    <input type="text" data-mask="(00)0000-00000" class="form-control" id="recado" name="telefone[<?= $arrayTelefones[2]['id'] ?>]" value="<?=  $arrayTelefones[2]['telefone']; ?>">
+                                    <input type="text" data-mask="(00)00000-0000" class="form-control" id="recado" name="telefone[<?= $arrayTelefones[2]['id'] ?>]" value="<?=  $arrayTelefones[2]['telefone']; ?>">
 
                                     <?php
                                     } else {
                                     ?>
 
-                                    <input type="text" data-mask="(00)0000-00000" class="form-control" id="recado" name="telefone3">
+                                    <input type="text" data-mask="(00)00000-0000" class="form-control" id="recado" name="telefone3">
 
                                     <?php
                                     }
@@ -242,8 +190,8 @@ $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                 </div>
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-default">Cancelar</button>
-                                <input type="hidden" name="idPessoaFisica" value="<?= $idPessoaFisica ?>">
+                                <a href="?perfil=contratos&p=pesquisa&sp=pf_pesquisa" class="btn btn-default">Voltar a Pesquisa</a>
+                                <input type="hidden" name="idPf" value="<?= $idPessoaFisica ?>">
                                 <button type="submit" name="edita" id="edita" class="btn btn-primary pull-right"> Editar </button>
                             </div>
                     </form>

@@ -1,5 +1,4 @@
 <?php
-include "../perfil/includes/menu.php";
 
 if (isset($_POST['documentacao'])) {
     $cpf = $_POST['documentacao'];
@@ -20,7 +19,7 @@ if (isset($_POST['documentacao'])) {
                         <h3 class="box-title">Informações Pessoa Física</h3>
                     </div>
 
-                    <form method="POST" action="?perfil=contratos/pf_edita" role="form">
+                    <form method="POST" action="?perfil=contratos&p=pesquisa&sp=pf_pesquisa" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-4">
@@ -81,8 +80,8 @@ if (isset($_POST['documentacao'])) {
                                 </div>
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-default">Cancelar</button>
-                                <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary pull-right"> Cadastrar </button>
+                                <a href="?perfil=contratos&p=pesquisa&sp=pf_pesquisa" class="btn btn-default">Voltar a Pesquisa</a>
+                                <button type="submit" name="cadastrar" id="cadastrar" class="btn btn-primary pull-right"> Cadastrar </button>
                             </div>
                     </form>
                 </div>
