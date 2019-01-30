@@ -5,6 +5,7 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li><a href="?secao=perfil"><i class="fa fa-home"></i><span>Home</span></a></li>
+            <li class="header">MÓDULO DE CONTRATOS</li>
             <li class="treeview">
                 <a href=""> <i class="fa fa-cogs"></i> <span>Cadastrar</span> <i class="fa fa-angle-left pull-right"></i> </a>
                 <ul class="treeview-menu">

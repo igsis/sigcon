@@ -5,7 +5,7 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li><a href="?secao=perfil"><i class="fa fa-home"></i><span>Home</span></a></li>
-            <li class="header">MÓDULOS</li>
+            <li class="header">MÓDULO ADMINISTRATIVO</li>
             <li> <a href="?perfil=administrativo&p=licitacao&sp=licitacao_cadastro"> <i class="fa fa-circle-o text-orange"></i> <span>Cadastrar Licitação</span> </a> </li>
 
             <li class="treeview">

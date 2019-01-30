@@ -28,8 +28,10 @@ if(isset($_POST['login']))
                 $_SESSION['idUser'] = $user['id'];
                 $_SESSION['nivelAcesso'] = $user['nivel_acesso_id'];
 				$log = "Fez login.";
-				//gravarLog($log);
 				header("Location: visual/index.php");
+				$dataAtual = date('Y-m-d');
+				$sqlUltimoAcesso = "UPDATE `usuarios` SET `ultimo_acesso` = '$dataAtual' WHERE `id` = '".$user['id']."'";
+				$con->query($sqlUltimoAcesso);
 				gravarLog($sql);
 			}
 			else
