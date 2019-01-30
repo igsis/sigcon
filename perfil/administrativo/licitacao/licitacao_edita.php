@@ -19,11 +19,11 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $analise_edital = $_POST['analise_edital'];
     $licitacao = $_POST['licitacao'];
     $obs_licitacao = $_POST['obs_licitacao'] ?? NULL;
-    $homologacao = $_POST['homologacao'];
+    $homologacao = $_POST['homologacao'] ?? NULL;
     $obs_homologacao = $_POST['obs_homologacao'] ?? NULL;
     $empenho = $_POST['empenho'];
     $obs_empenho = $_POST['obs_empenho'] ?? NULL;
-    $entrega = $_POST['entrega'];
+    $entrega = $_POST['entrega'] ?? NULL;
     $ordem_inicio = $_POST['ordem_inicio'] ?? NULL;
     $observacoes = addslashes($_POST['observacao']) ?? NULL;
 
