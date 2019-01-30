@@ -40,7 +40,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
             $endereco_id = recuperaUltimo("enderecos");
 
-            $sql = "INSERT INTO pessoas_fisicas
+            $sql = "INSERT INTO pessoa_fisicas
                                 (nome,
                                  cpf,
                                  email,
@@ -54,7 +54,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
             if (mysqli_query($con, $sql)) {
 
-                $idPessoaFisica = recuperaUltimo('pessoas_fisicas');
+                $idPessoaFisica = recuperaUltimo('pessoa_fisicas');
 
                 foreach ($telefones as $telefone) {
                     if ($telefone != '') {
@@ -66,6 +66,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                        '$telefone')";
 
                         mysqli_query($con, $sqlTelefone);
+                        gravarLog($sqlTelefone);
                     }
                 }
             }
@@ -78,13 +79,13 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
     if (isset($_POST['edita'])) {
 
-        $sql = "UPDATE pessoas_fisicas SET
+        $sql = "UPDATE pessoa_fisicas SET
                                  nome = '$nome_pf',
                                  cpf = '$cpf',
                                  email = '$email'
                           WHERE id = '$idPessoaFisica'";
 
-        $pf = recuperaDados('pessoas_fisicas', 'id', $idPessoaFisica);
+        $pf = recuperaDados('pessoa_fisicas', 'id', $idPessoaFisica);
         $endereco_id = $pf['endereco_id'];
 
         if (isset($_POST['telefone3'])) {
@@ -99,23 +100,21 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
             foreach ($telefones as $idTelefone => $telefone) {
                 if (!strlen($telefone)) {
                     // Deletar telefone do banco se for apagado no edita.
-                    $sqlDelete = "DELETE FROM pj_telefones WHERE id = '$idTelefone'";
+                    $sqlDelete = "DELETE FROM pf_telefones WHERE id = '$idTelefone'";
                     mysqli_query($con, $sqlDelete);
                     gravarLog($sqlDelete);
-
                 }
 
-                // cadastrar o telefone de pf
-                $sqlTelefone = "UPDATE  pf_telefones SET
+                if ($telefone != '') {
+                    // editar telefone de pf
+                    $sqlTelefone = "UPDATE  pf_telefones SET
                                           telefone = '$telefone'
                                   WHERE id = '$idTelefone'";
 
-                mysqli_query($con, $sqlTelefone);
-                gravarLog($sqlTelefone);
+                    mysqli_query($con, $sqlTelefone);
+                    gravarLog($sqlTelefone);
+                }
             }
-
-            $sqlTelefones = "SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPessoaFisica'";
-            $arrayTelefones = $conn->query($sqlTelefones)->fetchAll();
 
             $sqlEndereco = "UPDATE enderecos SET
                                   cep = '$cep',
@@ -140,7 +139,10 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     }
 }
 
-$pessoa_fisica = recuperaDados("pessoas_fisicas", "id", $idPessoaFisica);
+$sqlTelefones = "SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPessoaFisica'";
+$arrayTelefones = $conn->query($sqlTelefones)->fetchAll();
+
+$pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoaFisica);
 
 $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
 

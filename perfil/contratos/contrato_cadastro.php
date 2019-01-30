@@ -79,8 +79,6 @@ $conn = bancoPDO();
                                     <label for="objeto">Objeto *</label>
                                     <input type="text" id="objeto" name="objeto" class="form-control" maxlength="100" value="<?= $licitacao['objeto']; ?>" readonly>
                                 </div>
-
-
                             </div>
 
                             <div class="row">

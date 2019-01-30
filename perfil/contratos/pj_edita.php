@@ -20,7 +20,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $contato = $_POST['contato'];
 
     if (isset($_POST['cadastra'])) {
-        // cadastrar endereco de pf
+        // cadastrar endereco de pj
         $sqlEndereco = "INSERT INTO enderecos
                                     (cep,
                                      logradouro,
@@ -39,11 +39,18 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
         if (mysqli_query($con, $sqlEndereco)) {
 
+            gravarLog($sqlEndereco);
+
+
+            echo "<pre>";
+            print_r($telefones);
+            echo "</pre>";
+
             $endereco_id = recuperaUltimo("enderecos");
 
-            $sql = "INSERT INTO pessoas_juridicas
+            $sql = "INSERT INTO pessoa_juridicas
                                 (razao_social,
-                                 CNPJ,
+                                 cnpj,
                                  email,
                                  contato,
                                  endereco_id,
@@ -57,11 +64,11 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
             if (mysqli_query($con, $sql)) {
 
-                $idPessoaJuridica = recuperaUltimo('pessoas_juridicas');
+                $idPessoaJuridica = recuperaUltimo('pessoa_juridicas');
 
                 foreach ($telefones as $telefone) {
                     if ($telefone != '') {
-                        // cadastrar o telefone de pf
+                        // cadastrar o telefone de pj
                         $sqlTelefone = "INSERT INTO pj_telefones
                                       (pessoa_juridica_id,
                                        telefone)
@@ -69,6 +76,8 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                        '$telefone')";
 
                         mysqli_query($con, $sqlTelefone);
+
+                        gravarLog($sqlTelefone);
 
                         $mensagem = mensagem("success", "Cadastrado com sucesso!");
                     }
@@ -82,14 +91,14 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
     if (isset($_POST['edita'])) {
 
-        $sql = "UPDATE pessoas_juridicas SET
+        $sql = "UPDATE pessoa_juridicas SET
                                  razao_social = '$razao_social',
-                                 CNPJ = '$cnpj',
+                                 cnpj = '$cnpj',
                                  email = '$email',
                                  contato = '$contato'
                           WHERE id = '$idPessoaJuridica'";
 
-        $pj = recuperaDados('pessoas_juridicas', 'id', $idPessoaJuridica);
+        $pj = recuperaDados('pessoa_juridicas', 'id', $idPessoaJuridica);
         $endereco_id = $pj['endereco_id'];
 
         if (isset($_POST['telefone3'])) {
@@ -109,18 +118,15 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                     gravarLog($sqlDelete);
                 }
 
-                // cadastrar o telefone de pf
-                $sqlTelefone = "UPDATE  pj_telefones SET
+                if ($telefone != '') {
+                    // editar o telefone de pj
+                    $sqlTelefone = "UPDATE  pj_telefones SET
                                           telefone = '$telefone'
                                   WHERE id = '$idTelefone'";
-                mysqli_query($con, $sqlTelefone);
-                gravarLog($sqlTelefone);
-
+                    mysqli_query($con, $sqlTelefone);
+                    gravarLog($sqlTelefone);
+                }
             }
-
-            $sqlTelefones = "SELECT * FROM pj_telefones WHERE pessoa_juridica_id = '$idPessoaJuridica'";
-            $arrayTelefones = $conn->query($sqlTelefones)->fetchAll();
-
 
             $sqlEndereco = "UPDATE enderecos SET
                                   cep = '$cep',
@@ -145,8 +151,10 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     }
 }
 
-$pessoa_juridica = recuperaDados("pessoas_juridicas", "id", $idPessoaJuridica);
+$sqlTelefones = "SELECT * FROM pj_telefones WHERE pessoa_juridica_id = '$idPessoaJuridica'";
+$arrayTelefones = $conn->query($sqlTelefones)->fetchAll();
 
+$pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoaJuridica);
 $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
 
 ?>
@@ -178,7 +186,7 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="cnpj">CNPJ *</label>
-                                    <input type="text" data-mask="00.000.000/0000-00" minlength="18" class="form-control" id="cnpj" name="cnpj" value="<?= $pessoa_juridica['CNPJ'] ?>" required>
+                                    <input type="text" data-mask="00.000.000/0000-00" minlength="18" class="form-control" id="cnpj" name="cnpj" value="<?= $pessoa_juridica['cnpj'] ?>" required>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>

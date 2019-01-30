@@ -14,7 +14,7 @@
                     <li><a href="?perfil=contratos&p=pesquisa_licitacao_contratos"><i class="fa fa-circle-o text-red"></i> <span>Contratos</span></a></li>
                     <li><a href="?perfil=contratos&p=aditivo_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Aditivos</span></a></li>
                     <li><a href="?perfil=contratos&p=pagamento_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Pagamento</span></a></li>
-                    <li class="treeview">
+                   <!-- <li class="treeview">
                         <li class=""><a href="?perfil=contratos&p=pf_cadastro"><i class="fa fa-circle-o text-red"></i> <span>Pessoa Física</span></a></li>
                     </li>
                     <li class="treeview">
@@ -28,10 +28,10 @@
                     </li>
                     <li class="treeview">
                         <li class=""><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Pagamento</span></a></li>
-                    </li>
+                    </li>-->
                 </ul>
             </li>
-            <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Pesquisar</span></a></li>
+            <li><a href=""><i class="fa fa-circle-o text-aqua"></i> <span>Pesquisar</span></a></li>
             <li class="header">MAIS</li>
             <li><a href="?perfil=usuario/minha_conta"><i class="fa fa-user"></i><span>Minha Conta</span></a></li>
             <li><a href="../include/ajuda.php"><i class="fa fa-question "></i><span>Ajuda</span></a></li>
