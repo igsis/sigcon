@@ -3,15 +3,15 @@
 $con = bancoMysqli();
 $conn = bancoPDO();
 
-$sql = "SELECT * FROM licitacoes WHERE empenho = 1 ORDER BY numero_processo";
-$query = mysqli_query($con,$sql);
-$num = mysqli_num_rows($query);
-$licitacoes = $conn->query($sql)->fetchAll();
+$sqlEmpenho = "SELECT * FROM licitacoes WHERE empenho = 1 ORDER BY numero_processo";
+$query = mysqli_query($con,$sqlEmpenho);
+$num_empenhadas = mysqli_num_rows($query);
+$licitacoes_empenhadas = $conn->query($sqlEmpenho)->fetchAll();
 
-
-$sqlStatus3 = "SELECT * FROM licitacoes WHERE licitacao_status_id = 3";
-$queryStatus3 = mysqli_query($con, $sqlStatus3);
-$qtde3 = mysqli_num_rows($queryStatus3);
+$sqlHomologacao = "SELECT * FROM licitacoes WHERE homologacao = 1 AND empenho = 0 ORDER BY numero_processo";
+$queryHomologacao = mysqli_query($con, $sqlHomologacao);
+$num_homologadas = mysqli_num_rows($queryHomologacao);
+$licitacoes_homologadas = $conn->query($sqlHomologacao)->fetchAll();
 
 $sqlStatus2 = "SELECT * FROM licitacoes WHERE licitacao_status_id = 2";
 $queryStatus2 = mysqli_query($con, $sqlStatus2);
@@ -36,7 +36,7 @@ $qtde1 = mysqli_num_rows($queryStatus1);
                         <div class="col-md-12">
                             <?php
 
-                            if($num > 0)
+                            if($num_empenhadas > 0)
                             {
 
                                 ?>
@@ -52,7 +52,7 @@ $qtde1 = mysqli_num_rows($queryStatus1);
                                     </thead>
                                     <tbody>
                                     <?php
-                                    foreach ($licitacoes as $licitacao) {
+                                    foreach ($licitacoes_empenhadas as $licitacao) {
                                         $unidade = recuperaDados('unidades', 'id', $licitacao['unidade_id'])['nome'];
                                         $status = recuperaDados('licitacao_status', 'id', $licitacao['licitacao_status_id'])['status'];
                                         ?>
@@ -83,34 +83,45 @@ $qtde1 = mysqli_num_rows($queryStatus1);
 
         <div class="row">
             <div class="col-md-12">
-                <div class="box">
+                <div class="box box-primary">
                     <div class="box-header with-border text-center">
-                        <h3 class="box-title text-bold">Etapas</h3>
+                        <h3 class="box-title text-bold">Licitações Homologadas</h3>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <?php
 
-                            if($num > 0)
+                            if($num_homologadas > 0)
                             {
+
                                 ?>
 
                                 <table class='table table-striped table-bordered table-responsive list_info'>
                                     <thead>
-                                    <tr class='list_menu text-center text-bold text-purple'>
-                                        <td width='50%'>Etapa da licitação</td>
-                                        <td width='50%'>Total </td>
+                                    <tr>
+                                        <th>Nº SEI administrativo</th>
+                                        <th>Objeto</th>
+                                        <th>Unidade</th>
+                                        <th>Status</th>
                                     </tr>
                                     </thead>
+
                                     <tbody>
-                                    <tr>
-                                        <td>Licitações que ainda não possuem contrato</td>
-                                        <td class='list_description'><?= $qtde3 ?></td>
-                                    </tr>
-                                    <tr><td>Licitações que possoem contrato</td>
-                                        <td class='list_description'><?= $qtde2 ?></td></tr>
-                                    <tr><td>Licitações canceladas</td>
-                                        <td class='list_description'><?= $qtde1 ?></td></tr>
+                                    <?php
+                                    foreach ($licitacoes_homologadas as $licitacao) {
+                                        $unidade = recuperaDados('unidades', 'id', $licitacao['unidade_id'])['nome'];
+                                        $status = recuperaDados('licitacao_status', 'id', $licitacao['licitacao_status_id'])['status'];
+                                        ?>
+                                        <tr>
+                                            <td><?= $licitacao['numero_processo'] ?></td>
+                                            <td><?= $licitacao['objeto'] ?></td>
+                                            <td><?= $unidade ?></td>
+                                            <td><?= $status ?></td>
+                                        </tr>
+                                        <?php
+                                    }
+                                    ?>
+                                    </tbody>
                                 </table>
 
                                 <?php

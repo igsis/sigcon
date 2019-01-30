@@ -16,9 +16,9 @@ if (isset($_POST['procurar'])){
 
     if ($cnpj != NULL ) {
 
-        $queryCNPJ = "SELECT id, razao_social, CNPJ, email
-                         FROM pessoas_juridicas
-                         WHERE CNPJ = '$cnpj'";
+        $queryCNPJ = "SELECT id, razao_social, cnpj, email
+                         FROM pessoa_juridicas
+                         WHERE cnpj = '$cnpj'";
 
         if ($result = mysqli_query($con,$queryCNPJ)) {
 
@@ -33,12 +33,12 @@ if (isset($_POST['procurar'])){
 
                     $resultado .= "<tr>";
                     $resultado .= "<td>".$pessoa['razao_social']."</td>";
-                    $resultado .= "<td>".$pessoa['CNPJ']."</td>";
+                    $resultado .= "<td>".$pessoa['cnpj']."</td>";
                     $resultado .= "<td>".$pessoa['email']."</td>";
                     $resultado .= "<td>
                                      <form action='?perfil=contratos/contrato_cadastro' method='post'>
-                                        <input type='text' name='idPj' value='".$pessoa['id']."'>
-                                        <input type='text' name='idLicitacao' value='".$idLicitacao."'>
+                                        <input type='hidden' name='idPj' value='".$pessoa['id']."'>
+                                        <input type='hidden' name='idLicitacao' value='".$idLicitacao."'>
                                         <input type='submit' name='carregar' class='btn btn-primary' name='selecionar' value='Selecionar'>
                                      </form>
                                </td>";

@@ -13,13 +13,13 @@ $conn = bancoPDO();
         $tipoPessoa = 1;
         $idPessoa = $_POST['idPf'];
 
-        $pessoa_fisica = recuperaDados("pessoas_fisicas", "id", $idPessoa)['cpf'];
+        $pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoa)['cpf'];
 
     } elseif (isset($_POST['idPj'])) {
         $tipoPessoa = 2;
         $idPessoa = $_POST['idPj'];
 
-        $pessoa_juridica = recuperaDados("pessoas_juridicas", "id", $idPessoa)['CNPJ'];
+        $pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoa)['cnpj'];
     }
 
 ?>
@@ -101,8 +101,8 @@ $conn = bancoPDO();
                                 </div>
                                 <div class="form-group col-md-3">
                                     <!-- Campo populado de acordo com a escolha da unidade -->
-                                    <label for="equipamentos">Equipamentos atendidos</label> <br>
-                                    <select class="form-control" id="equipamentos" name="equipamentos">
+                                    <label for="equipamento">Equipamentos atendidos</label> <br>
+                                    <select class="form-control" id="equipamento" name="equipamento">
                                         <option value="">Selecione...</option>
                                         <?php
                                         geraOpcao("equipamentos")
@@ -204,6 +204,7 @@ $conn = bancoPDO();
                         <div class="box-footer">
                             <input type="hidden" name="tipoPessoa" value="<?= $tipoPessoa ?>">
                             <input type="hidden" name="idPessoa" value="<?= $idPessoa ?>">
+                            <input type="hidden" name="idLicitacao" value="<?= $idLicitacao ?>">
                             <button type="submit" name="cadastra" class="btn btn-primary pull-right">Cadastrar</button>
                         </div>
                     </form>

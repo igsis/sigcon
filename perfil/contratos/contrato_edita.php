@@ -7,32 +7,39 @@ $conn = bancoPDO();
 $tipoPessoa = $_POST['tipoPessoa'];
 $idPessoa = $_POST['idPessoa'];
 
+if ($tipoPessoa == 1) {
+    $pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoa)['cpf'];
+
+} elseif ($tipoPessoa == 2) {
+    $pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoa)['cnpj'];
+
+}
+
 $idLicitacao = $_POST['idLicitacao'];
 $licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
 
 if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $idContrato = $_POST['idContrato'] ?? NULL;
-    $termo_contrato = $_POST['termo_contrato'];
-    $tipo_servico = $_POST['tipo_servico'];
-    $objeto = $_POST['objeto'];
-    $idEmpresa = $_POST['idEmpresa'];
-    $idUnidade = $_POST['unidade'];
-    $idEquipamento = $_POST['equipamento'];
-    $fiscal = $_POST['fiscal'];
-    $contatoFiscal = $_POST['fiscal_contato'];
-    $suplente = $_POST['suplente'];
-    $contatoSuplente = $_POST['suplente_contato'];
-    $garantia = $_POST['garantia'];
-    $vigencia_inicio = $_POST['vigencia_inicio'];
-    $vigencia_fim = $_POST['vigencia_fim'];
-    $DOU = $_POST['dou'];
-    $valor_mensal = $_POST['valor_mensal'];
-    $valor_anual = $_POST['valor_anual'];
-    $negociacoes_reajustes = $_POST['negociacoes_reajustes'];
-    $nivel_risco = $_POST['nivel_risco'];
-    $observacao = $_POST['observacao'];
-    $vencimento = $_POST['vencimento'];
-    $status = $_POST['status'];
+    $termo_contrato = $_POST['termo_contrato'] ?? NULL;
+    $tipo_servico = $_POST['tipo_servico'] ?? NULL;
+    $objeto = $_POST['objeto'] ?? NULL;
+    $idUnidade = $_POST['unidade'] ?? NULL;
+    $idEquipamento = $_POST['equipamento'] ?? NULL;
+    $fiscal = $_POST['fiscal'] ?? NULL;
+    $contatoFiscal = $_POST['fiscal_contato'] ?? NULL;
+    $suplente = $_POST['suplente'] ?? NULL;
+    $contatoSuplente = $_POST['suplente_contato'] ?? NULL;
+    $garantia = $_POST['garantia'] ?? NULL;
+    $vigencia_inicio = $_POST['vigencia_inicio'] ?? NULL;
+    $vigencia_fim = $_POST['vigencia_fim'] ?? NULL;
+    $DOU = $_POST['dou'] ?? NULL;
+    $valor_mensal = $_POST['valor_mensal'] ?? NULL;
+    $valor_anual = $_POST['valor_anual'] ?? NULL;
+    $negociacoes_reajustes = $_POST['negociacoes_reajustes'] ?? NULL;
+    $nivel_risco = $_POST['nivel_risco'] ?? NULL;
+    $observacao = $_POST['observacao'] ?? NULL;
+    $vencimento = $_POST['vencimento'] ?? NULL;
+    $status = $_POST['status'] ?? NULL;
 
     if(isset($_POST['cadastra'])) {
         $sqlFiscal = "INSERT INTO fiscais (nome_fiscal, 
@@ -78,8 +85,8 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                              VALUES   ('$idLicitacao', 
                                                        '$termo_contrato',
                                                        '$tipo_servico',
-                                                       '$tipo_pessoa',
-                                                       '$pessoa_id',
+                                                       '$tipoPessoa',
+                                                       '$idPessoa',
                                                        '$idUnidade',
                                                        '$idEquipamento',
                                                        '$idFiscal',
@@ -91,6 +98,8 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                                        '$observacao',
                                                        '$status',                                                       
                                                        '1')";
+
+                echo $sqlContrato;
 
                 if (mysqli_query($con, $sqlContrato)) {
 
@@ -110,8 +119,8 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
         $sqlContrato = "UPDATE contratos SET 
                                           termo_contrato = '$termo_contrato', 
                                           tipo_servico = '$tipo_servico',
-                                          tipo_pessoa_id = '$tipo_pessoa',
-                                          pessoa_id = '$pessoa_id',
+                                          tipo_pessoa_id = '$tipoPessoa',
+                                          pessoa_id = '$idPessoa',
                                           unidade_id = '$idUnidade',
                                           equipamentos_id = '$idEquipamento',
                                           garantia =  '$garantia',
@@ -194,46 +203,50 @@ $contratos = recuperaDados("contratos", "id", $idContrato);
                                     <label for="num_processo">Número do processo administrativo</label>
                                     <input type="text" data-mask="0000.0000/0000000-0" id="num_processo" name="num_processo" class="form-control" maxlength="20" value="<?= $licitacao['numero_processo'];  ?>" readonly>
                                 </div>
+                                <?php
+
+                                if ($tipoPessoa == 1) {
+
+                                    ?>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="cpf">CPF: </label>
+                                        <input type="text" data-mask="000.000.000-00" id="cpf" name="cpf"
+                                               class="form-control" value="<?= $pessoa_fisica ?>" readonly>
+                                    </div>
+
+                                    <?php
+
+                                }else {
+
+                                    ?>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="cnpj">CNPJ: </label>
+                                        <input type="text" data-mask="00.000.000/0000-00" id="cnpj" name="cnpj"
+                                               class="form-control" value="<?= $pessoa_juridica ?>" readonly>
+                                    </div>
+
+                                    <?php
+                                }
+
+                                ?>
+                                <div class="form-group col-md-6">
+                                    <label for="objeto">Objeto *</label>
+                                    <input type="text" id="objeto" name="objeto" class="form-control" maxlength="100" value="<?= $licitacao['objeto']; ?>" readonly>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="termo_contrato">Termo de contrato *</label>
                                     <input type="text" id="termo_contrato" name="termo_contrato" class="form-control" maxlength="100" required>
                                 </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-3">
                                     <label for="tipo_servico">Tipo de serviço *</label>
                                     <input type="text" id="tipo_servico" name="tipo_servico" class="form-control" maxlength="80" required>
                                 </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="objeto">Objeto *</label>
-                                    <input type="text" id="objeto" name="objeto" class="form-control" maxlength="100" required>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <form method='POST'>
-                                        <label for="pesquisaEmpresa">Empresa</label>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" name='cnpj' maxlength='19' minlength='19' class="form-control" placeholder="Buscar">
-                                            <div class="input-group-btn">
-                                                <button type="submit" name='pesquisaEmpresa' class="btn btn-default"><i class="fa fa-search"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <form method='POST'>
-                                        <label for="pesquisaPf">Pessoa Fisíca</label>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" name='cpf' maxlength='19' minlength='11' class="form-control" placeholder="Buscar">
-                                            <div class="input-group-btn">
-                                                <button type="submit" name='pesquisaPf' class="btn btn-default"><i class="fa fa-search"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-
-                            <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="unidade">Unidade *</label>
                                     <select class="form-control" id="unidade" name="unidade">
@@ -253,6 +266,9 @@ $contratos = recuperaDados("contratos", "id", $idContrato);
                                         ?>
                                     </select>
                                 </div>
+                            </div>
+
+                            <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="fiscal">Fiscal</label>
                                     <input type="text" id="fiscal" name="fiscal" class="form-control" maxlength="60">
@@ -261,9 +277,6 @@ $contratos = recuperaDados("contratos", "id", $idContrato);
                                     <label for="fiscal_contato">Contato do fiscal</label>
                                     <input type="text" id="fiscal_contato" name="fiscal_contato" class="form-control" maxlength="60">
                                 </div>
-                            </div>
-
-                            <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="suplente">Suplente</label>
                                     <input type="text" id="suplente" name="suplente" class="form-control" maxlength="60">
@@ -272,7 +285,10 @@ $contratos = recuperaDados("contratos", "id", $idContrato);
                                     <label for="suplente_contato">Contato do suplente</label>
                                     <input type="text" id="suplente_contato" name="suplente_contato" class="form-control" maxlength="60">
                                 </div>
-                                <div class="form-group col-md-6" align="center" style="margin-top: 10px">
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-12" align="center" style="margin-top: 10px">
                                     <label for="garantia">Garatia? </label> <br>
                                     <label><input type="radio" name="garantia" value="2"> Sim </label>&nbsp;&nbsp;
                                     <label><input type="radio" name="garantia" value="1"> Não </label>
