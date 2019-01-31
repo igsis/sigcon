@@ -122,20 +122,20 @@ $qtde1 = mysqli_num_rows($queryStatus1);
             <?php
 // etapa de levantamento de preço
             $conn = bancoPDO();
-/*
-            $sql_levantamento = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE levantamento_preco = 1 AND reserva = 0 AND publicado = 1 AND licitacao_status_id != 3")->fetchAll();
-*/
 
+            $sql_levantamento = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE levantamento_preco = 1 AND reserva = 0 AND publicado = 1 AND licitacao_status_id != 3")->fetch();
+
+/*
             $sql_levantamento = "SELECT count(id) AS qtde FROM licitacoes WHERE levantamento_preco = 1 AND reserva = 0 AND publicado = 1 AND licitacao_status_id != 3";
             $query_levantamento = mysqli_query($con,$sql_levantamento);
             $lev = mysqli_fetch_array($query_levantamento);
-
+*/
             ?>
             
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-8">
-                        <div class="chart-responsive"><?= /*var_dump($sql_levantamento) . $sql_levantamento['qtde'] */ $lev['qtde'] ?>
+                        <div class="chart-responsive"><?= $sql_levantamento['qtde'] ?>
                             <canvas id="pieChart" style="height: 150px;"></canvas>
                         </div>
                     </div>
@@ -200,8 +200,8 @@ $sql_ordem_inicio = "SELECT count(id) FROM licitacoes WHERE ordem_inicio != '000
             },
             {
                 value: 400,
-                color: '#f39c12',
-                highlight: '#f39c12',
+                color: '#C48C19',
+                highlight: '#C48C19',
                 label: 'FireFox'
             },
             {
@@ -218,9 +218,27 @@ $sql_ordem_inicio = "SELECT count(id) FROM licitacoes WHERE ordem_inicio != '000
             },
             {
                 value: 100,
+                color: '#D13022',
+                highlight: '#D13022',
+                label: 'Navigator'
+            },
+            {
+                value: 100,
+                color: '#F2B134',
+                highlight: '#F2B134',
+                label: 'Empenho'
+            },
+            {
+                value: 100,
+                color: '#5CDE8C',
+                highlight: '#5CDE8C',
+                label: 'Entrega'
+            },
+            {
+                value: 100,
                 color: '#d2d6de',
                 highlight: '#d2d6de',
-                label: 'Navigator'
+                label: 'Ordem de Início'
             }
         ];
         let pieOptions = {
