@@ -119,11 +119,23 @@ $qtde1 = mysqli_num_rows($queryStatus1);
             <div class="box-header with-border">
                 <h3 class="box-title">Gráfico</h3>
             </div>
+            <?php
+// etapa de levantamento de preço
+            $conn = bancoPDO();
+/*
+            $sql_levantamento = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE levantamento_preco = 1 AND reserva = 0 AND publicado = 1 AND licitacao_status_id != 3")->fetchAll();
+*/
+
+            $sql_levantamento = "SELECT count(id) AS qtde FROM licitacoes WHERE levantamento_preco = 1 AND reserva = 0 AND publicado = 1 AND licitacao_status_id != 3";
+            $query_levantamento = mysqli_query($con,$sql_levantamento);
+            $lev = mysqli_fetch_array($query_levantamento);
+
+            ?>
             
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-8">
-                        <div class="chart-responsive">
+                        <div class="chart-responsive"><?= /*var_dump($sql_levantamento) . $sql_levantamento['qtde'] */ $lev['qtde'] ?>
                             <canvas id="pieChart" style="height: 150px;"></canvas>
                         </div>
                     </div>
@@ -133,6 +145,35 @@ $qtde1 = mysqli_num_rows($queryStatus1);
         </div>
     </section>
 </div>
+<?php
+// etapa de levantamento de preço
+$sql_levantamento = "SELECT count(id) FROM licitacoes WHERE levantamento_preco = 1 AND reserva = 0 AND publicado = 1 AND licitacao_status_id != 3";
+
+// etapa de reserva
+$sql_reserva = "SELECT count(id) FROM licitacoes WHERE reserva = 1 AND elaboracao_edital = 0 AND publicado = 1 AND licitacao_status_id != 3";
+
+//
+$sql_elaboracao_edital = "SELECT count(id) FROM licitacoes WHERE elaboracao_edital = 1 AND analise_edital = 0 AND publicado = 1 AND licitacao_status_id != 3";
+
+//
+$sql_analise_edital = "SELECT count(id) FROM licitacoes WHERE analise_edital = 1 AND licitacao = '0000-00-00' AND publicado = 1 AND licitacao_status_id != 3";
+
+//
+$sql_licitacao = "SELECT count(id) FROM licitacoes WHERE licitacao != '0000-00-00' AND homologacao = 0 AND publicado = 1 AND licitacao_status_id != 3";
+
+//
+$sql_homologacao = "SELECT count(id) FROM licitacoes WHERE homologacao = 1 AND empenho = 0 AND publicado = 1 AND licitacao_status_id != 3";
+
+//
+$sql_empenho = "SELECT count(id) FROM licitacoes WHERE empenho = 1 AND entrega = 0 AND publicado = 1 AND licitacao_status_id != 3";
+
+//
+$sql_entrega = "SELECT count(id) FROM licitacoes WHERE entrega = 1 AND ordem_inicio = '0000-00-00' AND publicado = 1 AND licitacao_status_id != 3";
+
+//
+$sql_ordem_inicio = "SELECT count(id) FROM licitacoes WHERE ordem_inicio != '0000-00-00' AND publicado = 1 AND licitacao_status_id != 3";
+?>
+
 <!-- ChartJS -->
 <script defer src="../visual/bower_components/chart.js/Chart.js"></script>
 <script defer>
@@ -146,7 +187,7 @@ $qtde1 = mysqli_num_rows($queryStatus1);
         let pieChart = new Chart(pieChartCanvas);
         let PieData = [
             {
-                value: 700,
+                value: 970,
                 color: '#f56954',
                 highlight: '#f56954',
                 label: 'Chrome'
