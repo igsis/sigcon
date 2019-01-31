@@ -83,7 +83,7 @@ if (isset($_POST['procurar'])){
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <form action="?perfil=contratos/pj_pesquisa" method="post">
+                        <form action="?perfil=contratos&p=pesquisa&sp=pj_pesquisa" method="post">
                             <div class="form-group">
                                 <label for="procurar">Pesquisar por CNPJ:</label>
                                 <div class="input-group">

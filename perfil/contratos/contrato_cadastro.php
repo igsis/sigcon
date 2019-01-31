@@ -108,7 +108,7 @@ $conn = bancoPDO();
                                                 <hr>
                                                 <!-- Campo populado de acordo com a escolha da unidade -->
                                                 <label for="equipamento">Equipamentos atendidos</label> <br>
-                                                <select class="form-control" id="equipamento" name="equipamento[0]">
+                                                <select class="form-control" id="equipamento" name="equipamento[0]" required>
                                                     <option value="">Selecione...</option>
                                                     <?php
                                                     geraOpcao("equipamentos")
@@ -152,8 +152,8 @@ $conn = bancoPDO();
                             <div class="row">
                                 <div class="form-group col-md-12" align="center" style="margin-top: 10px">
                                     <label for="garantia">Garatia? </label> <br>
-                                    <label><input type="radio" name="garantia" value="2"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="garantia" value="1"> Não </label>
+                                    <label><input type="radio" name="garantia" value="1"> Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="garantia" value="0"> Não </label>
                                 </div>
                             </div>
 
@@ -165,11 +165,11 @@ $conn = bancoPDO();
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label>Vigência início</label>
-                                    <input type="date" name="vigencia_inicio" id='vigencia_inicio' class="form-control">
+                                    <input type="date" name="inicio_vigencia" id='inicio_vigencia' class="form-control">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Vigência fim</label>
-                                    <input type="date" name="vigencia_fim" id='vigencia_fim' class="form-control">
+                                    <input type="date" name="fim_vigencia" id='fim_vigencia' class="form-control">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>DOU</label>
