@@ -2,6 +2,68 @@
 
 $con = bancoMysqli();
 
+if (isset($_POST['idLicitacao'])) {
+    $idLicitacao = $_POST['idLicitacao'];
+}
+
+$exibir = ' ';
+$resultado = "<td></td>";
+
+if (isset($_POST['procurar'])){
+
+    $cpf = $_POST['procurar'] ?? NULL;
+
+    if ($cpf != NULL ) {
+
+        $queryCPF = "SELECT id, nome, cpf, email
+                         FROM pessoa_fisicas
+                         WHERE cpf = '$cpf'";
+
+        if ($result = mysqli_query($con,$queryCPF)) {
+
+            $resultCPF = mysqli_num_rows($result);
+
+            if ($resultCPF > 0){
+
+                $exibir = true;
+                $resultado = "";
+
+                foreach($result as $pessoa){
+
+                    $resultado .= "<tr>";
+                    $resultado .= "<td>".$pessoa['nome']."</td>";
+                    $resultado .= "<td>".$pessoa['cpf']."</td>";
+                    $resultado .= "<td>".$pessoa['email']."</td>";
+                    $resultado .= "<td>
+                                     <form action='?perfil=contratos/contrato_cadastro' method='post'>
+                                        <input type='hidden' name='idPf' value='".$pessoa['id']."'>
+                                        <input type='hidden' name='idLicitacao' value='".$idLicitacao."'>
+                                        <input type='submit' name='carregar' class='btn btn-primary' name='selecionar' value='Selecionar'>
+                                     </form>
+                               </td>";
+                    $resultado .= "</tr>";
+                }
+            }else {
+
+                $exibir = false;
+                $resultado = "<td colspan='4'>
+                        <span style='margin: 50% 40%;'>Sem resultados</span>
+                      </td>
+                      <td>
+                        <form method='post' action='?perfil=contratos/pf_cadastro'>
+                            <input type='hidden' name='documentacao' value='$cpf'>
+                            <button class=\"btn btn-primary\" name='adicionar' type='submit'>
+                                <i class=\"glyphicon glyphicon-plus\">        
+                                </i>Adicionar
+                            </button>
+                        </form>
+                      </td>";
+
+            }
+        }
+    }
+}
+
 if (isset($_POST['cadastrar'])) {
     $nome_pf = addslashes($_POST['nome_pf']);
     $cpf = $_POST['cpf'];
@@ -145,12 +207,32 @@ $queryPf = $con->query($sqlPf);
                                     <td><?=$pf['cpf']?></td>
                                     <td><?=$pf['email']?></td>
                                     <td>
-                                        <form action="?perfil=contratos&p=pessoa_fisica&sp=pf_edita" method="post">
-                                            <input type="hidden" name="idPf" id="idPf" value="<?=$pf['id']?>">
-                                            <input type="hidden" name="carregar" id="carregar">
-                                            <input class="btn btn-info" type="submit" value="Editar">
-                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exclusao" data-nome="<?=$pf['nome']?>" data-id="<?=$pf['id']?>">Apagar</button>
-                                        </form>
+                                        <?php
+                                        if (isset($_POST['idLicitacao']))
+                                        {
+                                            ?>
+                                            <div id="FormSelecionar" style="float: left; padding: 5px;">
+                                                <form action="?perfil=contratos&p=contrato_cadastro"
+                                                      method="post">
+                                                    <input type="hidden" name="idPf" id="idPf" value="<?= $pf['id'] ?>">
+                                                    <input type="hidden" name="carregar" id="carregar">
+                                                    <input class="btn btn-warning" type="submit" value="Selecionar">
+                                                </form>
+                                            </div>
+                                            <?php
+                                        }
+                                        ?>
+                                        <div id="FormAcao" style="padding: 5px;">
+                                            <form action="?perfil=contratos&p=pessoa_fisica&sp=pf_edita" method="post">
+                                                <input type="hidden" name="idPf" id="idPf" value="<?= $pf['id'] ?>">
+                                                <input type="hidden" name="carregar" id="carregar">
+                                                <input class="btn btn-info" type="submit" value="Editar">
+                                                <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                        data-target="#exclusao" data-nome="<?= $pf['nome'] ?>"
+                                                        data-id="<?= $pf['id'] ?>">Apagar
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                                 <?php
