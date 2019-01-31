@@ -145,21 +145,6 @@
     <!-- /.content -->
 </div>
 
-
-<script>
-
-    $('#num_processo').mask('0000.0000/0000000-0', {reverse: true});
-
-
-    function habilitarDesabilitarCampo(target, prop)
-    {
-        $(target).prop('disabled',prop);
-    }
-
-
-
-</script>
-
 <script>
 
     let checks = document.querySelectorAll('.check');
