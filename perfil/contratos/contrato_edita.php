@@ -99,10 +99,32 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
                 echo $sqlContrato;
 
+                print_r($equipamentos);
+
+
                 if (mysqli_query($con, $sqlContrato)) {
 
                     gravarLog($sqlContrato);
+
                     $idContrato = recuperaUltimo("contratos");
+
+                    foreach ($equipamentos as $equipamento) {
+
+                        if ($equipamento != '') {
+
+                            $sqlEquipamentos = "INSERT INTO contrato_equipamentos  
+                                                    (contrato_id, 
+                                                     equipamentos_id)
+                                       VALUES       ('$idContrato',
+                                                     '$equipamento')";
+
+                                mysqli_query($con, $sqlEquipamentos);
+                                gravarLog($sqlEquipamentos);
+
+                            }
+                        }
+                    }
+
                     $mensagem = mensagem("success", "Cadastrado com sucesso!");
 
                 } else {
@@ -110,7 +132,6 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                 }
             }
         }
-    }
 
     if (isset($_POST['edita'])){
 
@@ -165,8 +186,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
 $fical = recuperaDados("fiscais", "id", $idFiscal);
 $suplente = recuperaDados("suplentes", "id", $idSuplente);
-$contratos = recuperaDados("contratos", "id", $idContrato);
-
+$contrato = recuperaDados("contratos", "id", $idContrato);
 
 
 ?>
@@ -239,18 +259,18 @@ $contratos = recuperaDados("contratos", "id", $idContrato);
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="termo_contrato">Termo de contrato *</label>
-                                    <input type="text" id="termo_contrato" name="termo_contrato" class="form-control" maxlength="100" required>
+                                    <input type="text" id="termo_contrato" name="termo_contrato" class="form-control" maxlength="100" value="<?= $contrato['termo_contrato'] ?>">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="tipo_servico">Tipo de serviço *</label>
-                                    <input type="text" id="tipo_servico" name="tipo_servico" class="form-control" maxlength="80" required>
+                                    <input type="text" id="tipo_servico" name="tipo_servico" class="form-control" maxlength="80" value="<?= $contrato['tipo_servico'] ?>">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="unidade">Unidade *</label>
                                     <select class="form-control" id="unidade" name="unidade">
                                         <option value="">Selecione...</option>
                                         <?php
-                                        geraOpcao("unidades")
+                                        geraOpcao("unidades", $contrato['unidade_id'])
                                         ?>
                                     </select>
                                 </div>
