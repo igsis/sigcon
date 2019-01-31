@@ -148,13 +148,13 @@
 
 <script>
 
-    // $('#num_processo').mask('0000.0000/0000000-0', {reverse: true});
+    $('#num_processo').mask('0000.0000/0000000-0', {reverse: true});
 
 
-    // function habilitarDesabilitarCampo(target, prop)
-    // {
-    //     $(target).prop('disabled',prop);
-    // }
+    function habilitarDesabilitarCampo(target, prop)
+    {
+        $(target).prop('disabled',prop);
+    }
 
 
 
