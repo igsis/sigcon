@@ -21,7 +21,7 @@ if (isset($_POST['documentacao'])) {
                         <h3 class="box-title">Informações Pessoa Jurídica</h3>
                     </div>
 
-                    <form method="POST" action="?perfil=contratos/pj_edita" role="form">
+                    <form method="POST" action="?perfil=contratos&p=pessoa_juridica&sp=pj_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-5">
@@ -75,13 +75,13 @@ if (isset($_POST['documentacao'])) {
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="celular">Celular * </label>
-                                    <input type="text" data-mask="(00) 0.0000-0000" class="form-control" id="celular" name="telefone[1]" required>
+                                    <input type="text" data-mask="(00) 00000-0000" class="form-control" id="celular" name="telefone[1]" required>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-2">
                                     <label for="recado">Recado (opcional) </label>
-                                    <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="telefone[2]">
+                                    <input type="text" data-mask="(00) 00000-0000" class="form-control" id="recado" name="telefone[2]">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="contato">Contato na empresa *</label>

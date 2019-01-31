@@ -174,7 +174,7 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                         }; ?>
                     </div>
 
-                    <form method="POST" action="?perfil=contratos/pj_edita" role="form">
+                    <form method="POST" action="?perfil=contratos&p=pessoa_juridica&sp=pj_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-5">
@@ -229,7 +229,7 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="celular">Celular * </label>
-                                    <input type="text" data-mask="(00)0.0000-0000" required class="form-control" id="celular" name="telefone[<?= $arrayTelefones[1]['id'] ?>]" value="<?= $arrayTelefones[1]['telefone']; ?>">
+                                    <input type="text" data-mask="(00)00000-0000" required class="form-control" id="celular" name="telefone[<?= $arrayTelefones[1]['id'] ?>]" value="<?= $arrayTelefones[1]['telefone']; ?>">
                                 </div>
                             </div>
                             <div class="row">
@@ -237,13 +237,13 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                     <label for="recado">Recado (opcional) </label>
                                     <?php if (isset($arrayTelefones[2])) {
                                         ?>
-                                        <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="telefone[<?= $arrayTelefones[2]['id'] ?>]" value="<?=  $arrayTelefones[2]['telefone']; ?>">
+                                        <input type="text" data-mask="(00) 00000-0000" class="form-control" id="recado" name="telefone[<?= $arrayTelefones[2]['id'] ?>]" value="<?=  $arrayTelefones[2]['telefone']; ?>">
 
                                         <?php
                                     } else {
                                         ?>
 
-                                        <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="telefone3">
+                                        <input type="text" data-mask="(00) 00000-0000" class="form-control" id="recado" name="telefone3">
 
                                         <?php
                                     }
