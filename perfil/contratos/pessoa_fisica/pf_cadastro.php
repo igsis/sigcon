@@ -28,7 +28,8 @@ if (isset($_POST['documentacao'])) {
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cpf">CPF *</label>
-                                    <input type="text" data-mask="000.000.000-00" minlength="14" class="form-control" id="cpf" name="cpf" value="<?= isset($cpf) ? $cpf : NULL ?>" required>
+                                    <input type="text" data-mask="000.000.000-00" minlength="14" class="form-control" onblur="validacao()" id="cpf" name="cpf" value="<?= isset($cpf) ? $cpf : NULL ?>" required>
+<!--                                    <input type="text" name="validado" id="validado">-->
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
@@ -81,7 +82,7 @@ if (isset($_POST['documentacao'])) {
                             </div>
                             <div class="box-footer">
                                 <a href="?perfil=contratos&p=pesquisa&sp=pf_pesquisa" class="btn btn-default">Voltar a Pesquisa</a>
-                                <button type="submit" name="cadastrar" id="cadastrar" class="btn btn-primary pull-right"> Cadastrar </button>
+                                <button type="submit" name="cadastrar" id="cadastrar" class="btn btn-primary pull-right" disabled="true"> Cadastrar </button>
                             </div>
                     </form>
                 </div>
@@ -89,3 +90,54 @@ if (isset($_POST['documentacao'])) {
         </div>
     </section>
 </div>
+
+<script>
+
+    function TestaCPF(cpf) {
+        var Soma;
+        var Resto;
+        var strCPF = cpf;
+        Soma = 0;
+
+        for (i=1; i<=9; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (11 - i);
+        Resto = (Soma * 10) % 11;
+
+        if ((Resto == 10) || (Resto == 11))  Resto = 0;
+        if (Resto != parseInt(strCPF.substring(9, 10)) ) return false;
+
+        Soma = 0;
+        for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (12 - i);
+        Resto = (Soma * 10) % 11;
+
+        if ((Resto == 10) || (Resto == 11))  Resto = 0;
+        if (Resto != parseInt(strCPF.substring(10, 11) ) ) return false;
+        return true;
+    }
+
+    function validacao(){
+
+        var strCPF = document.querySelector('#cpf').value
+
+        console.log(strCPF);
+
+        // tira os pontos do valor, ficando apenas os numeros
+        strCPF = strCPF.replace(/[^0-9]/g, '');
+
+        //console.log(strCPF);
+
+        var validado = TestaCPF(strCPF);
+
+        //console.log(teste);
+
+        // document.querySelector('#validado').value = teste;
+
+        if(!validado){
+            alert('CPF inválido');
+
+            document.querySelector("#cadastrar").disabled = true;
+        }else if(validado){
+            document.querySelector("#cadastrar").disabled = false;
+        }
+    }
+
+</script>
