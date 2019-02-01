@@ -38,7 +38,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $negociacoes_reajustes = $_POST['negociacoes_reajustes'] ?? NULL;
     $nivel_risco = $_POST['nivel_risco'] ?? NULL;
     $observacao = $_POST['observacao'] ?? NULL;
-    $vencimento = $_POST['vencimento'] ?? NULL;
+    $vencimento = $fim_vigencia;
     $status = $_POST['status'] ?? NULL;
 
     if(isset($_POST['cadastra'])) {
@@ -50,22 +50,22 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                            '$contatoFiscal',
                                            '1')";
 
-            $sqlSuplente = "INSERT INTO suplentes (nome_suplente, 
+        $sqlSuplente = "INSERT INTO suplentes (nome_suplente, 
                                            contato_suplente, 
                                            publicado)
                                   VALUES  ('$suplente', 
                                            '$contatoSuplente',
                                            '1')";
 
-            if (mysqli_query($con, $sqlSuplente) && mysqli_query($con, $sqlFiscal)) {
+        if (mysqli_query($con, $sqlSuplente) && mysqli_query($con, $sqlFiscal)) {
 
-                gravarLog($sqlFiscal);
-                $idFiscal = recuperaUltimo("fiscais");
+            gravarLog($sqlFiscal);
+            $idFiscal = recuperaUltimo("fiscais");
 
-                gravarLog($sqlSuplente);
-                $idSuplente = recuperaUltimo("suplentes");
+            gravarLog($sqlSuplente);
+            $idSuplente = recuperaUltimo("suplentes");
 
-                $sqlContrato = "INSERT INTO contratos (licitacao_id, 
+            $sqlContrato = "INSERT INTO contratos (licitacao_id, 
                                                        termo_contrato, 
                                                        tipo_servico,
                                                        tipo_pessoa_id,
@@ -96,24 +96,24 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                                        '$status',                                                       
                                                        '1')";
 
-                if (mysqli_query($con, $sqlContrato)) {
+            if (mysqli_query($con, $sqlContrato)) {
 
-                    gravarLog($sqlContrato);
-                    $idContrato = recuperaUltimo("contratos");
+                gravarLog($sqlContrato);
+                $idContrato = recuperaUltimo("contratos");
 
-                    foreach ($equipamentos as $equipamento) {
+                foreach ($equipamentos as $equipamento) {
 
-                                $sqlEquipamentos = "INSERT INTO contrato_equipamentos  
+                    $sqlEquipamentos = "INSERT INTO contrato_equipamento  
                                                     (contrato_id, 
-                                                     equipamentos_id)
+                                                     equipamento_id)
                                        VALUES       ('$idContrato',
                                                      '$equipamento')";
 
-                                mysqli_query($con, $sqlEquipamentos);
-                                gravarLog($sqlEquipamentos);
-                    }
+                    mysqli_query($con, $sqlEquipamentos);
+                    gravarLog($sqlEquipamentos);
+                }
 
-                    $sqlInfo = "INSERT INTO informacoes_do_contrato (contrato_id, 
+                $sqlInfo = "INSERT INTO informacoes_do_contrato (contrato_id, 
                                                        inicio_vigencia, 
                                                        fim_vigencia,
                                                        DOU,
@@ -126,34 +126,31 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                                        '$valor_mensal',
                                                        '$valor_anual')";
 
-                    if (mysqli_query($con, $sqlInfo)) {
+                if (mysqli_query($con, $sqlInfo)) {
 
-                        gravarLog($sqlInfo);
-                        //Adicionando data de vencimento do contrato
-                        $vencimento = recuperaDados("informacoes_do_contrato", "contrato_id", $idContrato)['fim_vigencia'];
-                        $sqlVencimento = "UPDATE contratos SET vencimento = '$vencimento' WHERE id = '$idContrato'";
-                        $queryVencimento = mysqli_query($con, $sqlVencimento);
-
-                        $mensagem = mensagem("success", "Cadastrado com sucesso!");
-
-                        }
-                    }
-                }else {
-                        $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
-                    }
+                    gravarLog($sqlInfo);
+                    $mensagem = mensagem("success", "Cadastrado com sucesso!");
                 }
+            } else {
+                $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
+            }
+        }
+    }
 
 
     if (isset($_POST['edita'])){
 
-         foreach ($equipamentos as $equipamento) {
-              $sqlEquips = "UPDATE contrato_equipamentos SET
-                                                     equipamentos_id = '$equipamento'
-                                              WHERE  contrato_id = '$idContrato'";
+        print_r ($equipamentos);
+
+        foreach ($equipamentos as $idEquip => $equipamento) {
+              $sqlEquips = "UPDATE contrato_equipamento SET
+                                       equipamento_id = '$equipamento'
+                                 WHERE id = '$idEquip'";
 
                mysqli_query($con, $sqlEquips);
                gravarLog($sqlEquips);
          }
+
 
         $sqlInfo = "UPDATE informacoes_do_contrato SET 
                                           inicio_vigencia = '$inicio_vigencia',
@@ -216,7 +213,7 @@ $suplente = recuperaDados("suplentes", "id", $idSuplente);
 $contrato = recuperaDados("contratos", "id", $idContrato);
 $informacoes = recuperaDados("informacoes_do_contrato", "contrato_id", $idContrato);
 
-$sqlEquips = "SELECT * FROM contrato_equipamentos WHERE contrato_id = '$idContrato'";
+$sqlEquips = "SELECT * FROM contrato_equipamento WHERE contrato_id = '$idContrato'";
 $queryEquips = mysqli_query($con, $sqlEquips);
 $numEquips = mysqli_num_rows($queryEquips);
 
@@ -311,10 +308,10 @@ $numEquips = mysqli_num_rows($queryEquips);
                             <?php
 
                                 if ($numEquips > 0) {
+                                    $count = 0;
                                     while ($equipamento = mysqli_fetch_array($queryEquips)) {
 
                                         ?>
-
                                         <div class="row">
                                             <div class="form-group">
                                                 <div class="col-md-12">
@@ -322,18 +319,18 @@ $numEquips = mysqli_num_rows($queryEquips);
                                                         <hr>
                                                         <!-- Campo populado de acordo com a escolha da unidade -->
                                                         <label for="equipamento">Equipamentos atendidos</label> <br>
-                                                        <select class="form-control" id="equipamento" name="equipamento[0]" required>
+                                                        <select class="form-control" id="equipamento" name="equipamento[<?=$equipamento['id']?>]">
                                                             <option value="">Selecione...</option>
                                                             <?php
-                                                            geraOpcao("equipamentos", $equipamento['equipamentos_id']);
+                                                            geraOpcao("equipamentos", $equipamento['equipamento_id']);
                                                             ?>
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
                                         <?php
+                                        $count++;
                                     }
                                     ?>
 
@@ -363,7 +360,7 @@ $numEquips = mysqli_num_rows($queryEquips);
                                             <!-- Campo populado de acordo com a escolha da unidade -->
                                             <label for="equipamento">Equipamentos atendidos</label> <br>
                                             <select class="form-control" id="equipamento"
-                                                    name="equipamento[0]">
+                                                    name="equipamento[<?=$count++?>]">
                                                 <option value="">Selecione...</option>
                                                 <?php
                                                 geraOpcao("equipamentos");
