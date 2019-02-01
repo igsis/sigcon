@@ -148,7 +148,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
          foreach ($equipamentos as $equipamento) {
               $sqlEquips = "UPDATE contrato_equipamentos SET
-                                                     equipamento_id = '$equipamento'
+                                                     equipamentos_id = '$equipamento'
                                               WHERE  contrato_id = '$idContrato'";
 
                mysqli_query($con, $sqlEquips);
@@ -421,15 +421,15 @@ $numEquips = mysqli_num_rows($queryEquips);
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-3">
-                                    <label>Vigência início</label>
+                                    <label for="inicio_vigencia">Vigência início</label>
                                     <input type="date" name="inicio_vigencia" id='inicio_vigencia' class="form-control" value="<?= $informacoes['inicio_vigencia'] ?>">
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label>Vigência fim</label>
+                                    <label for="fim_vigencia">Vigência fim</label>
                                     <input type="date" name="fim_vigencia" id='fim_vigencia' class="form-control" value="<?= $informacoes['fim_vigencia'] ?>">
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label>DOU</label>
+                                    <label for="dou">DOU</label>
                                     <input type="date" name="dou" id='dou' class="form-control" value="<?= $informacoes['DOU'] ?>">
                                 </div>
                                 <div class="form-group col-md-3">
