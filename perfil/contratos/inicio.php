@@ -3,29 +3,40 @@
 $con = bancoMysqli();
 $conn = bancoPDO();
 
+$dtHoje = date("d/m/Y");
+$data = DateTime::createFromFormat("Y-m-d", $dtHoje);
+
+//Licitações na que foram empenhadas
 $sqlEmpenho = "SELECT * FROM licitacoes WHERE empenho = 1 ORDER BY numero_processo";
 $query = mysqli_query($con,$sqlEmpenho);
 $num_empenhadas = mysqli_num_rows($query);
 $licitacoes_empenhadas = $conn->query($sqlEmpenho)->fetchAll();
 
+
+//Licitações na fase homologação
 $sqlHomologacao = "SELECT * FROM licitacoes WHERE homologacao = 1 AND empenho = 0 ORDER BY numero_processo";
-$queryHomologacao = mysqli_query($con, $sqlHomologacao);
-$num_homologadas = mysqli_num_rows($queryHomologacao);
+$num_homologadas = $conn->query($sqlHomologacao)->rowCount();
 $licitacoes_homologadas = $conn->query($sqlHomologacao)->fetchAll();
 
-$sqlStatus2 = "SELECT * FROM contratos WHERE publicado = 1";
-$queryStatus2 = mysqli_query($con, $sqlStatus2);
-$qtde2 = mysqli_num_rows($queryStatus2);
 
-$sqlStatus1 = "SELECT * FROM licitacoes WHERE licitacao_status_id = 1";
-$queryStatus1 = mysqli_query($con, $sqlStatus1);
-$qtde1 = mysqli_num_rows($queryStatus1);
+//Contratos com vencimento menor que 45 dias
+$sqlContrato = "SELECT * FROM contratos WHERE publicado = 1";
+$contratos = $conn->query($sqlContrato)->fetchAll();
+
+$vencimento = $contratos['vencimento'];
+
+
+
 ?>
 
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content">
         <h2 class="page-header"><?= saudacao();?></h2>
+
+
+
+
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-primary">
