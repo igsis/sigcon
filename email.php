@@ -9,34 +9,43 @@ if (isset($_POST['reset']))
     $token = bin2hex(random_bytes(50));
     $email = trim($_POST['email']);
 
+
     $sqlConsulta = "SELECT * FROM `usuarios` WHERE email = '$email'";
     $queryConsulta = $con->query($sqlConsulta);
     if ($queryConsulta->num_rows > 0)
     {
         // store token in the password-reset database table against the user's email
-        $sqlToken = "INSERT INTO `reset_senhas`(email, token) VALUES ('$email', '$token')";
+        $sqlConsultaToken = "SELECT * FROM `reset_senhas` WHERE `email` = '$email'";
+        if ($con->query($sqlConsultaToken)->num_rows > 0)
+        {
+            $sqlToken = "UPDATE `reset_senhas` SET `token` = '$token' WHERE `email` = '$email'";
+        }
+        else
+        {
+            $sqlToken = "INSERT INTO `reset_senhas`(email, token) VALUES ('$email', '$token')";
+        }
         $results = $con->query($sqlToken);
 
         // Send email to user with the token in a link they can click on
         $to = $email;
         $subject = "Recuperação de Senha Sigcon";
-        $msg = "Olá, <a href='reset.php?token=" . $token . "'>CLIQUE AQUI</a> para reiniciar sua senha no SIGCON";
-        $msg = wordwrap($msg,70);
-        $headers = "De: no.reply.smcsistemas@gmail.com";
+        $msg = emailReset($token);
+
+        // To send HTML mail, the Content-type header must be set
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+
+        // Create email headers
+        $headers .= "De: no.reply.smcsistemas@gmail.com\r\n";
         mail($to, $subject, $msg, $headers);
 
-        $mensagem = [
-                "classe" => "callout-success",
-                "mensagem" => "Enviamos um email para <b>$email</b> para a reiniciarmos sua senha. <br>
-                        Por favor acesse seu email e clique no link que lhe enviamos!"
-        ];
+        $texto = "Enviamos um email para <b>$email</b> para a reiniciarmos sua senha. <br>
+                    Por favor acesse seu email e clique no link recebido para cadastrar uma nova senha!";
+        $mensagem = callout("success", $texto);
     }
     else
     {
-        $mensagem = [
-            "classe" => "callout-danger",
-            "mensagem" => "E-mail não cadastrado"
-        ];
+        $mensagem = callout("danger", "E-mail não cadastrado");
     }
 
 }
@@ -81,28 +90,25 @@ if (isset($_POST['reset']))
     <!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">Recuperação de Senha</p>
-        <?php if(isset($mensagem)) { ?>
-            <div class="callout <?= $mensagem['classe'] ?>">
-                <p> <?= $mensagem['mensagem'] ?></p>
+        <?= isset($mensagem) ? $mensagem : "" ?>
+
+        <form action="email.php" method="post">
+            <div class="form-group has-feedback">
+                <input name="email" type="email" class="form-control" placeholder="Email">
+                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
-        <?php } ?>
-            <form action="email.php" method="post">
-                <div class="form-group has-feedback">
-                    <input name="email" type="email" class="form-control" placeholder="Email">
-                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+            <div class="row form-group">
+                <div class="col-xs-12">
+                    <input type="hidden" name="reset">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">Enviar</button>
                 </div>
-                <div class="row form-group">
-                    <div class="col-xs-12">
-                        <input type="hidden" name="reset">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">Enviar</button>
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <a href="index.php">Voltar a tela de Login</a>
                 </div>
-                <div class="row">
-                    <div class="col-xs-12 text-center">
-                        <a href="index.php">Voltar a tela de Login</a>
-                    </div>
-                </div>
-            </form>
+            </div>
+        </form>
     </div>
     <!-- /.login-box-body -->
 </div>

@@ -4,27 +4,76 @@ require "funcoes/funcoesConecta.php";
 
 $con = bancoMysqli();
 
-if (isset($_POST['new_password'])) {
-    $new_pass = mysqli_real_escape_string($db, $_POST['new_pass']);
-    $new_pass_c = mysqli_real_escape_string($db, $_POST['new_pass_c']);
-
-    // Grab to token that came from the email link
+if (isset($_GET['token']))
+{
     $token = $_GET['token'];
-    if (empty($new_pass) || empty($new_pass_c)) array_push($errors, "Password is required");
-    if ($new_pass !== $new_pass_c) array_push($errors, "Password do not match");
-    if (count($errors) == 0) {
-        // select email address of user from the password_reset table
-        $sql = "SELECT email FROM password_reset WHERE token='$token' LIMIT 1";
-        $results = mysqli_query($db, $sql);
-        $email = mysqli_fetch_assoc($results)['email'];
+    $sqlConsultaToken = "SELECT `email` FROM `reset_senhas` WHERE token = '$token' LIMIT 1";
 
-        if ($email) {
-            $new_pass = md5($new_pass);
-            $sql = "UPDATE users SET password='$new_pass' WHERE email='$email'";
-            $results = mysqli_query($db, $sql);
-            header('location: index.php');
+    if ($con->query($sqlConsultaToken)->num_rows <= 0)
+    {
+        $mensagem = callout("danger","Link Inválido! Tente recuperar sua senha novamente. Redirecionando a tela de login.");
+        echo "<meta HTTP-EQUIV='refresh' CONTENT='3.5;URL=index.php'>";
+    }
+}
+else
+{
+    header('location: ./index.php');
+}
+
+if (isset($_POST['reset'])) {
+    $token = $_POST['token'];
+    $novaSenha = $_POST['novaSenha'];
+    $confirmaSenha = $_POST['confirmaSenha'];
+
+    if ($novaSenha == $confirmaSenha)
+    {
+        $sqlConsultaToken = "SELECT `email` FROM `reset_senhas` WHERE token = '$token' LIMIT 1";
+        $queryToken = $con->query($sqlConsultaToken);
+
+        if ($queryToken)
+        {
+            $email = $queryToken->fetch_assoc()['email'];
+            $senha = md5($novaSenha);
+            $sqlNovaSenha = "UPDATE usuarios SET senha = '$senha' WHERE email = '$email'";
+
+            if ($con->query($sqlNovaSenha))
+            {
+                gravarLog($sqlNovaSenha);
+                $mensagem = callout("success","Senha atualizada com sucesso! Redirecionando a página de login!");
+                $con->query("DELETE FROM `reset_senhas` WHERE `token` = '$token'");
+                echo "<meta HTTP-EQUIV='refresh' CONTENT='3.5;URL=index.php'>";
+            }
+            else
+            {
+                $mensagem = callout("danger","Erro ao atualizar! Tente novamente");
+            }
+        }
+        else
+        {
+            $mensagem = callout("danger","Link Inválido! Tente recuperar sua senha novamente");
         }
     }
+    else
+    {
+        $mensagem = callout("danger","Senhas não conferem");
+    }
+
+//    // Grab to token that came from the email link
+//    if (empty($new_pass) || empty($new_pass_c)) array_push($errors, "Password is required");
+//    if ($new_pass !== $new_pass_c) array_push($errors, "Password do not match");
+//    if (count($errors) == 0) {
+//        // select email address of user from the password_reset table
+//        $sql = "SELECT email FROM password_reset WHERE token='$token' LIMIT 1";
+//        $results = mysqli_query($db, $sql);
+//        $email = mysqli_fetch_assoc($results)['email'];
+//
+//        if ($email) {
+//            $new_pass = md5($new_pass);
+//            $sql = "UPDATE users SET password='$new_pass' WHERE email='$email'";
+//            $results = mysqli_query($db, $sql);
+//            header('location: index.php');
+//        }
+//    }
 }
 ?>
 
@@ -66,20 +115,24 @@ if (isset($_POST['new_password'])) {
     <!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">Recuperação de Senha</p>
-        <?php if(isset($mensagem)) { ?>
-            <div class="callout <?= $mensagem['classe'] ?>">
-                <p> <?= $mensagem['mensagem'] ?></p>
-            </div>
-        <?php } ?>
-        <form action="email.php" method="post">
+        <?= isset($mensagem) ? $mensagem : "" ?>
+
+        <form action="reset.php?token=<?= $_GET['token'] ?>" method="post">
             <div class="form-group has-feedback">
-                <input name="email" type="email" class="form-control" placeholder="Email">
-                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                <label for="novaSenha">Nova senha: </label>
+                <input type="password" class="form-control" id="novaSenha" name="novaSenha" required>
+            </div>
+            <div class="form-group has-feedback" id="divConfirmaSenha">
+                <label for="confirmaSenha">Confirmar Senha: </label>
+                <input type="password" class="form-control" id="confirmaSenha" name="confirmaSenha"
+                       onblur="comparaSenhas()" onkeypress="comparaSenhas()" required>
+                <span class="help-block" id="spanHelp"></span>
             </div>
             <div class="row form-group">
                 <div class="col-xs-12">
                     <input type="hidden" name="reset">
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">Enviar</button>
+                    <input type="hidden" name="token" value="<?= $_GET['token'] ?>">
+                    <button type="submit" id="atualizar" class="btn btn-primary btn-block btn-flat" >Atualizar</button>
                 </div>
             </div>
             <div class="row">
@@ -109,7 +162,24 @@ if (isset($_POST['new_password'])) {
             increaseArea: '20%' /* optional */
         });
     });
+</script>
+<script language="JavaScript">
+    function comparaSenhas() {
+        let senha = document.getElementById("novaSenha");
+        let confirmaSenha = document.getElementById("confirmaSenha");
+        let divConfirmaSenha = document.getElementById("divConfirmaSenha");
+        document.getElementById("atualizar").disabled = true;
+        divConfirmaSenha.classList.add("has-error");
+        document.getElementById("spanHelp").innerHTML = "Senha não confere";
 
+        if (senha.value == confirmaSenha.value) {
+            document.getElementById("atualizar").disabled = false;
+            divConfirmaSenha.classList.remove("has-error");
+            document.getElementById("spanHelp").innerHTML = "";
+
+        } else {
+        }
+    }
 </script>
 </body>
 </html>
