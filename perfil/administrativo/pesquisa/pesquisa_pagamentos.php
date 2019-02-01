@@ -1,6 +1,8 @@
 <?php
 $conn = bancoPDO();
 
+$pagamentos = $conn->query("")
+
 ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -14,6 +16,7 @@ $conn = bancoPDO();
                 <div class="box">
                     <div class="box-header">
                         <h3 class="box-title text-left">Pesquisa de Pagamentos</h3>
+                        <a href="?perfil=administrativo&p=unidades&sp=unidade_cadastro" class="text-right btn btn-success" style="float: right">Adicionar Pagamento</a>
                     </div>
 
                     <div class="row" align="center">
@@ -29,8 +32,9 @@ $conn = bancoPDO();
                                 <th>Nº do processo administrativo</th>
                                 <th>CPF/CNPJ</th>
                                 <th>Nome/Razão social</th>
-                                <th>Pagamentos</th>
-                                <th>Adicionar</th>
+                                <th>Valor</th>
+                                <th>Mês</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
