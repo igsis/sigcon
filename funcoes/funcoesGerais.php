@@ -260,13 +260,32 @@ date_default_timezone_set("Brazil/East");
 	{
 		//grava na tabela log os inserts e updates
 		$logTratado = addslashes($log);
-		$idUser = $_SESSION['idUser'];
+		$idUser = $_SESSION['idUser'] ?? "0";
 		$ip = $_SERVER["REMOTE_ADDR"];
 		$data = date('Y-m-d H:i:s');
 		$sql = "INSERT INTO `log` (`id`, `idUsuario`, `enderecoIP`, `dataLog`, `descricao`)
 			VALUES (NULL, '$idUser', '$ip', '$data', '$logTratado')";
 		$mysqli = bancoMysqli();
 		$mysqli->query($sql);
+	}
+
+	function interpolateQuery($query, $params) {
+		$keys = array();
+	
+		# build a regular expression for each parameter
+		foreach ($params as $key => $value) {
+			if (is_string($key)) {
+				$keys[] = '/:'.$key.'/';
+			} else {
+				$keys[] = '/[?]/';
+			}
+		}
+	
+		$query = preg_replace($keys, $params, $query, 1, $count);
+	
+		#trigger_error('replaced '.$count.' keys');
+	
+		return $query;
 	}
 
 	function gravarLogSenha($log, $idUsuario)
@@ -1109,6 +1128,33 @@ function mensagem($tipo,$texto){
                 </div>
             </div>
 	    ";
+}
+
+function callout($tipo,$texto){
+    return "<div class='callout callout-$tipo'>
+                <p> $texto </p>
+            </div>";
+}
+
+function emailReset($token){
+    $endereco = "http://".$_SERVER['SERVER_NAME']."/sigcon/reset.php?token=$token";
+    $mensagem = "<h3>Recuperação de Senha SIGCON</h3>
+                <p>Olá,</p>
+                <p>Recebemos uma solicitação de recuperação de senha. Caso tenha solicitado, por favor clique no link abaixo para continuar:</p>
+                <p><a href='$endereco'>RECUPERAÇÃO DE SENHA SIGCON</a></p>
+                <p>Caso não tenha sido você, apenas ignore este e-mail e sua senha se manterá a mesma</p>
+                <p></p>
+                
+                <p>Atenciosamente,</p>
+                <p>SMC Sistemas</p>
+                <h3><small>Esta é uma mensagem automática. Por favor, não responda este e-mail</small></h3>";
+    $html = "<html lang='pt-BR'>
+                    <body>
+                        $mensagem
+                    </body>
+                </html>";
+
+    return $html;
 }
 
 ?>

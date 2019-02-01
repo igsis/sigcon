@@ -13,13 +13,13 @@ $conn = bancoPDO();
         $tipoPessoa = 1;
         $idPessoa = $_POST['idPf'];
 
-        $pessoa_fisica = recuperaDados("pessoas_fisicas", "id", $idPessoa)['cpf'];
+        $pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoa)['cpf'];
 
     } elseif (isset($_POST['idPj'])) {
         $tipoPessoa = 2;
         $idPessoa = $_POST['idPj'];
 
-        $pessoa_juridica = recuperaDados("pessoas_juridicas", "id", $idPessoa)['CNPJ'];
+        $pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoa)['cnpj'];
     }
 
 ?>
@@ -27,7 +27,6 @@ $conn = bancoPDO();
 <div class="content-wrapper">
     <!-- Main content -->
     <section class="content">
-
         <!-- START FORM-->
         <h2 class="page-header">Contrato</h2>
 
@@ -79,8 +78,6 @@ $conn = bancoPDO();
                                     <label for="objeto">Objeto *</label>
                                     <input type="text" id="objeto" name="objeto" class="form-control" maxlength="100" value="<?= $licitacao['objeto']; ?>" readonly>
                                 </div>
-
-
                             </div>
 
                             <div class="row">
@@ -92,7 +89,7 @@ $conn = bancoPDO();
                                     <label for="tipo_servico">Tipo de serviço *</label>
                                     <input type="text" id="tipo_servico" name="tipo_servico" class="form-control" maxlength="80" required>
                                 </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-6">
                                     <label for="unidade">Unidade *</label>
                                     <select class="form-control" id="unidade" name="unidade">
                                         <option value="">Selecione...</option>
@@ -101,20 +98,39 @@ $conn = bancoPDO();
                                         ?>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <!-- Campo populado de acordo com a escolha da unidade -->
-                                    <label for="equipamentos">Equipamentos atendidos</label> <br>
-                                    <select class="form-control" id="equipamentos" name="equipamentos">
-                                        <option value="">Selecione...</option>
-                                        <?php
-                                        geraOpcao("equipamentos")
-                                        ?>
-                                    </select>
+                            </div>
+
+
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="equipamentos">
+                                                <hr>
+                                                <!-- Campo populado de acordo com a escolha da unidade -->
+                                                <label for="equipamento">Equipamentos atendidos</label> <br>
+                                                <select class="form-control" id="equipamento" name="equipamento[0]" required>
+                                                    <option value="">Selecione...</option>
+                                                    <?php
+                                                    geraOpcao("equipamentos")
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            <hr class="botoes">
+                            <div class="row">
+                                <div class="form-group col-md-offset-2 col-md-4">
+                                    <a class="btn btn-info btn-block" href="#void" id="addInput">Adicionar Equipamento</a>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <a class="btn btn-info btn-block" href="#void" id="remInput">Remover Ultimo Equipamento</a>
                                 </div>
                             </div>
 
                             <div class="row">
-
                                 <div class="form-group col-md-3">
                                     <label for="fiscal">Fiscal</label>
                                     <input type="text" id="fiscal" name="fiscal" class="form-control" maxlength="60">
@@ -136,8 +152,8 @@ $conn = bancoPDO();
                             <div class="row">
                                 <div class="form-group col-md-12" align="center" style="margin-top: 10px">
                                     <label for="garantia">Garatia? </label> <br>
-                                    <label><input type="radio" name="garantia" value="2"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="garantia" value="1"> Não </label>
+                                    <label><input type="radio" name="garantia" value="1"> Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="garantia" value="0"> Não </label>
                                 </div>
                             </div>
 
@@ -149,11 +165,11 @@ $conn = bancoPDO();
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label>Vigência início</label>
-                                    <input type="date" name="vigencia_inicio" id='vigencia_inicio' class="form-control">
+                                    <input type="date" name="inicio_vigencia" id='inicio_vigencia' class="form-control">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Vigência fim</label>
-                                    <input type="date" name="vigencia_fim" id='vigencia_fim' class="form-control">
+                                    <input type="date" name="fim_vigencia" id='fim_vigencia' class="form-control">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>DOU</label>
@@ -206,6 +222,7 @@ $conn = bancoPDO();
                         <div class="box-footer">
                             <input type="hidden" name="tipoPessoa" value="<?= $tipoPessoa ?>">
                             <input type="hidden" name="idPessoa" value="<?= $idPessoa ?>">
+                            <input type="hidden" name="idLicitacao" value="<?= $idLicitacao ?>">
                             <button type="submit" name="cadastra" class="btn btn-primary pull-right">Cadastrar</button>
                         </div>
                     </form>
@@ -221,6 +238,21 @@ $conn = bancoPDO();
 </div>
 
 <script>
+
+    $('#addInput').on('click', function(e) {
+        let i = $('.equipamentos').length;
+        $('.equipamentos').first().clone().find("select").attr('name', function(idx, attrVal) {
+            return attrVal.replace('[0]','')+'['+i+']';
+        }).end().insertBefore('.botoes');
+    });
+
+    $('#remInput').on('click', function(e) {
+        let i = $('.equipamentos').length;
+        if (i > 1){
+            $('.equipamentos').last().remove();
+        }
+    });
+
 
     $('#num_processo').mask('0000.0000/0000000-0', {reverse: true});
 
@@ -240,8 +272,6 @@ $conn = bancoPDO();
              document.status.disabled = true;
          }
      }*/
-
-
 
 
 </script>

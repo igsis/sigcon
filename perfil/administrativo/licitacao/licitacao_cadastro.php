@@ -45,42 +45,52 @@
                             <hr/>
                             <div class="row">
                                 <div class="form-group col-md-3">
-                                    <label for="levantamento_preco">Levantamento de preço? </label> <br>
-                                    <label><input type="radio" name="levantamento_preco" value="2" onclick="habilitarDesabilitarCampo('.reserva', false)"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="levantamento_preco" value="1" checked onclick="habilitarDesabilitarCampo('.reserva', true)"> Não </label>
+                                    <div class="checkbox">
+                                        <label for="levantamento_preco" class='text-center'><strong>Levantamento de preço?</strong>
+                                            <input type="checkbox" class="check" name='levantamento_preco' id='levantamento_preco' />
+                                        </label>                                        
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="reserva">Reserva? </label> <br>
-                                    <label><input type="radio" name="reserva" value="2" class="reserva" disabled onclick="habilitarDesabilitarCampo('.elaboracao_edital', false)"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="reserva" value="1" class="reserva" checked disabled onclick="habilitarDesabilitarCampo('.elaboracao_edital', true)"> Não </label>
+                                    <div class="checkbox">
+                                        <label for="reserva" class='text-center'><strong>Reserva? </strong>
+                                            <input type="checkbox" class="check" name="reserva" id='reserva'  />
+                                        </label>                                      
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="elaboracao_edital">Elaboração de Edital? </label> <br>
-                                    <label><input type="radio" name="elaboracao_edital" value="2" class="elaboracao_edital" disabled onclick="habilitarDesabilitarCampo('.analise_edital', false)"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="elaboracao_edital" value="1" class="elaboracao_edital" disabled onclick="habilitarDesabilitarCampo('.analise_edital', true)" checked> Não </label>
+                                    <div class="checkbox">
+                                        <label for="elaboracao_edital" class='text-center'><strong>Elaboração de Edital?</strong>
+                                            <input type="checkbox" class="check" name="elaboracao_edital" id="elaboracao_edital" />
+                                        </label> 
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="analise_edital">Análise / Ajuste do Edital? </label> <br>
-                                    <label><input type="radio" name="analise_edital" class="analise_edital" value="2" disabled  onclick="habilitarDesabilitarCampo('.licitacao', false)">  Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="analise_edital" class="analise_edital" value="1" disabled checked onclick="habilitarDesabilitarCampo('.licitacao', true)"> Não </label>
+                                    <div class="checkbox">
+                                        <label for="analise_edital" class='text-center'><strong>Análise / Ajuste do Edital? </strong>
+                                            <input type="checkbox" class="check" name="analise_edital"  id='analise_edital' /> 
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                             <hr/>
                             <div class="row">
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-3">
                                     <label for="licitacao">Licitação</label> <br>
-                                    <input type="date" name="licitacao" id="licitacao" class="form-control licitacao" disabled onchange="habilitarDesabilitarCampo('.homologacao', false)">
+                                    <input type="date" name="licitacao" id="licitacao" class="form-control licitacao" />
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label for="obs_licitacao">Licitação Observação</label>
                                     <input type="text" id="obs_licitacao" name="obs_licitacao" class="form-control" maxlength="60">
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <label for="homologacao">Homologação / Recurso?</label> <br>
-                                    <label><input type="radio" name="homologacao" class="homologacao" value="2" disabled onclick="habilitarDesabilitarCampo('.empenho', false)"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="homologacao" class="homologacao" value="1" disabled checked onclick="habilitarDesabilitarCampo('.empenho', true)"> Não </label>
+                                <div class="form-group col-md-3">
+                                    <div class="checkbox">
+                                        <label for="homologacao" class='text-center'><strong>Homologação / Recurso?</strong>
+                                            <input type="checkbox" class="check" name="homologacao" id='homologacao' />
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label for="obs_homologacao">Homologação Observação</label>
                                     <input type="text" id="obs_homologacao" name="obs_homologacao" class="form-control" maxlength="60">
                                 </div>
@@ -88,18 +98,22 @@
                             <hr/>
                             <div class="row">
                                 <div class="form-group col-md-2">
-                                    <label for="empenho">Empenho?</label> <br>
-                                    <label><input type="radio" name="empenho" class="empenho" value="2" disabled onclick="habilitarDesabilitarCampo('.entrega', false)"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="empenho" class="empenho" value="1" disabled onclick="habilitarDesabilitarCampo('.entrega', true)" checked> Não </label>
+                                    <div class="checkbox">
+                                        <label for="empenho" class='text-center'><strong>Empenho?</strong>
+                                            <input type="checkbox" class="check" name="empenho" id='empenho' />
+                                        </label>
+                                    </div>                                        
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="obs_empenho">Empenho Observação</label>
                                     <input type="text" id="obs_empenho" name="obs_empenho" class="form-control" maxlength="60">
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label for="entrega">Entrega? </label> <br>
-                                    <label><input type="radio" name="entrega" class="entrega" value="2" disabled> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="entrega" class="entrega" value="1" disabled checked> Não </label>
+                                    <div class="checkbox">
+                                        <label for="entrega" class='text-center'> <strong>Entrega? </strong>
+                                            <input type="checkbox" class="check" name="entrega" id='entrega' />
+                                        </label>                                    
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="ordem_inicio">Ordem de Início</label>
@@ -131,18 +145,40 @@
     <!-- /.content -->
 </div>
 
-
 <script>
 
-    $('#num_processo').mask('0000.0000/0000000-0', {reverse: true});
+    let checks = document.querySelectorAll('.check');
 
-
-
-    function habilitarDesabilitarCampo(target, prop)
-    {
-        $(target).prop('disabled',prop);
+    for (const key in checks) {
+        if(key != 0){
+            checks[key].disabled = true           
+        }
     }
 
+    // Função que desabilita todos os checkbox que forem maiores que a checkbox === false
+    const disableMaiorqueAtual = () => {
+        for (const key in checks) {
+            if(checks[key].disabled == true && checks[key].checked == true){
+                let cont = key
+                do {
+                    checks[cont].checked = false
+                    checks[cont].disabled = true
+                    cont ++
+                }while(cont <= 6)
+            }
+        }
+    }
 
+    for (let i = 0; i < checks.length; i++) {
+        const check = checks[i];
+        check.addEventListener('change', () => {
+            if(checks[i].checked === true){
+                checks[(i + 1 )].disabled = false
+            }else{
+                checks[(i + 1 )].disabled = true
+            }
+            disableMaiorqueAtual()
+        })  
+    }
 
 </script>

@@ -20,7 +20,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $contato = $_POST['contato'];
 
     if (isset($_POST['cadastra'])) {
-        // cadastrar endereco de pf
+        // cadastrar endereco de pj
         $sqlEndereco = "INSERT INTO enderecos
                                     (cep,
                                      logradouro,
@@ -39,11 +39,13 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
         if (mysqli_query($con, $sqlEndereco)) {
 
+            gravarLog($sqlEndereco);
+
             $endereco_id = recuperaUltimo("enderecos");
 
-            $sql = "INSERT INTO pessoas_juridicas
+            $sql = "INSERT INTO pessoa_juridicas
                                 (razao_social,
-                                 CNPJ,
+                                 cnpj,
                                  email,
                                  contato,
                                  endereco_id,
@@ -57,20 +59,24 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
             if (mysqli_query($con, $sql)) {
 
-                $idPessoaJuridica = recuperaUltimo('pessoas_juridicas');
+                $idPessoaJuridica = recuperaUltimo('pessoa_juridicas');
 
                 foreach ($telefones as $telefone) {
                     if ($telefone != '') {
-                        // cadastrar o telefone de pf
+                        // cadastrar o telefone de pj
                         $sqlTelefone = "INSERT INTO pj_telefones
                                       (pessoa_juridica_id,
                                        telefone)
                               VALUES  ('$idPessoaJuridica',
                                        '$telefone')";
 
-                        mysqli_query($con, $sqlTelefone);
 
-                        $mensagem = mensagem("success", "Cadastrado com sucesso!");
+                        if (mysqli_query($con, $sqlTelefone)) {
+
+                            gravarLog($sqlTelefone);
+
+                            $mensagem = mensagem("success", "Cadastrado com sucesso!");
+                        }
                     }
                 }
             }
@@ -82,14 +88,14 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
     if (isset($_POST['edita'])) {
 
-        $sql = "UPDATE pessoas_juridicas SET
+        $sql = "UPDATE pessoa_juridicas SET
                                  razao_social = '$razao_social',
-                                 CNPJ = '$cnpj',
+                                 cnpj = '$cnpj',
                                  email = '$email',
                                  contato = '$contato'
                           WHERE id = '$idPessoaJuridica'";
 
-        $pj = recuperaDados('pessoas_juridicas', 'id', $idPessoaJuridica);
+        $pj = recuperaDados('pessoa_juridicas', 'id', $idPessoaJuridica);
         $endereco_id = $pj['endereco_id'];
 
         if (isset($_POST['telefone3'])) {
@@ -109,18 +115,15 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                     gravarLog($sqlDelete);
                 }
 
-                // cadastrar o telefone de pf
-                $sqlTelefone = "UPDATE  pj_telefones SET
+                if ($telefone != '') {
+                    // editar o telefone de pj
+                    $sqlTelefone = "UPDATE  pj_telefones SET
                                           telefone = '$telefone'
                                   WHERE id = '$idTelefone'";
-                mysqli_query($con, $sqlTelefone);
-                gravarLog($sqlTelefone);
-
+                    mysqli_query($con, $sqlTelefone);
+                    gravarLog($sqlTelefone);
+                }
             }
-
-            $sqlTelefones = "SELECT * FROM pj_telefones WHERE pessoa_juridica_id = '$idPessoaJuridica'";
-            $arrayTelefones = $conn->query($sqlTelefones)->fetchAll();
-
 
             $sqlEndereco = "UPDATE enderecos SET
                                   cep = '$cep',
@@ -145,8 +148,10 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     }
 }
 
-$pessoa_juridica = recuperaDados("pessoas_juridicas", "id", $idPessoaJuridica);
+$sqlTelefones = "SELECT * FROM pj_telefones WHERE pessoa_juridica_id = '$idPessoaJuridica'";
+$arrayTelefones = $conn->query($sqlTelefones)->fetchAll();
 
+$pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoaJuridica);
 $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
 
 ?>
@@ -169,7 +174,7 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                         }; ?>
                     </div>
 
-                    <form method="POST" action="?perfil=contratos/pj_edita" role="form">
+                    <form method="POST" action="?perfil=contratos&p=pessoa_juridica&sp=pj_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-5">
@@ -178,7 +183,7 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="cnpj">CNPJ *</label>
-                                    <input type="text" data-mask="00.000.000/0000-00" minlength="18" class="form-control" id="cnpj" name="cnpj" value="<?= $pessoa_juridica['CNPJ'] ?>" required>
+                                    <input type="text" data-mask="00.000.000/0000-00" minlength="18" class="form-control" id="cnpj" name="cnpj" value="<?= $pessoa_juridica['cnpj'] ?>" required onblur="validacao()">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
@@ -224,7 +229,7 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="celular">Celular * </label>
-                                    <input type="text" data-mask="(00)0.0000-0000" required class="form-control" id="celular" name="telefone[<?= $arrayTelefones[1]['id'] ?>]" value="<?= $arrayTelefones[1]['telefone']; ?>">
+                                    <input type="text" data-mask="(00)00000-0000" required class="form-control" id="celular" name="telefone[<?= $arrayTelefones[1]['id'] ?>]" value="<?= $arrayTelefones[1]['telefone']; ?>">
                                 </div>
                             </div>
                             <div class="row">
@@ -232,13 +237,13 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                     <label for="recado">Recado (opcional) </label>
                                     <?php if (isset($arrayTelefones[2])) {
                                         ?>
-                                        <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="telefone[<?= $arrayTelefones[2]['id'] ?>]" value="<?=  $arrayTelefones[2]['telefone']; ?>">
+                                        <input type="text" data-mask="(00) 00000-0000" class="form-control" id="recado" name="telefone[<?= $arrayTelefones[2]['id'] ?>]" value="<?=  $arrayTelefones[2]['telefone']; ?>">
 
                                         <?php
                                     } else {
                                         ?>
 
-                                        <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="telefone3">
+                                        <input type="text" data-mask="(00) 00000-0000" class="form-control" id="recado" name="telefone3">
 
                                         <?php
                                     }
@@ -260,3 +265,79 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
         </div>
     </section>
 </div>
+
+
+<script>
+    function validarCNPJ(cnpj) {
+
+        // Elimina CNPJs invalidos conhecidos
+        if (cnpj == "00000000000000" ||
+            cnpj == "11111111111111" ||
+            cnpj == "22222222222222" ||
+            cnpj == "33333333333333" ||
+            cnpj == "44444444444444" ||
+            cnpj == "55555555555555" ||
+            cnpj == "66666666666666" ||
+            cnpj == "77777777777777" ||
+            cnpj == "88888888888888" ||
+            cnpj == "99999999999999")
+            return false;
+
+        // Valida DVs
+        tamanho = cnpj.length - 2
+        numeros = cnpj.substring(0,tamanho);
+        digitos = cnpj.substring(tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+        for (i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2)
+                pos = 9;
+        }
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado != digitos.charAt(0))
+            return false;
+
+        tamanho = tamanho + 1;
+        numeros = cnpj.substring(0,tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+        for (i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2)
+                pos = 9;
+        }
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado != digitos.charAt(1))
+            return false;
+
+        return true;
+
+    }
+
+    function validacao(){
+
+        var cnpj = document.querySelector('#cnpj').value
+
+        console.log(cnpj);
+
+        // tira os pontos do valor, ficando apenas os numeros
+        cnpj = cnpj.replace(/[^\d]+/g,'');
+
+        //console.log(cnpj);
+
+        var validado = validarCNPJ(cnpj);
+
+        //console.log(teste);
+
+        if(!validado){
+            alert('CNPJ inválido');
+
+            document.querySelector("#edita").disabled = true;
+        }else if(validado){
+            document.querySelector("#edita").disabled = false;
+        }
+    }
+
+
+</script>

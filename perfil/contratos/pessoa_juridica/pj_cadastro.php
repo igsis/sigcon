@@ -21,7 +21,7 @@ if (isset($_POST['documentacao'])) {
                         <h3 class="box-title">Informações Pessoa Jurídica</h3>
                     </div>
 
-                    <form method="POST" action="?perfil=contratos/pj_edita" role="form">
+                    <form method="POST" action="?perfil=contratos&p=pessoa_juridica&sp=pj_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-5">
@@ -30,7 +30,7 @@ if (isset($_POST['documentacao'])) {
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="cnpj">CNPJ *</label>
-                                    <input type="text" data-mask="00.000.000/0000-00" minlength="18" class="form-control" id="cnpj" name="cnpj" value="<?= isset($cnpj) ? $cnpj : NULL?>" required>
+                                    <input type="text" data-mask="00.000.000/0000-00" minlength="18" class="form-control" id="cnpj" name="cnpj" value="<?= isset($cnpj) ? $cnpj : NULL?>" required onblur="validacao()">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
@@ -75,13 +75,13 @@ if (isset($_POST['documentacao'])) {
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="celular">Celular * </label>
-                                    <input type="text" data-mask="(00) 0.0000-0000" class="form-control" id="celular" name="telefone[1]" required>
+                                    <input type="text" data-mask="(00) 00000-0000" class="form-control" id="celular" name="telefone[1]" required>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-2">
                                     <label for="recado">Recado (opcional) </label>
-                                    <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="telefone[2]">
+                                    <input type="text" data-mask="(00) 00000-0000" class="form-control" id="recado" name="telefone[2]">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="contato">Contato na empresa *</label>
@@ -90,7 +90,7 @@ if (isset($_POST['documentacao'])) {
                             </div>
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-default">Cancelar</button>
-                                <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary pull-right"> Cadastrar </button>
+                                <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary pull-right" disabled="true"> Cadastrar </button>
                             </div>
                     </form>
                 </div>
@@ -98,3 +98,78 @@ if (isset($_POST['documentacao'])) {
         </div>
     </section>
 </div>
+
+<script>
+    function validarCNPJ(cnpj) {
+
+        // Elimina CNPJs invalidos conhecidos
+        if (cnpj == "00000000000000" ||
+            cnpj == "11111111111111" ||
+            cnpj == "22222222222222" ||
+            cnpj == "33333333333333" ||
+            cnpj == "44444444444444" ||
+            cnpj == "55555555555555" ||
+            cnpj == "66666666666666" ||
+            cnpj == "77777777777777" ||
+            cnpj == "88888888888888" ||
+            cnpj == "99999999999999")
+            return false;
+
+        // Valida DVs
+        tamanho = cnpj.length - 2
+        numeros = cnpj.substring(0,tamanho);
+        digitos = cnpj.substring(tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+        for (i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2)
+                pos = 9;
+        }
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado != digitos.charAt(0))
+            return false;
+
+        tamanho = tamanho + 1;
+        numeros = cnpj.substring(0,tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+        for (i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2)
+                pos = 9;
+        }
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado != digitos.charAt(1))
+            return false;
+
+        return true;
+
+    }
+
+    function validacao(){
+
+        var cnpj = document.querySelector('#cnpj').value
+
+        console.log(cnpj);
+
+        // tira os pontos do valor, ficando apenas os numeros
+        cnpj = cnpj.replace(/[^\d]+/g,'');
+
+        //console.log(cnpj);
+
+        var validado = validarCNPJ(cnpj);
+
+        //console.log(teste);
+
+        if(!validado){
+            alert('CNPJ inválido');
+
+            document.querySelector("#cadastra").disabled = true;
+        }else if(validado){
+            document.querySelector("#cadastra").disabled = false;
+        }
+    }
+
+
+</script>

@@ -1,123 +1,67 @@
 <?php
-include "../perfil/includes/menu.php";
 
 $con = bancoMysqli();
 $conn = bancoPDO();
 
-if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
-    $idPessoaFisica = $_POST['idPessoaFisica'] ?? NULL;
+$idPessoaFisica = $_POST['idPf'];
+
+if (isset($_POST['edita'])) {
+    $idPessoaFisica = $_POST['idPf'] ?? NULL;
     $nome_pf = addslashes($_POST['nome_pf']);
     $cpf = $_POST['cpf'];
-    $email = $_POST['email'];
+    $email = trim($_POST['email']);
     $telefones = $_POST['telefone'];
     $cep = $_POST['cep'];
-    $logradouro = $_POST['logradouro'];
-    $bairro = $_POST['bairro'];
+    $logradouro = addslashes($_POST['logradouro']);
+    $bairro = addslashes($_POST['bairro']);
     $numero = $_POST['numero'];
     $complemento = $_POST['complemento'] ?? NULL;
     $uf = $_POST['uf'];
-    $cidade = $_POST['cidade'];
+    $cidade = addslashes($_POST['cidade']);
 
-    if (isset($_POST['cadastra'])) {
-        // cadastrar endereco de pf
-        $sqlEndereco = "INSERT INTO enderecos
-                                    (cep,
-                                     logradouro,
-                                     bairro,
-                                     cidade,
-                                     estado,
-                                     numero,
-                                     complemento)
-                              VALUES ('$cep',
-                                      '$logradouro',
-                                      '$bairro',
-                                      '$cidade',
-                                      '$uf',
-                                      '$numero',
-                                      '$complemento')";
+    $pf = recuperaDados('pessoa_fisicas', 'id', $idPessoaFisica);
+    $endereco_id = $pf['endereco_id'];
 
-        if (mysqli_query($con, $sqlEndereco)) {
-
-            $endereco_id = recuperaUltimo("enderecos");
-
-            $sql = "INSERT INTO pessoas_fisicas
-                                (nome,
-                                 cpf,
-                                 email,
-                                 endereco_id,
-                                 publicado)
-                          VALUES ('$nome_pf',
-                                  '$cpf',
-                                  '$email',
-                                  '$endereco_id',
-                                  '1')";
-
-            if (mysqli_query($con, $sql)) {
-
-                $idPessoaFisica = recuperaUltimo('pessoas_fisicas');
-
-                foreach ($telefones as $telefone) {
-                    if ($telefone != '') {
-                        // cadastrar o telefone de pf
-                        $sqlTelefone = "INSERT INTO pf_telefones
-                                      (pessoa_fisica_id,
-                                       telefone)
-                              VALUES  ('$idPessoaFisica',
-                                       '$telefone')";
-
-                        mysqli_query($con, $sqlTelefone);
-                    }
-                }
-            }
-
-        } else {
-            $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
-
+    if (isset($_POST['telefone3']))
+    {
+        $telefone3 = $_POST['telefone3'];
+        $sqlTelefone3 = "INSERT INTO pf_telefones (pessoa_fisica_id, telefone) VALUES ('$idPessoaFisica', '$telefone3')";
+        if ($con->query($sqlTelefone3))
+        {
+            gravarLog($sqlTelefone3);
         }
     }
 
-    if (isset($_POST['edita'])) {
-
-        $sql = "UPDATE pessoas_fisicas SET
+    $sql = "UPDATE pessoa_fisicas SET
                                  nome = '$nome_pf',
                                  cpf = '$cpf',
                                  email = '$email'
                           WHERE id = '$idPessoaFisica'";
 
-        $pf = recuperaDados('pessoas_fisicas', 'id', $idPessoaFisica);
-        $endereco_id = $pf['endereco_id'];
-
-        if (isset($_POST['telefone3'])) {
-            $telefone3 = $_POST['telefone3'];
-            $sqlTelefone3 = "INSERT INTO pf_telefones (pessoa_fisica_id, telefone) VALUES ('$idPessoaFisica', '$telefone3')";
-            $query = mysqli_query($con, $sqlTelefone3);
-            gravarLog($sqlTelefone3);
-        }
-
-        if (mysqli_query($con, $sql)) {
-
-            foreach ($telefones as $idTelefone => $telefone) {
-                if (!strlen($telefone)) {
-                    // Deletar telefone do banco se for apagado no edita.
-                    $sqlDelete = "DELETE FROM pj_telefones WHERE id = '$idTelefone'";
-                    mysqli_query($con, $sqlDelete);
+    if ($con->query($sql))
+    {
+        foreach ($telefones as $idTelefone => $telefone)
+        {
+            if (!strlen($telefone))
+            {
+                // Deletar telefone do banco se for apagado no edita.
+                $sqlDelete = "DELETE FROM pj_telefones WHERE id = '$idTelefone'";
+                if ($con->query($sqlDelete))
+                {
                     gravarLog($sqlDelete);
-
                 }
-
-                // cadastrar o telefone de pf
-                $sqlTelefone = "UPDATE  pf_telefones SET
-                                          telefone = '$telefone'
-                                  WHERE id = '$idTelefone'";
-
-                mysqli_query($con, $sqlTelefone);
-                gravarLog($sqlTelefone);
             }
 
-            $sqlTelefones = "SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPessoaFisica'";
-            $arrayTelefones = $conn->query($sqlTelefones)->fetchAll();
+            // cadastrar o telefone de pf
+            $sqlTelefone = "UPDATE pf_telefones SET telefone = '$telefone' WHERE id = '$idTelefone'";
 
-            $sqlEndereco = "UPDATE enderecos SET
+            if ($con->query($sqlTelefone))
+            {
+                gravarLog($sqlTelefone);
+            }
+        }
+
+        $sqlEndereco = "UPDATE enderecos SET
                                   cep = '$cep',
                                   logradouro = '$logradouro',
                                   estado= '$uf',
@@ -127,22 +71,28 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                   complemento = '$complemento'
                                   WHERE id = '$endereco_id'";
 
-            if (mysqli_query($con, $sqlEndereco)) {
-
-                $mensagem = mensagem("success", "Atualizado com sucesso!");
-
-                //gravarLog($sql);
-            } else {
-                $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
-                //gravarLog($sql);
-            }
+        if (mysqli_query($con, $sqlEndereco))
+        if ($con->query($sqlEndereco))
+        {
+            gravarLog($sqlEndereco);
+            $mensagem = mensagem("success", "Atualizado com sucesso!");
         }
+        else
+        {
+            $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
+        }
+    }
+    else
+    {
+        $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
     }
 }
 
-$pessoa_fisica = recuperaDados("pessoas_fisicas", "id", $idPessoaFisica);
 
-$pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
+$pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoaFisica);
+$pf_endereco = recuperaDados("enderecos", "id", $pessoa_fisica['endereco_id']);
+
+$arrayTelefones = $conn->query("SELECT * FROM pf_telefones WHERE pessoa_fisica_id = '$idPessoaFisica'")->fetchAll();
 
 ?>
 <script language="JavaScript" >
@@ -164,7 +114,7 @@ $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
                         }; ?>
                     </div>
 
-                    <form method="POST" action="?perfil=contratos/pf_edita" role="form">
+                    <form method="POST" action="?perfil=contratos&p=pessoa_fisica&sp=pf_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-4">
@@ -173,7 +123,7 @@ $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cpf">CPF *</label>
-                                    <input type="text" data-mask="000.000.000-00" minlength="11" class="form-control" id="cpf" name="cpf" value="<?= $pessoa_fisica['cpf']; ?>">
+                                    <input type="text" data-mask="000.000.000-00" minlength="11" class="form-control" id="cpf" name="cpf" value="<?= $pessoa_fisica['cpf']; ?>" onblur="validacao()">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
@@ -219,20 +169,20 @@ $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="celular">Celular *</label>
-                                    <input type="text" data-mask="(00)0.0000-0000" class="form-control" id="celular" name="telefone[<?= $arrayTelefones[1]['id'] ?>]" value="<?= $arrayTelefones[1]['telefone']; ?>">
+                                    <input type="text" data-mask="(00)00000-0000" class="form-control" id="celular" name="telefone[<?= $arrayTelefones[1]['id'] ?>]" value="<?= $arrayTelefones[1]['telefone']; ?>">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="recado">Recado (opcional) </label>
                                     <?php if (isset($arrayTelefones[2])) {
                                     ?>
 
-                                    <input type="text" data-mask="(00)0000-00000" class="form-control" id="recado" name="telefone[<?= $arrayTelefones[2]['id'] ?>]" value="<?=  $arrayTelefones[2]['telefone']; ?>">
+                                    <input type="text" data-mask="(00)00000-0000" class="form-control" id="recado" name="telefone[<?= $arrayTelefones[2]['id'] ?>]" value="<?=  $arrayTelefones[2]['telefone']; ?>">
 
                                     <?php
                                     } else {
                                     ?>
 
-                                    <input type="text" data-mask="(00)0000-00000" class="form-control" id="recado" name="telefone3">
+                                    <input type="text" data-mask="(00)00000-0000" class="form-control" id="recado" name="telefone3">
 
                                     <?php
                                     }
@@ -240,8 +190,8 @@ $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                 </div>
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-default">Cancelar</button>
-                                <input type="hidden" name="idPessoaFisica" value="<?= $idPessoaFisica ?>">
+                                <a href="?perfil=contratos&p=pesquisa&sp=pf_pesquisa" class="btn btn-default">Voltar a Pesquisa</a>
+                                <input type="hidden" name="idPf" value="<?= $idPessoaFisica ?>">
                                 <button type="submit" name="edita" id="edita" class="btn btn-primary pull-right"> Editar </button>
                             </div>
                     </form>
@@ -250,3 +200,66 @@ $pf_endereco = recuperaDados("enderecos", "id", $endereco_id);
         </div>
     </section>
 </div>
+
+<script>
+
+    function TestaCPF(cpf) {
+        var Soma;
+        var Resto;
+        var strCPF = cpf;
+        Soma = 0;
+
+        if (strCPF == "00000000000" ||
+            strCPF == "11111111111" ||
+            strCPF == "22222222222" ||
+            strCPF == "33333333333" ||
+            strCPF == "44444444444" ||
+            strCPF == "55555555555" ||
+            strCPF == "66666666666" ||
+            strCPF == "77777777777" ||
+            strCPF == "88888888888" ||
+            strCPF == "99999999999")
+            return false;
+
+        for (i=1; i<=9; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (11 - i);
+        Resto = (Soma * 10) % 11;
+
+        if ((Resto == 10) || (Resto == 11))  Resto = 0;
+        if (Resto != parseInt(strCPF.substring(9, 10)) ) return false;
+
+        Soma = 0;
+        for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (12 - i);
+        Resto = (Soma * 10) % 11;
+
+        if ((Resto == 10) || (Resto == 11))  Resto = 0;
+        if (Resto != parseInt(strCPF.substring(10, 11) ) ) return false;
+        return true;
+    }
+
+    function validacao(){
+
+        var strCPF = document.querySelector('#cpf').value
+
+        console.log(strCPF);
+
+        // tira os pontos do valor, ficando apenas os numeros
+        strCPF = strCPF.replace(/[^0-9]/g, '');
+
+        //console.log(strCPF);
+
+        var validado = TestaCPF(strCPF);
+
+        //console.log(teste);
+
+        // document.querySelector('#validado').value = teste;
+
+        if(!validado){
+            alert('CPF inválido');
+
+            document.querySelector("#edita").disabled = true;
+        }else if(validado){
+            document.querySelector("#edita").disabled = false;
+        }
+    }
+
+</script>

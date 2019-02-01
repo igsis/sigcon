@@ -1,5 +1,4 @@
 <?php
-include "../perfil/includes/menu.php";
 
 if (isset($_POST['documentacao'])) {
     $cpf = $_POST['documentacao'];
@@ -20,7 +19,7 @@ if (isset($_POST['documentacao'])) {
                         <h3 class="box-title">Informações Pessoa Física</h3>
                     </div>
 
-                    <form method="POST" action="?perfil=contratos/pf_edita" role="form">
+                    <form method="POST" action="?perfil=contratos&p=pesquisa&sp=pf_pesquisa" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-4">
@@ -29,7 +28,8 @@ if (isset($_POST['documentacao'])) {
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cpf">CPF *</label>
-                                    <input type="text" data-mask="000.000.000-00" minlength="14" class="form-control" id="cpf" name="cpf" value="<?= isset($cpf) ? $cpf : NULL ?>" required>
+                                    <input type="text" data-mask="000.000.000-00" minlength="14" class="form-control" onblur="validacao()" id="cpf" name="cpf" value="<?= isset($cpf) ? $cpf : NULL ?>" required>
+<!--                                    <input type="text" name="validado" id="validado">-->
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
@@ -81,8 +81,8 @@ if (isset($_POST['documentacao'])) {
                                 </div>
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-default">Cancelar</button>
-                                <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary pull-right"> Cadastrar </button>
+                                <a href="?perfil=contratos&p=pesquisa&sp=pf_pesquisa" class="btn btn-default">Voltar a Pesquisa</a>
+                                <button type="submit" name="cadastrar" id="cadastrar" class="btn btn-primary pull-right" disabled="true"> Cadastrar </button>
                             </div>
                     </form>
                 </div>
@@ -90,3 +90,66 @@ if (isset($_POST['documentacao'])) {
         </div>
     </section>
 </div>
+
+<script>
+
+    function TestaCPF(cpf) {
+        var Soma;
+        var Resto;
+        var strCPF = cpf;
+        Soma = 0;
+
+        if (strCPF == "00000000000" ||
+            strCPF == "11111111111" ||
+            strCPF == "22222222222" ||
+            strCPF == "33333333333" ||
+            strCPF == "44444444444" ||
+            strCPF == "55555555555" ||
+            strCPF == "66666666666" ||
+            strCPF == "77777777777" ||
+            strCPF == "88888888888" ||
+            strCPF == "99999999999")
+            return false;
+
+        for (i=1; i<=9; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (11 - i);
+        Resto = (Soma * 10) % 11;
+
+        if ((Resto == 10) || (Resto == 11))  Resto = 0;
+        if (Resto != parseInt(strCPF.substring(9, 10)) ) return false;
+
+        Soma = 0;
+        for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (12 - i);
+        Resto = (Soma * 10) % 11;
+
+        if ((Resto == 10) || (Resto == 11))  Resto = 0;
+        if (Resto != parseInt(strCPF.substring(10, 11) ) ) return false;
+        return true;
+    }
+
+    function validacao(){
+
+        var strCPF = document.querySelector('#cpf').value
+
+        console.log(strCPF);
+
+        // tira os pontos do valor, ficando apenas os numeros
+        strCPF = strCPF.replace(/[^0-9]/g, '');
+
+        //console.log(strCPF);
+
+        var validado = TestaCPF(strCPF);
+
+        //console.log(teste);
+
+        // document.querySelector('#validado').value = teste;
+
+        if(!validado){
+            alert('CPF inválido');
+
+            document.querySelector("#cadastrar").disabled = true;
+        }else if(validado){
+            document.querySelector("#cadastrar").disabled = false;
+        }
+    }
+
+</script>

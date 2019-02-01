@@ -12,19 +12,19 @@ $resultado = "<td></td>";
 
 if (isset($_POST['procurar'])){
 
-    $cpf = $_POST['procurar'] ?? NULL;
+    $cnpj = $_POST['procurar'] ?? NULL;
 
-    if ($cpf != NULL ) {
+    if ($cnpj != NULL ) {
 
-        $queryCPF = "SELECT id, nome, cpf, email
-                         FROM pessoas_fisicas
-                         WHERE cpf = '$cpf'";
+        $queryCNPJ = "SELECT id, razao_social, cnpj, email
+                         FROM pessoa_juridicas
+                         WHERE cnpj = '$cnpj'";
 
-        if ($result = mysqli_query($con,$queryCPF)) {
+        if ($result = mysqli_query($con,$queryCNPJ)) {
 
-            $resultCPF = mysqli_num_rows($result);
+            $resultCNPJ = mysqli_num_rows($result);
 
-            if ($resultCPF > 0){
+            if ($resultCNPJ > 0){
 
                 $exibir = true;
                 $resultado = "";
@@ -32,12 +32,12 @@ if (isset($_POST['procurar'])){
                 foreach($result as $pessoa){
 
                     $resultado .= "<tr>";
-                    $resultado .= "<td>".$pessoa['nome']."</td>";
-                    $resultado .= "<td>".$pessoa['cpf']."</td>";
+                    $resultado .= "<td>".$pessoa['razao_social']."</td>";
+                    $resultado .= "<td>".$pessoa['cnpj']."</td>";
                     $resultado .= "<td>".$pessoa['email']."</td>";
                     $resultado .= "<td>
                                      <form action='?perfil=contratos/contrato_cadastro' method='post'>
-                                        <input type='hidden' name='idPf' value='".$pessoa['id']."'>
+                                        <input type='hidden' name='idPj' value='".$pessoa['id']."'>
                                         <input type='hidden' name='idLicitacao' value='".$idLicitacao."'>
                                         <input type='submit' name='carregar' class='btn btn-primary' name='selecionar' value='Selecionar'>
                                      </form>
@@ -51,8 +51,8 @@ if (isset($_POST['procurar'])){
                         <span style='margin: 50% 40%;'>Sem resultados</span>
                       </td>
                       <td>
-                        <form method='post' action='?perfil=contratos/pf_cadastro'>
-                            <input type='hidden' name='documentacao' value='$cpf'>
+                        <form method='post' action='?perfil=contratos/pj_cadastro'>
+                            <input type='hidden' name='documentacao' value='$cnpj'>
                             <button class=\"btn btn-primary\" name='adicionar' type='submit'>
                                 <i class=\"glyphicon glyphicon-plus\">        
                                 </i>Adicionar
@@ -79,15 +79,15 @@ if (isset($_POST['procurar'])){
             <div class="col-md-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">Procurar pessoa fisica</h3>
+                        <h3 class="box-title">Procurar pessoa jurídica</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <form action="?perfil=contratos/pf_pesquisa" method="post">
+                        <form action="?perfil=contratos&p=pesquisa&sp=pj_pesquisa" method="post">
                             <div class="form-group">
-                                <label for="procurar">Pesquisar por CPF:</label>
+                                <label for="procurar">Pesquisar por CNPJ:</label>
                                 <div class="input-group">
-                                    <input type="text" data-mask="000.000.000-00" class="form-control" minlength=14 name="procurar" id="cpf" value="<?= isset($cpf) ? $cpf : NULL?>" >
+                                    <input type="text" data-mask="00.000.000/0000-00" class="form-control" minlength=14 name="procurar" id="cnpj" value="<?= isset($cnpj) ? $cnpj : NULL ?>">
                                     <input type='hidden' name='idLicitacao' value="<?= $idLicitacao ?>">
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i> Procurar</button>
@@ -102,8 +102,8 @@ if (isset($_POST['procurar'])){
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    <th>Nome</th>
-                                    <th>CPF</th>
+                                    <th>Razão Social</th>
+                                    <th>CNPJ</th>
                                     <th>E-mail</th>
                                 </tr>
                                 </thead>

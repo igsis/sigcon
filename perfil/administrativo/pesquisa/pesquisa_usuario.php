@@ -37,7 +37,7 @@ if (isset($_POST['cadastra'])) {
     {
         $idUsuario = $con->insert_id;
         gravarLog($sql);
-        $mensagem = mensagem("success", "Usuário cadastrado com sucesso!");
+        $mensagem = mensagem("success", "Usuário cadastrado com sucesso! Senha padrão: sigcon2019");
     }
     else
     {

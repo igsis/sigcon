@@ -4,37 +4,45 @@ include "../perfil/includes/menu.php";
 $con = bancoMysqli();
 $conn = bancoPDO();
 
-$tipoPessoa = $_POST['tipoPessoa'];
-$idPessoa = $_POST['idPessoa'];
+$tipoPessoa = $_POST['tipoPessoa'] ?? NULL;
+$idPessoa = $_POST['idPessoa'] ?? NULL;
+
+if ($tipoPessoa == 1) {
+    $pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoa)['cpf'];
+
+} elseif ($tipoPessoa == 2) {
+    $pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoa)['cnpj'];
+
+}
 
 $idLicitacao = $_POST['idLicitacao'];
 $licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
 
 if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $idContrato = $_POST['idContrato'] ?? NULL;
-    $termo_contrato = $_POST['termo_contrato'];
-    $tipo_servico = $_POST['tipo_servico'];
-    $objeto = $_POST['objeto'];
-    $idEmpresa = $_POST['idEmpresa'];
-    $idUnidade = $_POST['unidade'];
-    $idEquipamento = $_POST['equipamento'];
-    $fiscal = $_POST['fiscal'];
-    $contatoFiscal = $_POST['fiscal_contato'];
-    $suplente = $_POST['suplente'];
-    $contatoSuplente = $_POST['suplente_contato'];
-    $garantia = $_POST['garantia'];
-    $vigencia_inicio = $_POST['vigencia_inicio'];
-    $vigencia_fim = $_POST['vigencia_fim'];
-    $DOU = $_POST['dou'];
-    $valor_mensal = $_POST['valor_mensal'];
-    $valor_anual = $_POST['valor_anual'];
-    $negociacoes_reajustes = $_POST['negociacoes_reajustes'];
-    $nivel_risco = $_POST['nivel_risco'];
-    $observacao = $_POST['observacao'];
-    $vencimento = $_POST['vencimento'];
-    $status = $_POST['status'];
+    $termo_contrato = $_POST['termo_contrato'] ?? NULL;
+    $tipo_servico = $_POST['tipo_servico'] ?? NULL;
+    $objeto = $_POST['objeto'] ?? NULL;
+    $idUnidade = $_POST['unidade'] ?? NULL;
+    $equipamentos = $_POST['equipamento'] ?? NULL;
+    $fiscal = $_POST['fiscal'] ?? NULL;
+    $contatoFiscal = $_POST['fiscal_contato'] ?? NULL;
+    $suplente = $_POST['suplente'] ?? NULL;
+    $contatoSuplente = $_POST['suplente_contato'] ?? NULL;
+    $garantia = $_POST['garantia'] ?? NULL;
+    $inicio_vigencia = $_POST['inicio_vigencia'] ?? NULL;
+    $fim_vigencia = $_POST['fim_vigencia'] ?? NULL;
+    $DOU = $_POST['dou'] ?? NULL;
+    $valor_mensal = $_POST['valor_mensal'] ?? NULL;
+    $valor_anual = $_POST['valor_anual'] ?? NULL;
+    $negociacoes_reajustes = $_POST['negociacoes_reajustes'] ?? NULL;
+    $nivel_risco = $_POST['nivel_risco'] ?? NULL;
+    $observacao = $_POST['observacao'] ?? NULL;
+    $vencimento = $fim_vigencia;
+    $status = $_POST['status'] ?? NULL;
 
     if(isset($_POST['cadastra'])) {
+
         $sqlFiscal = "INSERT INTO fiscais (nome_fiscal, 
                                            contato_fiscal, 
                                            publicado)
@@ -42,30 +50,27 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                            '$contatoFiscal',
                                            '1')";
 
-        if (mysqli_query($con, $sqlFiscal)) {
-
-            gravarLog($sqlFiscal);
-            $idFiscal = recuperaUltimo("fiscais");
-
-            $sqlSuplente = "INSERT INTO suplentes (nome_suplente, 
+        $sqlSuplente = "INSERT INTO suplentes (nome_suplente, 
                                            contato_suplente, 
                                            publicado)
                                   VALUES  ('$suplente', 
                                            '$contatoSuplente',
                                            '1')";
 
-            if (mysqli_query($con, $sqlSuplente)) {
+        if (mysqli_query($con, $sqlSuplente) && mysqli_query($con, $sqlFiscal)) {
 
-                gravarLog($sqlSuplente);
-                $idSuplente = recuperaUltimo("suplentes");
+            gravarLog($sqlFiscal);
+            $idFiscal = recuperaUltimo("fiscais");
 
-                $sqlContrato = "INSERT INTO contratos (licitacao_id, 
+            gravarLog($sqlSuplente);
+            $idSuplente = recuperaUltimo("suplentes");
+
+            $sqlContrato = "INSERT INTO contratos (licitacao_id, 
                                                        termo_contrato, 
                                                        tipo_servico,
                                                        tipo_pessoa_id,
                                                        pessoa_id,
                                                        unidade_id,
-                                                       equipamentos_id,
                                                        fiscal_id,
                                                        suplente_id,
                                                        garantia, 
@@ -78,10 +83,9 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                              VALUES   ('$idLicitacao', 
                                                        '$termo_contrato',
                                                        '$tipo_servico',
-                                                       '$tipo_pessoa',
-                                                       '$pessoa_id',
+                                                       '$tipoPessoa',
+                                                       '$idPessoa',
                                                        '$idUnidade',
-                                                       '$idEquipamento',
                                                        '$idFiscal',
                                                        '$idSuplente',
                                                        '$garantia',
@@ -92,28 +96,80 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                                        '$status',                                                       
                                                        '1')";
 
-                if (mysqli_query($con, $sqlContrato)) {
+            if (mysqli_query($con, $sqlContrato)) {
 
-                    gravarLog($sqlContrato);
-                    $idContrato = recuperaUltimo("contratos");
-                    $mensagem = mensagem("success", "Cadastrado com sucesso!");
+                gravarLog($sqlContrato);
+                $idContrato = recuperaUltimo("contratos");
 
-                } else {
-                    $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
+                foreach ($equipamentos as $equipamento) {
+
+                    $sqlEquipamentos = "INSERT INTO contrato_equipamento  
+                                                    (contrato_id, 
+                                                     equipamento_id)
+                                       VALUES       ('$idContrato',
+                                                     '$equipamento')";
+
+                    mysqli_query($con, $sqlEquipamentos);
+                    gravarLog($sqlEquipamentos);
                 }
+
+                $sqlInfo = "INSERT INTO informacoes_do_contrato (contrato_id, 
+                                                       inicio_vigencia, 
+                                                       fim_vigencia,
+                                                       DOU,
+                                                       valor_mensal,
+                                                       valor_anual)
+                                             VALUES   ('$idContrato', 
+                                                       '$inicio_vigencia',
+                                                       '$fim_vigencia',
+                                                       '$DOU',
+                                                       '$valor_mensal',
+                                                       '$valor_anual')";
+
+                if (mysqli_query($con, $sqlInfo)) {
+
+                    gravarLog($sqlInfo);
+                    $mensagem = mensagem("success", "Cadastrado com sucesso!");
+                }
+            } else {
+                $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
             }
         }
     }
 
+
     if (isset($_POST['edita'])){
 
-        $sqlContrato = "UPDATE contratos SET 
+        print_r ($equipamentos);
+
+        foreach ($equipamentos as $idEquip => $equipamento) {
+              $sqlEquips = "UPDATE contrato_equipamento SET
+                                       equipamento_id = '$equipamento'
+                                 WHERE id = '$idEquip'";
+
+               mysqli_query($con, $sqlEquips);
+               gravarLog($sqlEquips);
+         }
+
+
+        $sqlInfo = "UPDATE informacoes_do_contrato SET 
+                                          inicio_vigencia = '$inicio_vigencia',
+                                          fim_vigencia = '$fim_vigencia',
+                                          DOU = '$DOU',
+                                          valor_mensal = '$valor_mensal',
+                                          valor_anual =  '$valor_anual'
+                                    WHERE contrato_id = '$idContrato'";
+
+            mysqli_query($con, $sqlInfo);
+            gravarLog($sqlInfo);
+            $vencimento = recuperaDados("informacoes_do_contrato", "contrato_id", $idContrato)['fim_vigencia'];
+
+            $sqlContrato = "UPDATE contratos SET 
                                           termo_contrato = '$termo_contrato', 
                                           tipo_servico = '$tipo_servico',
-                                          tipo_pessoa_id = '$tipo_pessoa',
-                                          pessoa_id = '$pessoa_id',
+                                          tipo_pessoa_id = '$tipoPessoa',
+                                          pessoa_id = '$idPessoa',
                                           unidade_id = '$idUnidade',
-                                          equipamentos_id = '$idEquipamento',
                                           garantia =  '$garantia',
                                           vencimento = '$vencimento',
                                           negociacoes_reajustes =  '$negociacoes_reajustes',
@@ -122,47 +178,47 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                           contrato_status_id = '$status'
                                   WHERE id = '$idContrato'";
 
-        if (mysqli_query($con, $sqlContrato)) {
+                    gravarLog($sqlContrato);
+                    $contrato = recuperaDados("contratos", "id", $idContrato);
 
-            gravarLog($sqlContrato);
+                    $idFiscal = $contrato['fiscal_id'];
+                    $idSuplente = $contrato['suplente_id'];
 
-            $contrato = recuperaDados("contratos", "id", $idContrato);
-            $idFiscal = $contrato['fiscal_id'];
-            $idSuplente = $contratos['suplente_id'];
-
-            $sqlFiscal = "UPDATE fiscais SET 
+                    $sqlFiscal = "UPDATE fiscais SET 
                                           nome_fiscal = '$fiscal', 
                                           contato_fiscal = '$contatoFiscal'
                                       WHERE id = '$idFiscal'";
 
-            if (mysqli_query($con, $sqlFiscal)) {
+                    gravarLog($sqlFiscal);
 
-                gravarLog($sqlFiscal);
-
-                $sqlSuplente = "UPDATE suplentes SET 
+                    $sqlSuplente = "UPDATE suplentes SET 
                                                 nome_suplente = '$suplente', 
                                                 contato_suplente = '$contatoSuplente'
                                       WHERE id = '$idSuplente'";
 
-                if (mysqli_query($con, $sqlSuplente)) {
                     gravarLog($sqlSuplente);
-                    $mensagem = mensagem("success", "Atualizado com sucesso!");
 
-                } else {
-                    $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
-                }
-            }
-        }
+                    if (mysqli_query($con, $sqlContrato) || mysqli_query($con, $sqlFiscal) || mysqli_query($con, $sqlSuplente)) {
+
+                        $mensagem = mensagem("success", "Atualizado com sucesso!");
+
+                    } else {
+                        $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
+                    }
     }
 }
 
-$fical = recuperaDados("fiscais", "id", $idFiscal);
+$fiscal = recuperaDados("fiscais", "id", $idFiscal);
 $suplente = recuperaDados("suplentes", "id", $idSuplente);
-$contratos = recuperaDados("contratos", "id", $idContrato);
+$contrato = recuperaDados("contratos", "id", $idContrato);
+$informacoes = recuperaDados("informacoes_do_contrato", "contrato_id", $idContrato);
 
-
+$sqlEquips = "SELECT * FROM contrato_equipamento WHERE contrato_id = '$idContrato'";
+$queryEquips = mysqli_query($con, $sqlEquips);
+$numEquips = mysqli_num_rows($queryEquips);
 
 ?>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Main content -->
@@ -194,88 +250,164 @@ $contratos = recuperaDados("contratos", "id", $idContrato);
                                     <label for="num_processo">Número do processo administrativo</label>
                                     <input type="text" data-mask="0000.0000/0000000-0" id="num_processo" name="num_processo" class="form-control" maxlength="20" value="<?= $licitacao['numero_processo'];  ?>" readonly>
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label for="termo_contrato">Termo de contrato *</label>
-                                    <input type="text" id="termo_contrato" name="termo_contrato" class="form-control" maxlength="100" required>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="tipo_servico">Tipo de serviço *</label>
-                                    <input type="text" id="tipo_servico" name="tipo_servico" class="form-control" maxlength="80" required>
-                                </div>
-                            </div>
+                                <?php
 
-                            <div class="row">
+                                if ($tipoPessoa == 1) {
+
+                                    ?>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="cpf">CPF: </label>
+                                        <input type="text" data-mask="000.000.000-00" id="cpf" name="cpf"
+                                               class="form-control" value="<?= $pessoa_fisica ?>" readonly>
+                                    </div>
+
+                                    <?php
+
+                                }else {
+
+                                    ?>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="cnpj">CNPJ: </label>
+                                        <input type="text" data-mask="00.000.000/0000-00" id="cnpj" name="cnpj"
+                                               class="form-control" value="<?= $pessoa_juridica ?>" readonly>
+                                    </div>
+
+                                    <?php
+                                }
+
+                                ?>
                                 <div class="form-group col-md-6">
                                     <label for="objeto">Objeto *</label>
-                                    <input type="text" id="objeto" name="objeto" class="form-control" maxlength="100" required>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <form method='POST'>
-                                        <label for="pesquisaEmpresa">Empresa</label>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" name='cnpj' maxlength='19' minlength='19' class="form-control" placeholder="Buscar">
-                                            <div class="input-group-btn">
-                                                <button type="submit" name='pesquisaEmpresa' class="btn btn-default"><i class="fa fa-search"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <form method='POST'>
-                                        <label for="pesquisaPf">Pessoa Fisíca</label>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" name='cpf' maxlength='19' minlength='11' class="form-control" placeholder="Buscar">
-                                            <div class="input-group-btn">
-                                                <button type="submit" name='pesquisaPf' class="btn btn-default"><i class="fa fa-search"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
+                                    <input type="text" id="objeto" name="objeto" class="form-control" maxlength="100" value="<?= $licitacao['objeto']; ?>" readonly>
                                 </div>
                             </div>
 
+
                             <div class="row">
                                 <div class="form-group col-md-3">
+                                    <label for="termo_contrato">Termo de contrato *</label>
+                                    <input type="text" id="termo_contrato" name="termo_contrato" class="form-control" maxlength="100" value="<?= $contrato['termo_contrato'] ?>">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="tipo_servico">Tipo de serviço *</label>
+                                    <input type="text" id="tipo_servico" name="tipo_servico" class="form-control" maxlength="80" value="<?= $contrato['tipo_servico'] ?>">
+                                </div>
+                                <div class="form-group col-md-6">
                                     <label for="unidade">Unidade *</label>
                                     <select class="form-control" id="unidade" name="unidade">
                                         <option value="">Selecione...</option>
                                         <?php
-                                        geraOpcao("unidades")
+                                        geraOpcao("unidades", $contrato['unidade_id'])
                                         ?>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <!-- Campo populado de acordo com a escolha da unidade -->
-                                    <label for="equipamentos">Equipamentos atendidos</label> <br>
-                                    <select class="form-control" id="equipamentos" name="equipamentos">
-                                        <option value="">Selecione...</option>
+                            </div>
+
+                            <?php
+
+                                if ($numEquips > 0) {
+                                    $count = 0;
+                                    while ($equipamento = mysqli_fetch_array($queryEquips)) {
+
+                                        ?>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <div class="equipamentos">
+                                                        <hr>
+                                                        <!-- Campo populado de acordo com a escolha da unidade -->
+                                                        <label for="equipamento">Equipamentos atendidos</label> <br>
+                                                        <select class="form-control" id="equipamento" name="equipamento[<?=$equipamento['id']?>]">
+                                                            <option value="">Selecione...</option>
+                                                            <?php
+                                                            geraOpcao("equipamentos", $equipamento['equipamento_id']);
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <?php
-                                        geraOpcao("equipamentos")
-                                        ?>
-                                    </select>
+                                        $count++;
+                                    }
+                                    ?>
+
+                                     <hr class="botoes">
+                                        <div class="row">
+                                            <div class="form-group col-md-offset-2 col-md-4">
+                                                <a class="btn btn-info btn-block" href="#void" id="addInput">Adicionar
+                                                    Equipamento</a>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <a class="btn btn-info btn-block" href="#void" id="remInput">Remover
+                                                    Ultimo Equipamento</a>
+                                            </div>
+                                        </div>
+
+                                    <?php
+
+                                } else {
+
+                                    ?>
+
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="equipamentos">
+                                            <hr>
+                                            <!-- Campo populado de acordo com a escolha da unidade -->
+                                            <label for="equipamento">Equipamentos atendidos</label> <br>
+                                            <select class="form-control" id="equipamento"
+                                                    name="equipamento[<?=$count++?>]">
+                                                <option value="">Selecione...</option>
+                                                <?php
+                                                geraOpcao("equipamentos");
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
+                            </div>
+
+                            <hr class="botoes">
+                            <div class="row">
+                                <div class="form-group col-md-offset-2 col-md-4">
+                                    <a class="btn btn-info btn-block" href="#void" id="addInput">Adicionar Equipamento</a>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <a class="btn btn-info btn-block" href="#void" id="remInput">Remover Último Equipamento</a>
+                                </div>
+                            </div>
+                                <?php
+                                }
+                            ?>
+
+                            <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="fiscal">Fiscal</label>
-                                    <input type="text" id="fiscal" name="fiscal" class="form-control" maxlength="60">
+                                    <input type="text" id="fiscal" name="fiscal" class="form-control" maxlength="60" value="<?= $fiscal['nome_fiscal'] ?>">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="fiscal_contato">Contato do fiscal</label>
-                                    <input type="text" id="fiscal_contato" name="fiscal_contato" class="form-control" maxlength="60">
+                                    <input type="text" id="fiscal_contato" name="fiscal_contato" class="form-control" maxlength="60" value="<?= $fiscal['contato_fiscal'] ?>">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="suplente">Suplente</label>
+                                    <input type="text" id="suplente" name="suplente" class="form-control" maxlength="60" value="<?= $suplente['nome_suplente'] ?>">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="suplente_contato">Contato do suplente</label>
+                                    <input type="text" id="suplente_contato" name="suplente_contato" class="form-control" maxlength="60" value="<?= $suplente['contato_suplente'] ?>">
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="form-group col-md-3">
-                                    <label for="suplente">Suplente</label>
-                                    <input type="text" id="suplente" name="suplente" class="form-control" maxlength="60">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="suplente_contato">Contato do suplente</label>
-                                    <input type="text" id="suplente_contato" name="suplente_contato" class="form-control" maxlength="60">
-                                </div>
-                                <div class="form-group col-md-6" align="center" style="margin-top: 10px">
+                                <div class="form-group col-md-12" align="center" style="margin-top: 10px">
                                     <label for="garantia">Garatia? </label> <br>
-                                    <label><input type="radio" name="garantia" value="2"> Sim </label>&nbsp;&nbsp;
-                                    <label><input type="radio" name="garantia" value="1"> Não </label>
+                                    <label><input type="radio" name="garantia" value="1" <?= $contrato['garantia'] == 1 ? 'checked' : NULL ?>> Sim </label>&nbsp;&nbsp;
+                                    <label><input type="radio" name="garantia" value="0" <?= $contrato['garantia'] == 0 ? 'checked' : NULL ?>> Não </label>
                                 </div>
                             </div>
 
@@ -286,52 +418,52 @@ $contratos = recuperaDados("contratos", "id", $idContrato);
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-3">
-                                    <label>Vigência início</label>
-                                    <input type="date" name="vigencia_inicio" id='vigencia_inicio' class="form-control">
+                                    <label for="inicio_vigencia">Vigência início</label>
+                                    <input type="date" name="inicio_vigencia" id='inicio_vigencia' class="form-control" value="<?= $informacoes['inicio_vigencia'] ?>">
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label>Vigência fim</label>
-                                    <input type="date" name="vigencia_fim" id='vigencia_fim' class="form-control">
+                                    <label for="fim_vigencia">Vigência fim</label>
+                                    <input type="date" name="fim_vigencia" id='fim_vigencia' class="form-control" value="<?= $informacoes['fim_vigencia'] ?>">
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label>DOU</label>
-                                    <input type="date" name="dou" id='dou' class="form-control">
+                                    <label for="dou">DOU</label>
+                                    <input type="date" name="dou" id='dou' class="form-control" value="<?= $informacoes['DOU'] ?>">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="valor_mensal">Valor mensal</label>
-                                    <input type="text" id="valor_mensal" name="valor_mensal" class="form-control" placeholder="Valor em formato decimal *">
+                                    <input type="text" id="valor_mensal" name="valor_mensal" class="form-control" value="<?= $informacoes['valor_mensal'] ?>">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="valor_anual">Valor anual</label>
-                                    <input type="text" id="valor_anual" name="valor_anual" class="form-control" placeholder="Valor em formato decimal *">
+                                    <input type="text" id="valor_anual" name="valor_anual" class="form-control" value="<?= $informacoes['valor_anual'] ?>">
                                 </div>
                             </div>
                             <hr/>
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label for="observacao">Negociações / Reajuste</label>
-                                    <textarea type="text" id="observacao" name="observacao" class="form-control" rows="3" maxlength="125" required></textarea>
+                                    <label for="negociacoes_reajustes">Negociações / Reajuste</label>
+                                    <textarea id="negociacoes_reajustes" name="negociacoes_reajustes" class="form-control" rows="3" maxlength="125"><?= $contrato['negociacoes_reajustes'] ?></textarea>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="nivel_risco">Nível de risco</label>
-                                    <textarea type="text" id="nivel_risco" name="nivel_risco" class="form-control" maxlength="250" rows="3" required></textarea>
+                                    <textarea id="nivel_risco" name="nivel_risco" class="form-control" maxlength="250" rows="3"><?= $contrato['nivel_de_risco'] ?></textarea>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="observacao">Observação *</label>
-                                    <textarea type="text" id="observacao" name="observacao" class="form-control" maxlength="250" rows="3" required></textarea>
+                                    <textarea id="observacao" name="observacao" class="form-control" maxlength="250" rows="3"><?= $contrato['observacao'] ?></textarea>
                                 </div>
                                 <div class="form-group col-md-3" style="margin-top: 25px">
                                     <label for="vencimento">Vencimento</label>
-                                    <input type="date" id="vencimento" name="vencimento" class="form-control" maxlength="60" readonly>
+                                    <input type="text" id="vencimento" name="vencimento" class="form-control" maxlength="60" readonly value="<?= exibirDataBr($contrato['vencimento']) ?>">
                                 </div>
                                 <div class="form-group col-md-3" style="margin-top: 25px">
                                     <label for="status">Status *</label>
                                     <select class="form-control" id="status" name="status">
                                         <option value="">Selecione...</option>
                                         <?php
-                                        geraOpcao("contrato_status")
+                                        geraOpcao("contrato_status", $contrato['contrato_status_id'])
                                         ?>
                                     </select>
                                 </div>
@@ -340,6 +472,9 @@ $contratos = recuperaDados("contratos", "id", $idContrato);
                         <!-- /.box-body -->
                         <div class="box-footer">
                             <input type="hidden" name="idContrato" value="<?= $idContrato ?>">
+                            <input type="hidden" name="tipoPessoa" value="<?= $tipoPessoa ?>">
+                            <input type="hidden" name="idPessoa" value="<?= $idPessoa ?>">
+                            <input type="hidden" name="idLicitacao" value="<?= $idLicitacao ?>">
                             <button type="submit" name="edita" class="btn btn-primary pull-right">Editar</button>
                         </div>
                     </form>
@@ -350,13 +485,26 @@ $contratos = recuperaDados("contratos", "id", $idContrato);
         </div>
         <!-- /.row -->
         <!-- END ACCORDION & CAROUSEL-->
-
     </section>
     <!-- /.content -->
 </div>
 
 
 <script>
+
+    $('#addInput').on('click', function(e) {
+        let i = $('.equipamentos').length;
+        $('.equipamentos').first().clone().find("select").attr('name', function(idx, attrVal) {
+            return attrVal.replace('[0]','')+'['+i+']';
+        }).end().insertBefore('.botoes');
+    });
+
+    $('#remInput').on('click', function(e) {
+        let i = $('.equipamentos').length;
+        if (i > 1){
+            $('.equipamentos').last().remove();
+        }
+    });
 
     $('#num_processo').mask('0000.0000/0000000-0', {reverse: true});
 
