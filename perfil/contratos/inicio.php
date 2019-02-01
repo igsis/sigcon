@@ -20,9 +20,11 @@ $licitacoes_homologadas = $conn->query($sqlHomologacao)->fetchAll();
 
 
 //Contratos com vencimento menor que 45 dias
-$sqlContrato = "SELECT cont.id, cont.licitacao_id, lici.numero_processo, lici.objeto, termo_contrato, tipo_pessoa_id, pessoa_id, vencimento, cont.publicado FROM contratos as cont LEFT JOIN licitacoes as lici ON cont.licitacao_id = lici.id WHERE cont.publicado = 1 ORDER BY vencimento";
-$contratos = $conn->query($sqlContrato)->fetchAll();
+$sqlContrato = "SELECT cont.id, cont.licitacao_id, lici.numero_processo, lici.objeto, termo_contrato, tipo_pessoa_id, pessoa_id, vencimento, cont.publicado 
+                FROM contratos as cont LEFT JOIN licitacoes as lici ON cont.licitacao_id = lici.id 
+                WHERE cont.publicado = 1 ORDER BY vencimento";
 
+$contratos = $conn->query($sqlContrato)->fetchAll();
 
 $contratosAvencer = [];
 
@@ -38,13 +40,14 @@ $contratosAvencer = [];
         if ($contrato['tipo_pessoa_id'] == 1) {
             $idPF = $contrato['pessoa_id'];
             $sqlPF = "SELECT nome FROM pessoa_fisicas WHERE id = '$idPF'";
-            $pessoa_fisica = $conn->query($sqlPF)->fetchAll();
+            $pessoa_fisica = $conn->query($sqlPF)->fetch();
+            $tipoPessoa = 1;
 
         }elseif ($contrato['tipo_pessoa_id'] == 2) {
             $idPJ = $contrato['pessoa_id'];
             $sqlPJ = "SELECT razao_social FROM pessoa_juridicas WHERE id = '$idPJ'";
-            $pessoa_juridica = $conn->query($sqlPJ)->fetchAll();
-
+            $pessoa_juridica = $conn->query($sqlPJ)->fetch();
+            $tipoPessoa = 2;
         }
     }
 
@@ -57,12 +60,6 @@ $qtdeAvencer = count($contratosAvencer);
     <!-- Main content -->
     <section class="content">
         <h2 class="page-header"><?= saudacao();?></h2>
-
-        <?php
-       // print_r($contratos);
-         echo $qtdeAvencer;
-        print_r($contratosAvencer); ?>
-
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-primary">
@@ -76,12 +73,11 @@ $qtdeAvencer = count($contratosAvencer);
                             if($qtdeAvencer > 0)
                             {
                                 ?>
-
-                                <table class='table table-striped table-bordered table-responsive list_info'>
+                                <table id="tblLicitacao" class="table table-bordered table-striped"'>
                                     <thead>
                                     <tr>
                                         <th>Nº SEI administrativo</th>
-                                        <th>Objeto</th>
+                                        <th>Proponente</th>
                                         <th>Termo de contrato</th>
                                         <th>Vencimento</th>
                                     </tr>
@@ -92,12 +88,28 @@ $qtdeAvencer = count($contratosAvencer);
                                         ?>
                                         <tr>
                                             <td><?= $contrato['numero_processo'] ?></td>
-                                            <td><?= $contrato['objeto'] ?></td>
+
+                                            <?php
+                                                if ($tipoPessoa == 1) {
+                                                    ?>
+
+                                                    <td><?= $pessoa_fisica['nome'] ?></td>
+
+                                                    <?php
+                                                }else {
+                                                    ?>
+
+                                                    <td><?= $pessoa_juridica['razao_social'] ?></td>
+
+                                                    <?php
+                                                }
+                                            ?>
+
                                             <td><?= $contrato['termo_contrato'] ?></td>
                                             <td><?= exibirDataBr($contrato['vencimento'])?></td>
                                             <td>
                                                 <form action="?perfil=contratos&p=contrato_edita" method='POST'>
-                                                    <input type="text" name='editarContrato' value='<?= $contrato['id'] ?>'>
+                                                    <input type="hidden" name='carregar' value='<?= $contrato['id'] ?>'>
                                                     <button type='submit' class='btn btn-info'> Carregar</button>
                                                 </form>
                                             </td>
@@ -135,7 +147,7 @@ $qtdeAvencer = count($contratosAvencer);
                             {
                                 ?>
 
-                                <table class='table table-striped table-bordered table-responsive list_info'>
+                                <table id="tblLicitacao" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
                                         <th>Nº SEI administrativo</th>
@@ -232,6 +244,25 @@ $qtdeAvencer = count($contratosAvencer);
         </div>
     </section>
 </div>
+
+<script defer src="../visual/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script defer src="../visual/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#tblLicitacao').DataTable({
+            "language": {
+                "url": 'bower_components/datatables.net/Portuguese-Brasil.json'
+            },
+            "responsive": true,
+            "dom": "<'row'<'col-sm-6'l><'col-sm-6 text-right'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7 text-right'p>>",
+        });
+    });
+
+</script>
 
 
 

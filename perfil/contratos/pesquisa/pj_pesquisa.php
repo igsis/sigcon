@@ -1,7 +1,6 @@
 <?php
 
 $con = bancoMysqli();
-include "includes/menu.php";
 
 if (isset($_POST['idLicitacao'])) {
     $idLicitacao = $_POST['idLicitacao'];

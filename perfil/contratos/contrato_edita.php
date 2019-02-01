@@ -7,8 +7,8 @@ $conn = bancoPDO();
 $tipoPessoa = $_POST['tipoPessoa'] ?? NULL;
 $idPessoa = $_POST['idPessoa'] ?? NULL;
 
-if(isset($_POST['editarContrato'])){
-    $id = $_POST['editarContrato'];
+if(isset($_POST['carregar'])){
+    $id = $_POST['carregar'];
     $idContrato = recuperaDados('contratos', 'id', $id)['id'];
 }
 
@@ -213,9 +213,13 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     }
 }
 
+$contrato = recuperaDados("contratos", "id", $idContrato);
+$idFiscal = $contrato['fiscal_id'];
+$idSuplente = $contrato['suplente_id'];
+
 $fiscal = recuperaDados("fiscais", "id", $idFiscal);
 $suplente = recuperaDados("suplentes", "id", $idSuplente);
-$contrato = recuperaDados("contratos", "id", $idContrato);
+
 $informacoes = recuperaDados("informacoes_do_contrato", "contrato_id", $idContrato);
 
 $sqlEquips = "SELECT * FROM contrato_equipamento WHERE contrato_id = '$idContrato'";
