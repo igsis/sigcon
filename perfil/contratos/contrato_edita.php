@@ -7,6 +7,11 @@ $conn = bancoPDO();
 $tipoPessoa = $_POST['tipoPessoa'] ?? NULL;
 $idPessoa = $_POST['idPessoa'] ?? NULL;
 
+if(isset($_POST['editarContrato'])){
+    $id = $_POST['editarContrato'];
+    $idContrato = recuperaDados('contratos', 'id', $id)['id'];
+}
+
 if ($tipoPessoa == 1) {
     $pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoa)['cpf'];
 
