@@ -249,8 +249,7 @@ $status = recuperaDados("licitacao_status","id",$licitacao['licitacao_status_id'
 
                         <div class="box-footer">
                             <input type="hidden" name="idLicitacao" value="<?= $idLicitacao ?>">
-                            <button type="submit" name="edita" class="btn btn-info pull-right">Editar</button>
-                            <button type="button" class="btn btn-danger pull-left" data-toggle="modal" data-target="#modal-danger">Cancelar</button>
+                            <button type="submit" name="edita" class="btn btn-info pull-right">Editar</button>                            
                         </div>
                     </form>
                 </div>
@@ -258,33 +257,6 @@ $status = recuperaDados("licitacao_status","id",$licitacao['licitacao_status_id'
             </div>
             <!-- /.col -->
         </div>
-        <!-- /.row -->
-        <!-- END ACCORDION & CAROUSEL-->
-        <!-- Confirmação de Exclusão -->
-        <div class="modal modal-danger fade" id="modal-danger">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Confirmação de cancelamento</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>Deseja realmente cancelar?<br/></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Voltar</button>
-                        <form method="POST" action="?perfil=administrativo&p=licitacao/licitacao_visualiza" role="form">
-                            <input type="hidden" name="idLicitacao" value="<?= $idLicitacao ?>">
-                            <button type="submit" name="apagar" class="btn btn-outline">Sim</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- Fim Confirmação de Exclusão -->
     </section>
     <!-- /.content -->
 </div>
