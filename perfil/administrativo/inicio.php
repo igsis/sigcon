@@ -39,98 +39,14 @@ $ordem_inicio = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE ord
     <!-- Main content -->
     <section class="content">
         <h2 class="page-header"><?= saudacao();?></h2>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="box box-primary">
-                    <div class="box-header with-border text-center">
-                        <h3 class="box-title text-bold">Listagem de licitações</h3>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <br/>
-                            <table class='table table-striped table-bordered table-responsive list_info'>
-                                <thead>
-                                <tr class='list_menu text-center text-purple text-bold'>
-                                    <td width='50%'>Status da licitação</td>
-                                    <td width='50%'>Total</td>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr class='list_description'>
-                                    <td>Licitação</td>
-                                    <td class='list_description'><?= $licitacoes['qtde'] ?> </td>
-                                </tr>
-                                <tr class='list_description'>
-                                    <td>Contrato</td>
-                                    <td class='list_description'><?= $contratos['qtde'] ?> </td>
-                                </tr>
-                                <tr class='list_description'>
-                                    <td>Cancelada</td>
-                                    <td class='list_description'><?= $canceladas['qtde'] ?> </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="chart-responsive">
-                            <canvas id="pieChart" style="height: 300px;"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <table class="table table-condensed">
-                            <tr>
-                                <td><i class="fa fa-circle-o text-red"></i> Levantamento de preço</td>
-                                <td><span class="pull-right text-red">2</span></td>
-                            </tr>
-                            <tr>
-                                <td><i class="fa fa-circle-o text-yellow"></i> Reserva</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><i class="fa fa-circle-o text-green"></i> Elaboração de edital</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><i class="fa fa-circle-o text-lime"></i> Análise edital</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><i class="fa fa-circle-o text-aqua"></i> Licitação</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><i class="fa fa-circle-o text-blue"></i> Homologação</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><i class="fa fa-circle-o text-purple"></i> Empenho</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><i class="fa fa-circle-o text-fuchsia"></i> Entrega</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td><i class="fa fa-circle-o text-muted"></i> Ordem de Início</td>
-                                <td></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-<!--Gráfico-->
+        <!--Gráfico-->
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">Gráfico</h3>
+                <h3 class="box-title">Resumo</h3>
             </div>
             <div class="box-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="chart-responsive">
                             <canvas id="pieChart" style="height: 300px;"></canvas>
                         </div>
@@ -139,39 +55,64 @@ $ordem_inicio = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE ord
                         <table class="table table-condensed">
                             <tr>
                                 <td><i class="fa fa-circle-o text-red"></i> Levantamento de preço</td>
-                                <td><span class="pull-right text-red">2</span></td>
+                                <td><span class="pull-right text-red"><?= $levantamento['qtde'] ?></span></td>
                             </tr>
                             <tr>
                                 <td><i class="fa fa-circle-o text-yellow"></i> Reserva</td>
-                                <td></td>
+                                <td><span class="pull-right text-yellow"><?= $reserva['qtde'] ?></span></td>
                             </tr>
                             <tr>
                                 <td><i class="fa fa-circle-o text-green"></i> Elaboração de edital</td>
-                                <td></td>
+                                <td><span class="pull-right text-green"><?= $elaboracao_edital['qtde'] ?></span></td>
                             </tr>
                             <tr>
                                 <td><i class="fa fa-circle-o text-lime"></i> Análise edital</td>
-                                <td></td>
+                                <td><span class="pull-right text-lime"><?= $analise_edital['qtde'] ?></span></td>
                             </tr>
                             <tr>
                                 <td><i class="fa fa-circle-o text-aqua"></i> Licitação</td>
-                                <td></td>
+                                <td><span class="pull-right text-aqua"><?= $licitacao['qtde'] ?></span></td>
                             </tr>
                             <tr>
                                 <td><i class="fa fa-circle-o text-blue"></i> Homologação</td>
-                                <td></td>
+                                <td><span class="pull-right text-blue"><?= $homologacao['qtde'] ?></span></td>
                             </tr>
                             <tr>
                                 <td><i class="fa fa-circle-o text-purple"></i> Empenho</td>
-                                <td></td>
+                                <td><span class="pull-right text-purple"><?= $empenho['qtde'] ?></span></td>
                             </tr>
                             <tr>
                                 <td><i class="fa fa-circle-o text-fuchsia"></i> Entrega</td>
-                                <td></td>
+                                <td><span class="pull-right text-fuchsia"><?= $entrega['qtde'] ?></span></td>
                             </tr>
                             <tr>
                                 <td><i class="fa fa-circle-o text-muted"></i> Ordem de Início</td>
-                                <td></td>
+                                <td><span class="pull-right text-muted"><?= $ordem_inicio['qtde'] ?></span></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-1"></div>
+
+                    <div class="col-md-3">
+                        <table class='table table-striped table-bordered table-responsive list_info'>
+                            <thead>
+                            <tr class='list_menu text-center text-purple text-bold'>
+                                <td width='50%'>Status da licitação</td>
+                                <td width='50%'>Total</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class='list_description'>
+                                <td>Licitação</td>
+                                <td class='list_description'><?= $licitacoes['qtde'] ?> </td>
+                            </tr>
+                            <tr class='list_description'>
+                                <td>Contrato</td>
+                                <td class='list_description'><?= $contratos['qtde'] ?> </td>
+                            </tr>
+                            <tr class='list_description'>
+                                <td>Cancelada</td>
+                                <td class='list_description'><?= $canceladas['qtde'] ?> </td>
                             </tr>
                         </table>
                     </div>
