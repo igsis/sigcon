@@ -98,6 +98,7 @@ $unidade = recuperaDados("unidades", "id", $idUnidade);
                         <!-- /.box-body -->
 
                         <div class="box-footer">
+                            <a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_unidade" class="btn btn-default">Voltar a Pesquisa</a>
                             <input type="hidden" name="idUnidade" value="<?= $idUnidade ?>">
                             <button type="submit" name="edita" class="btn btn-info pull-right">Editar</button>
                         </div>
