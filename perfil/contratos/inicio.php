@@ -73,7 +73,7 @@ $qtdeAvencer = count($contratosAvencer);
                             if($qtdeAvencer > 0)
                             {
                                 ?>
-                                <table id="tblLicitacao" class="table table-bordered table-striped"'>
+                                    <table id="tblLicitacao" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
                                         <th>Nº SEI administrativo</th>
@@ -90,23 +90,23 @@ $qtdeAvencer = count($contratosAvencer);
                                             <td><?= $contrato['numero_processo'] ?></td>
 
                                             <?php
-                                                if ($tipoPessoa == 1) {
-                                                    ?>
+                                            if ($tipoPessoa == 1) {
+                                                ?>
 
-                                                    <td><?= $pessoa_fisica['nome'] ?></td>
+                                                <td><?= $pessoa_fisica['nome'] ?></td>
 
-                                                    <?php
-                                                }else {
-                                                    ?>
+                                                <?php
+                                            } else {
+                                                ?>
 
-                                                    <td><?= $pessoa_juridica['razao_social'] ?></td>
+                                                <td><?= $pessoa_juridica['razao_social'] ?></td>
 
-                                                    <?php
-                                                }
+                                                <?php
+                                            }
                                             ?>
 
                                             <td><?= $contrato['termo_contrato'] ?></td>
-                                            <td><?= exibirDataBr($contrato['vencimento'])?></td>
+                                            <td><?= exibirDataBr($contrato['vencimento']) ?></td>
                                             <td>
                                                 <form action="?perfil=contratos&p=contrato_edita" method='POST'>
                                                     <input type="hidden" name='carregar' value='<?= $contrato['id'] ?>'>
@@ -118,7 +118,7 @@ $qtdeAvencer = count($contratosAvencer);
                                     }
                                     ?>
                                     </tbody>
-                                </table>
+                                    </table>
 
                                 <?php
                             }
