@@ -13,7 +13,7 @@ $queryHomologacao = mysqli_query($con, $sqlHomologacao);
 $num_homologadas = mysqli_num_rows($queryHomologacao);
 $licitacoes_homologadas = $conn->query($sqlHomologacao)->fetchAll();
 
-$sqlStatus2 = "SELECT * FROM licitacoes WHERE licitacao_status_id = 2";
+$sqlStatus2 = "SELECT * FROM contratos WHERE publicado = 1";
 $queryStatus2 = mysqli_query($con, $sqlStatus2);
 $qtde2 = mysqli_num_rows($queryStatus2);
 
