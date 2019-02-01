@@ -52,11 +52,11 @@ if(isset($_POST['login']))
 ?>
 
 <!DOCTYPE html>
-<html ng-app="sisContrat">
+<html ng-app="sigCon">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>SigCon| Log in</title>
+  <title>SigCon | Log in</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -100,10 +100,12 @@ if(isset($_POST['login']))
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <div class="row">
-                <div class="col-xs-8"></div>
+                <div class="col-xs-8">
+                    <a href="email.php">Esqueci minha Senha</a>
+                </div>
                 <!-- /.col -->
                 <div class="col-xs-4">
-                    <button type="submit" ng-disabled="!login.usuario || !login.senha" class="btn btn-primary btn-block btn-flat">Entrar</button>
+                    <button type="submit" ng-disabled="!login.usuario || !login.senha" class="btn btn-primary btn-block btn-flat">Enviar</button>
                 </div>
                 <!-- /.col -->
             </div>
