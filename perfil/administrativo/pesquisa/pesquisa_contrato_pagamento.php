@@ -15,8 +15,7 @@ $conn = bancoPDO();
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title text-left">Pesquisa de Pagamentos</h3>
-                        <a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_contrato_pagamento" class="text-right btn btn-success" style="float: right">Adicionar Pagamento</a>
+                        <h3 class="box-title text-left">Pesquisa de Contratos</h3>
                     </div>
 
                     <div class="row" align="center">
