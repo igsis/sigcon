@@ -1,22 +1,38 @@
 <?php
+$conn = bancoPDO();
 
-$con = bancoMysqli();
+$licitacoes = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE publicado = 1 AND licitacao_status_id = 1")->fetch();
 
-$sql = "SELECT * FROM licitacoes WHERE publicado = 1";
-$query = mysqli_query($con,$sql);
-$num = mysqli_num_rows($query);
+$contratos = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE publicado = 1 AND licitacao_status_id = 2")->fetch();
 
-$sqlStatus3 = "SELECT * FROM licitacoes WHERE licitacao_status_id = 3";
-$queryStatus3 = mysqli_query($con, $sqlStatus3);
-$qtde3 = mysqli_num_rows($queryStatus3);
+$canceladas = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE publicado = 1 AND licitacao_status_id = 3")->fetch();
 
-$sqlStatus2 = "SELECT * FROM licitacoes WHERE licitacao_status_id = 2";
-$queryStatus2 = mysqli_query($con, $sqlStatus2);
-$qtde2 = mysqli_num_rows($queryStatus2);
+// etapa de levantamento de preço
+$levantamento = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE levantamento_preco = 1 AND reserva = 0 AND publicado = 1 AND licitacao_status_id != 3")->fetch();
 
-$sqlStatus1 = "SELECT * FROM licitacoes WHERE licitacao_status_id = 1";
-$queryStatus1 = mysqli_query($con, $sqlStatus1);
-$qtde1 = mysqli_num_rows($queryStatus1);
+// etapa de reserva
+$reserva = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE reserva = 1 AND elaboracao_edital = 0 AND publicado = 1 AND licitacao_status_id != 3")->fetch();
+
+//
+$elaboracao_edital = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE elaboracao_edital = 1 AND analise_edital = 0 AND publicado = 1 AND licitacao_status_id != 3")->fetch();
+
+//
+$analise_edital = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE analise_edital = 1 AND licitacao = '0000-00-00' AND publicado = 1 AND licitacao_status_id != 3")->fetch();
+
+//
+$licitacao = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE licitacao != '0000-00-00' AND homologacao = 0 AND publicado = 1 AND licitacao_status_id != 3")->fetch();
+
+//
+$homologacao = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE homologacao = 1 AND empenho = 0 AND publicado = 1 AND licitacao_status_id != 3")->fetch();
+
+//
+$empenho = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE empenho = 1 AND entrega = 0 AND publicado = 1 AND licitacao_status_id != 3")->fetch();
+
+//
+$entrega = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE entrega = 1 AND ordem_inicio = '0000-00-00' AND publicado = 1 AND licitacao_status_id != 3")->fetch();
+
+//
+$ordem_inicio = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE ordem_inicio != '0000-00-00' AND publicado = 1 AND licitacao_status_id != 3")->fetch();
 ?>
 
 <div class="content-wrapper">
@@ -24,92 +40,85 @@ $qtde1 = mysqli_num_rows($queryStatus1);
     <section class="content">
         <h2 class="page-header"><?= saudacao();?></h2>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-4">
                 <div class="box box-primary">
                     <div class="box-header with-border text-center">
                         <h3 class="box-title text-bold">Listagem de licitações</h3>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <?php
-
-                            if($num > 0)
-                            {
-
-                                ?>
-
-                                <table class='table table-striped table-bordered table-responsive list_info'>
-                                    <thead>
-                                    <tr class='list_menu text-center text-purple text-bold'>
-                                        <td width='50%'>Status da licitação</td>
-                                        <td width='50%'>Total</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr class='list_description'>
-                                        <td>Total de licitações cadastradas</td>
-                                        <td class='list_description'><?= $num ?> </td>
-                                    </tr>
-                                    <tr class='list_description'>
-                                        <td>Total de licitações canceladas</td>
-                                        <td class='list_description'><?= $qtde1 ?> </td>
-                                    </tr>
-
-                                </table>
-
-                                <?php
-                            }
-                            else
-                            {
-                                echo "Não há resultado no momento.";
-                            }
-                            ?>
+                            <br/>
+                            <table class='table table-striped table-bordered table-responsive list_info'>
+                                <thead>
+                                <tr class='list_menu text-center text-purple text-bold'>
+                                    <td width='50%'>Status da licitação</td>
+                                    <td width='50%'>Total</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class='list_description'>
+                                    <td>Licitação</td>
+                                    <td class='list_description'><?= $licitacoes['qtde'] ?> </td>
+                                </tr>
+                                <tr class='list_description'>
+                                    <td>Contrato</td>
+                                    <td class='list_description'><?= $contratos['qtde'] ?> </td>
+                                </tr>
+                                <tr class='list_description'>
+                                    <td>Cancelada</td>
+                                    <td class='list_description'><?= $canceladas['qtde'] ?> </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box">
-                    <div class="box-header with-border text-center">
-                        <h3 class="box-title text-bold">Etapas</h3>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <?php
-
-                            if($num > 0)
-                            {
-                                ?>
-
-                                <table class='table table-striped table-bordered table-responsive list_info'>
-                                    <thead>
-                                    <tr class='list_menu text-center text-bold text-purple'>
-                                        <td width='50%'>Etapa da licitação</td>
-                                        <td width='50%'>Total </td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>Licitações que ainda não possuem contrato</td>
-                                        <td class='list_description'><?= $qtde3 ?></td>
-                                    </tr>
-                                    <tr><td>Licitações que possoem contrato</td>
-                                        <td class='list_description'><?= $qtde2 ?></td></tr>
-                                    <tr><td>Licitações canceladas</td>
-                                        <td class='list_description'><?= $qtde1 ?></td></tr>
-                                </table>
-
-                                <?php
-                            }
-                            else
-                            {
-                                echo "Não há resultado no momento.";
-                            }
-                            ?>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="chart-responsive">
+                            <canvas id="pieChart" style="height: 300px;"></canvas>
                         </div>
+                    </div>
+                    <div class="col-md-3">
+                        <table class="table table-condensed">
+                            <tr>
+                                <td><i class="fa fa-circle-o text-red"></i> Levantamento de preço</td>
+                                <td><span class="pull-right text-red">2</span></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-yellow"></i> Reserva</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-green"></i> Elaboração de edital</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-lime"></i> Análise edital</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-aqua"></i> Licitação</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-blue"></i> Homologação</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-purple"></i> Empenho</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-fuchsia"></i> Entrega</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-muted"></i> Ordem de Início</td>
+                                <td></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -119,25 +128,52 @@ $qtde1 = mysqli_num_rows($queryStatus1);
             <div class="box-header with-border">
                 <h3 class="box-title">Gráfico</h3>
             </div>
-            <?php
-// etapa de levantamento de preço
-            $conn = bancoPDO();
-
-            $sql_levantamento = $conn->query("SELECT count(id) AS qtde FROM licitacoes WHERE levantamento_preco = 1 AND reserva = 0 AND publicado = 1 AND licitacao_status_id != 3")->fetch();
-
-/*
-            $sql_levantamento = "SELECT count(id) AS qtde FROM licitacoes WHERE levantamento_preco = 1 AND reserva = 0 AND publicado = 1 AND licitacao_status_id != 3";
-            $query_levantamento = mysqli_query($con,$sql_levantamento);
-            $lev = mysqli_fetch_array($query_levantamento);
-*/
-            ?>
-            
             <div class="box-body">
                 <div class="row">
-                    <div class="col-md-8">
-                        <div class="chart-responsive"><?= $sql_levantamento['qtde'] ?>
-                            <canvas id="pieChart" style="height: 150px;"></canvas>
+                    <div class="col-md-6">
+                        <div class="chart-responsive">
+                            <canvas id="pieChart" style="height: 300px;"></canvas>
                         </div>
+                    </div>
+                    <div class="col-md-3">
+                        <table class="table table-condensed">
+                            <tr>
+                                <td><i class="fa fa-circle-o text-red"></i> Levantamento de preço</td>
+                                <td><span class="pull-right text-red">2</span></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-yellow"></i> Reserva</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-green"></i> Elaboração de edital</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-lime"></i> Análise edital</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-aqua"></i> Licitação</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-blue"></i> Homologação</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-purple"></i> Empenho</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-fuchsia"></i> Entrega</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-circle-o text-muted"></i> Ordem de Início</td>
+                                <td></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -145,38 +181,10 @@ $qtde1 = mysqli_num_rows($queryStatus1);
         </div>
     </section>
 </div>
-<?php
-// etapa de levantamento de preço
-$sql_levantamento = "SELECT count(id) FROM licitacoes WHERE levantamento_preco = 1 AND reserva = 0 AND publicado = 1 AND licitacao_status_id != 3";
-
-// etapa de reserva
-$sql_reserva = "SELECT count(id) FROM licitacoes WHERE reserva = 1 AND elaboracao_edital = 0 AND publicado = 1 AND licitacao_status_id != 3";
-
-//
-$sql_elaboracao_edital = "SELECT count(id) FROM licitacoes WHERE elaboracao_edital = 1 AND analise_edital = 0 AND publicado = 1 AND licitacao_status_id != 3";
-
-//
-$sql_analise_edital = "SELECT count(id) FROM licitacoes WHERE analise_edital = 1 AND licitacao = '0000-00-00' AND publicado = 1 AND licitacao_status_id != 3";
-
-//
-$sql_licitacao = "SELECT count(id) FROM licitacoes WHERE licitacao != '0000-00-00' AND homologacao = 0 AND publicado = 1 AND licitacao_status_id != 3";
-
-//
-$sql_homologacao = "SELECT count(id) FROM licitacoes WHERE homologacao = 1 AND empenho = 0 AND publicado = 1 AND licitacao_status_id != 3";
-
-//
-$sql_empenho = "SELECT count(id) FROM licitacoes WHERE empenho = 1 AND entrega = 0 AND publicado = 1 AND licitacao_status_id != 3";
-
-//
-$sql_entrega = "SELECT count(id) FROM licitacoes WHERE entrega = 1 AND ordem_inicio = '0000-00-00' AND publicado = 1 AND licitacao_status_id != 3";
-
-//
-$sql_ordem_inicio = "SELECT count(id) FROM licitacoes WHERE ordem_inicio != '0000-00-00' AND publicado = 1 AND licitacao_status_id != 3";
-?>
 
 <!-- ChartJS -->
 <script defer src="../visual/bower_components/chart.js/Chart.js"></script>
-<script defer>
+<script>
     $(function ()
     {
         //-------------
@@ -187,57 +195,57 @@ $sql_ordem_inicio = "SELECT count(id) FROM licitacoes WHERE ordem_inicio != '000
         let pieChart = new Chart(pieChartCanvas);
         let PieData = [
             {
-                value: 970,
-                color: '#f56954',
-                highlight: '#f56954',
-                label: 'Chrome'
+                value: <?= $levantamento['qtde'] ?>,
+                color: '#DD4B39',
+                highlight: '#DD4B39',
+                label: 'Levantamento de preço'
             },
             {
-                value: 500,
-                color: '#00a65a',
-                highlight: '#00a65a',
-                label: 'IE'
+                value: <?= $reserva['qtde'] ?>,
+                color: '#F39C12',
+                highlight: '#F39C12',
+                label: 'Reserva'
             },
             {
-                value: 400,
-                color: '#C48C19',
-                highlight: '#C48C19',
-                label: 'FireFox'
+                value: <?= $elaboracao_edital['qtde'] ?>,
+                color: '#07A85F',
+                highlight: '#07A85F',
+                label: 'Elaboração edital'
             },
             {
-                value: 600,
-                color: '#00c0ef',
-                highlight: '#00c0ef',
-                label: 'Safari'
+                value: <?= $analise_edital['qtde'] ?>,
+                color: '#13FF7A',
+                highlight: '#13FF7A',
+                label: 'Análise edital'
             },
             {
-                value: 300,
-                color: '#3c8dbc',
-                highlight: '#3c8dbc',
-                label: 'Opera'
+                value: <?= $licitacao['qtde'] ?>,
+                color: '#5BD6F5',
+                highlight: '#5BD6F5',
+                label: 'Licitação'
             },
             {
-                value: 100,
-                color: '#D13022',
-                highlight: '#D13022',
-                label: 'Navigator'
+                value: <?= $homologacao['qtde'] ?>,
+                color: '#1A81BE',
+                highlight: '#1A81BE',
+                label: 'Homologação'
             },
             {
-                value: 100,
-                color: '#F2B134',
-                highlight: '#F2B134',
+                value: <?= $empenho['qtde'] ?>,
+                color: '#9E9BCA',
+                highlight: '#9E9BCA',
                 label: 'Empenho'
             },
             {
-                value: 100,
-                color: '#5CDE8C',
-                highlight: '#5CDE8C',
+                value: <?= $entrega['qtde'] ?>,
+                color: '#F22AC5',
+                highlight: '#F22AC5',
                 label: 'Entrega'
             },
             {
-                value: 100,
-                color: '#d2d6de',
-                highlight: '#d2d6de',
+                value: <?= $ordem_inicio['qtde'] ?>,
+                color: '#9C9C9C',
+                highlight: '#9C9C9C',
                 label: 'Ordem de Início'
             }
         ];
