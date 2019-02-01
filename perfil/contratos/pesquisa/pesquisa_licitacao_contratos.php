@@ -2,130 +2,141 @@
 include "../perfil/includes/menu.php";
 $conn = bancoPDO();
 
-$licitacoes  = $conn->query("SELECT * FROM `licitacoes`")->fetchAll();
-$unidades    = $conn->query("SELECT * FROM `unidades`")->fetchAll();
-
-if(isset($_POST['pesquisaNumProcesso']) && '' != $_POST['numProcesso']){
-    $numProcesso  = $_POST['numProcesso'];
-    $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE numero_processo = :id");
-    $stmt->execute(['id' => $numProcesso ]);
-    $licitacoes = $stmt->fetchAll();
+if (isset($_POST['excluirLicitacao'])) {
+    $idLicitacao = $_POST['excluirLicitacao'];
+    $stmt = $conn->prepare("UPDATE`licitacoes` SET licitacao_status_id = '3' WHERE id = :id ");
+    $stmt->execute(['id' => $idLicitacao]);
+    if ($stmt->execute(['id' => $idLicitacao])) {
+        $mensagem = mensagem("success", "Licitação cancelada com sucesso!");
+        //gravarLog($sql);
+    } else {
+        $mensagem = mensagem("danger", "Erro ao cancelar licitação. Tente novamente!");
+    }
 }
 
-if(isset($_POST['pesquisaObjeto'])){
-    $objeto  = $_POST['objeto'];
-    $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE objeto LIKE :objeto ");
-    $stmt->execute(['objeto' => "%$objeto%" ]);
-    $licitacoes = $stmt->fetchAll();
-}
-
-
-if(isset($_POST['pesquisaUnidade']) && '0' != $_POST['unidade'] ){
-    $idUnidade  = $_POST['unidade'];
-    $stmt = $conn->prepare("SELECT * FROM `licitacoes` WHERE unidade_id = :unidade ");
-    $stmt->execute(['unidade' => $idUnidade ]);
-    $licitacoes = $stmt->fetchAll();   
-}
-
+$licitacoes = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1' AND empenho = '1' ")->fetchAll();
 ?>
-
 <div class="content-wrapper">
-
+    <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>Pesquisa Licitação </h1>
+        <h1>Cadastrar Contrato</h1>
     </section>
 
     <section class="content">
-        <div class="col-xs-12">
-            <div class="box-body">
-                <div class='col-md-6'>
-                
-                    <div class="form-group">
-                        <div class="form-group">
-                            <form method='POST'>
-                                <label for="exampleInputEmail1">Número do processo</label>
-                                <div class="input-group input-group-sm">
-                                    <input type="text" name='numProcesso' maxlength='19' minlength='19' class="form-control pull-right" placeholder="Buscar">
-                                    <div class="input-group-btn">
-                                        <button type="submit" name='pesquisaNumProcesso' class="btn btn-default"><i class="fa fa-search"></i></button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title text-left">Lista de Licitações</h3>
+                    
                     </div>
 
-                    <div class="form-group">
-                        <form method='POST'>
-                            <label for="exampleInputEmail1">Objeto</label>
-                            <div class="input-group input-group-sm">
-                                <input type="text" name="objeto" class="form-control pull-right" placeholder="Buscar">
-                                <div class="input-group-btn">
-                                    <button type="submit" name='pesquisaObjeto' class="btn btn-default"><i class="fa fa-search"></i></button>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="row" align="center">
+                        <?php if (isset($mensagem)) {
+                            echo $mensagem;
+                        }; ?>
                     </div>
-
-                    <div class="form-group">
-                        <form method='POST'>
-                            <label for="exampleInputEmail1">Unidade</label>
-                            <div class="input-group input-group-sm">
-                                <select class="form-control pull-right" name="unidade" id="">
-                                    <option value="0">Selecione a Unidade</option>
-                                    <?php 
-                                        foreach($unidades as $unidade){
-                                    ?>
-                                        <option value="<?= $unidade['id'] ?>"><?= $unidade['nome'] ?></option>
-                                    <?php 
-                                        }
-                                    ?>
-                                </select>
-                                
-                                <div class="input-group-btn">
-                                    <button type="submit" name='pesquisaUnidade' class="btn btn-default"><i class="fa fa-search"></i></button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="box">
-                <div class="box-header">
-                <h3 class="box-title">Pesquisa Licitação</h3>            
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover">
-                        <tbody>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="tblLicitacao" class="table table-bordered table-striped">
+                            <thead>
                             <tr>
-                                <th>Número do processo administrativo</th>
+                                <th>Nº SEI administrativo</th>
                                 <th>Objeto</th>
                                 <th>Unidade</th>
+                                <th>Status</th>
                                 <th>Editar</th>
+    
                             </tr>
-
-                            <?php 
-                                foreach ($licitacoes as $licitacao) {
-                                    $unidade = recuperaDados('unidades', 'id', $licitacao['unidade_id'] )['nome'];
-                            ?>
+                            </thead>
+                            <tbody>
+                            <?php
+                            foreach ($licitacoes as $licitacao) {
+                                $unidade = recuperaDados('unidades', 'id', $licitacao['unidade_id'])['nome'];
+                                $status = recuperaDados('licitacao_status', 'id', $licitacao['licitacao_status_id'])['status'];
+                                ?>
                                 <tr>
                                     <td><?= $licitacao['numero_processo'] ?></td>
                                     <td><?= $licitacao['objeto'] ?></td>
-                                    <td><?= $unidade ?></td> 
+                                    <td><?= $unidade ?></td>
+                                    <td><?= $status ?></td>
                                     <td>
                                         <form action="?perfil=contratos/tipo_pessoa" method='POST'>
                                             <input type="hidden" name='idLicitacao' value='<?= $licitacao['id'] ?>'>
                                             <button type='submit' class='btn btn-info'> Carregar </button>
                                         </form>
-                                    </td> 
+                                    </td>                                
                                 </tr>
-                            <?php  
-                                }                                
+                                <?php
+                            }
                             ?>
-                        </tbody>
-                    </table>
-                </div>                
-            </div>            
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Nº SEI administrativo</th>
+                                <th>Objeto</th>
+                                <th>Unidade</th>
+                                <th>Status</th>
+                                <th>Editar</th>                            
+                            </tr>
+                            </tfoot>
+
+                        </table>
+
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
         </div>
-    </section>    
+        <!-- /.row -->
+        <!--.modal-->
+        <div class="modal modal-danger fade in" id="excluirLicitacao" >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Cancelar Licitação</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Tem certeza que deseja cancelar a licitação? <span> </span> </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Sair</button>
+                        <form method='POST' id='formExcliuir'>
+                            <input type="hidden" name='excluirLicitacao' value="<?= $licitacao['id'] ?>" >
+                            <button type='submit' class="btn btn-outline"> Cancelar </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
+
+<script defer src="../visual/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script defer src="../visual/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+<script type="text/javascript">
+
+    $('#excluirLicitacao').on('show.bs.modal', (e) =>
+    {
+        document.querySelector('#excluirLicitacao .modal-body p span').innerHTML = ` ${e.relatedTarget.dataset.objeto}?`
+        document.querySelector('#formExcliuir input[name="excluirLicitacao"]').value = e.relatedTarget.dataset.id
+    });
+
+    $(function () {
+        $('#tblLicitacao').DataTable({
+            "language": {
+                "url": 'bower_components/datatables.net/Portuguese-Brasil.json'
+            },
+            "responsive": true,
+            "dom": "<'row'<'col-sm-6'l><'col-sm-6 text-right'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7 text-right'p>>",
+        });
+    });
+
+</script>
