@@ -183,7 +183,7 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="cnpj">CNPJ *</label>
-                                    <input type="text" data-mask="00.000.000/0000-00" minlength="18" class="form-control" id="cnpj" name="cnpj" value="<?= $pessoa_juridica['cnpj'] ?>" required>
+                                    <input type="text" data-mask="00.000.000/0000-00" minlength="18" class="form-control" id="cnpj" name="cnpj" value="<?= $pessoa_juridica['cnpj'] ?>" required onblur="validacao()">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
@@ -265,3 +265,79 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
         </div>
     </section>
 </div>
+
+
+<script>
+    function validarCNPJ(cnpj) {
+
+        // Elimina CNPJs invalidos conhecidos
+        if (cnpj == "00000000000000" ||
+            cnpj == "11111111111111" ||
+            cnpj == "22222222222222" ||
+            cnpj == "33333333333333" ||
+            cnpj == "44444444444444" ||
+            cnpj == "55555555555555" ||
+            cnpj == "66666666666666" ||
+            cnpj == "77777777777777" ||
+            cnpj == "88888888888888" ||
+            cnpj == "99999999999999")
+            return false;
+
+        // Valida DVs
+        tamanho = cnpj.length - 2
+        numeros = cnpj.substring(0,tamanho);
+        digitos = cnpj.substring(tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+        for (i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2)
+                pos = 9;
+        }
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado != digitos.charAt(0))
+            return false;
+
+        tamanho = tamanho + 1;
+        numeros = cnpj.substring(0,tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+        for (i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2)
+                pos = 9;
+        }
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado != digitos.charAt(1))
+            return false;
+
+        return true;
+
+    }
+
+    function validacao(){
+
+        var cnpj = document.querySelector('#cnpj').value
+
+        console.log(cnpj);
+
+        // tira os pontos do valor, ficando apenas os numeros
+        cnpj = cnpj.replace(/[^\d]+/g,'');
+
+        //console.log(cnpj);
+
+        var validado = validarCNPJ(cnpj);
+
+        //console.log(teste);
+
+        if(!validado){
+            alert('CNPJ inválido');
+
+            document.querySelector("#edita").disabled = true;
+        }else if(validado){
+            document.querySelector("#edita").disabled = false;
+        }
+    }
+
+
+</script>
