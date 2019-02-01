@@ -263,7 +263,7 @@ date_default_timezone_set("Brazil/East");
 		$idUser = $_SESSION['idUser'] ?? "0";
 		$ip = $_SERVER["REMOTE_ADDR"];
 		$data = date('Y-m-d H:i:s');
-		$sql = "INSERT INTO `log` (`id`, `idUsuario`, `enderecoIP`, `dataLog`, `descricao`)
+		$sql = "INSERT INTO `log` (`id`, `usuario_id`, `endereco_ip`, `data_log`, `descricao`)
 			VALUES (NULL, '$idUser', '$ip', '$data', '$logTratado')";
 		$mysqli = bancoMysqli();
 		$mysqli->query($sql);
@@ -1130,12 +1130,27 @@ function mensagem($tipo,$texto){
 	    ";
 }
 
-function callout($tipo,$texto){
+/**
+ * <p>Função cria um alerta do tipo callout</p>
+ * @param string $tipo
+ * <p>danger - info - warning - success</p>
+ * @param string $texto
+ * <p>Mensagem que será exibida no corpo do alerta</p>
+ * @return string
+ */
+function callout($tipo, $texto){
     return "<div class='callout callout-$tipo'>
                 <p> $texto </p>
             </div>";
 }
 
+/**
+ * <p>Função cria o corpo do email enviado para reset de senha</p>
+ * <p>Tutorial para configurar o xampp para envio de emails no link</p>
+ * @link https://stackoverflow.com/a/18185233
+ * @param string $token
+ * @return string
+ */
 function emailReset($token){
     $endereco = "http://".$_SERVER['SERVER_NAME']."/sigcon/reset.php?token=$token";
     $mensagem = "<h3>Recuperação de Senha SIGCON</h3>
