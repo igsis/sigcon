@@ -1,7 +1,22 @@
 <?php
 $conn = bancoPDO();
 
-//$pagamentos = $conn->query("")
+$sql = "SELECT  	co.id,
+                    li.numero_processo,
+                    co.termo_contrato,
+                    li.objeto,
+                    li.unidade_id,
+                    co.tipo_servico,
+                    co.tipo_pessoa_id,
+                    co.pessoa_id
+        FROM licitacoes as li INNER JOIN contratos as co on li.id = co.licitacao_id WHERE co.publicado = 1";
+
+$contratos = $conn->query($sql)->fetchAll();
+
+$queryCount = $conn->prepare($sql);
+$queryCount->execute();
+$count = $queryCount->rowCount();
+
 
 ?>
 <div class="content-wrapper">
@@ -31,22 +46,60 @@ $conn = bancoPDO();
                                 <th>Nº do processo administrativo</th>
                                 <th>CPF/CNPJ</th>
                                 <th>Nome/Razão social</th>
-                                <th>Valor</th>
-                                <th>Mês</th>
-                                <th></th>
+                                <th>Termo de Contrato</th>
+                                <th>Objeto</th>
+                                <th>Unidade</th>
+                                <th>Equipamento</th>
+                                <th>Tipo servoço</th>
+                                <th>Ação</th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php
+                            if ($count > 0) {
 
+                                foreach ($contratos as $contrato) {
+                                    $unidade = recuperaDados('unidades', 'id', $contrato['unidade_id'])['nome'];
+
+                                    $equipamentos = $conn->query("SELECT equipamento_id FROM contrato_equipamento WHERE contrato_id ='" . $contrato['id'] . "'");
+
+                                    $equipamento = recuperaDados('equipamentos', 'id', $equipamentos['equipamento_id'])['nome'];
+
+                                    if ($contrato['tipo_pessoa_id'] == 1) {
+
+                                        $pessoa = $conn->query("SELECT nome as nome, cpf as documento FROM pessoas_fisicas WHERE id = '" . $contrato['pessoa_id'] . "'")->fetchAll();
+
+                                    } else {
+                                        $pessoa = $conn->query("SELECT razao_social as nome, CNPJ as documento FROM pessoas_juridicas WHERE id='" . $contrato['pessoa_id'] . "'")->fetchAll();
+                                    }
+                                    ?>
+                                    <tr>
+                                        <form action="?perfil=administrativo&p=pagamentos&sp=pagamentos_cadastro"
+                                              method="post">
+                                            <td><?= $contrato['numero_processo'] ?></td>
+                                            <td><?= $pessoa['documento'] ?></td>
+                                            <td><?= $pessoa['nome'] ?></td>
+                                            <td><?= $contrato['termo_contrato'] ?></td>
+                                            <td><?= $contrato['objeto'] ?></td>
+                                            <td><?= $unidade ?></td>
+                                            <td><?= $equipamento ?></td>
+                                            <td><?= $contrato['tipo_servico'] ?></td>
+                                            <td>
+                                                <input type="hidden" name="idContrato" value="<?= $contrato['id'] ?>">
+                                                <button class="btn btn-primary" type="submit">Selecionar</button>
+                                            </td>
+                                        </form>
+                                    </tr>
+                                    <?php
+                                }
+                            } else {
                                 ?>
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td colspan="9" class="text-center">Não há contratos cadastrados</td>
                                 </tr>
+                                <?php
+                            }
+                            ?>
                             </tbody>
                             <tfoot>
                             <tr>
@@ -69,7 +122,7 @@ $conn = bancoPDO();
         </div>
         <!-- /.row -->
         <!--.modal-->
-        <div class="modal modal-danger fade in" id="excluirLicitacao" >
+        <div class="modal modal-danger fade in" id="excluirLicitacao">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -78,13 +131,13 @@ $conn = bancoPDO();
                         <h4 class="modal-title">Cancelar Licitação</h4>
                     </div>
                     <div class="modal-body">
-                        <p>Tem certeza que deseja cancelar a licitação? <span> </span> </p>
+                        <p>Tem certeza que deseja cancelar a licitação? <span> </span></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Sair</button>
                         <form method='POST' id='formExcliuir'>
-                            <input type="hidden" name='excluirLicitacao' value="<?= $licitacao['id'] ?>" >
-                            <button type='submit' class="btn btn-outline"> Cancelar </button>
+                            <input type="hidden" name='excluirLicitacao' value="<?= $licitacao['id'] ?>">
+                            <button type='submit' class="btn btn-outline"> Cancelar</button>
                         </form>
                     </div>
                 </div>
@@ -98,8 +151,7 @@ $conn = bancoPDO();
 
 <script type="text/javascript">
 
-    $('#excluirLicitacao').on('show.bs.modal', (e) =>
-    {
+    $('#excluirLicitacao').on('show.bs.modal', (e) => {
         document.querySelector('#excluirLicitacao .modal-body p span').innerHTML = ` ${e.relatedTarget.dataset.objeto}?`
         document.querySelector('#formExcliuir input[name="excluirLicitacao"]').value = e.relatedTarget.dataset.id
     });
