@@ -29,7 +29,7 @@ $con = bancoMysqli();
                     <div class="box-body">
                         <div class="row">
                             <div class="form-group col-md-offset-3 col-md-3">
-                                <form method="POST" action="?perfil=contratos/pf_pesquisa" role="form">
+                                <form method="POST" action="?perfil=contratos&p=pesquisa&sp=pf_pesquisa" role="form">
                                     <input type="hidden" name="idLicitacao" value="<?= $idLicitacao ?>">
                                     <button type="submit" name="pessoa_fisica" class="btn btn-block btn-primary btn-lg">Pessoa Física</button>
                                 </form>
