@@ -21,15 +21,15 @@ if (isset($_POST['documentacao'])) {
 
                     <form method="POST" action="?perfil=contratos&p=pesquisa&sp=pf_pesquisa" role="form">
                         <div class="box-body">
-                            <div class="row">
+                            <div class="row has-feedback">
                                 <div class="form-group col-md-4">
                                     <label for="nome_pf">Nome Completo *</label>
                                     <input type="text" class="form-control" id="nome_pf" name="nome_pf" maxlength="170" required>
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 has-feedback" id="divCPF">
                                     <label for="cpf">CPF *</label>
                                     <input type="text" data-mask="000.000.000-00" minlength="14" class="form-control" onblur="validacao()" id="cpf" name="cpf" value="<?= isset($cpf) ? $cpf : NULL ?>" required>
-<!--                                    <input type="text" name="validado" id="validado">-->
+                                    <span class="help-block" id="spanHelp"></span>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
@@ -127,10 +127,8 @@ if (isset($_POST['documentacao'])) {
     }
 
     function validacao(){
-
-        var strCPF = document.querySelector('#cpf').value
-
-        console.log(strCPF);
+        var divCPF = document.querySelector('#divCPF');
+        var strCPF = document.querySelector('#cpf').value;
 
         // tira os pontos do valor, ficando apenas os numeros
         strCPF = strCPF.replace(/[^0-9]/g, '');
@@ -144,10 +142,13 @@ if (isset($_POST['documentacao'])) {
         // document.querySelector('#validado').value = teste;
 
         if(!validado){
-            alert('CPF inválido');
+            divCPF.classList.add("has-error");
+            document.getElementById("spanHelp").innerHTML = "CPF Inválido";
 
             document.querySelector("#cadastrar").disabled = true;
         }else if(validado){
+            divCPF.classList.remove("has-error");
+            document.getElementById("spanHelp").innerHTML = "";
             document.querySelector("#cadastrar").disabled = false;
         }
     }
