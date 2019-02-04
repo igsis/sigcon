@@ -1,124 +1,87 @@
 <?php
-
+$conn = bancoPDO();
 $con = bancoMysqli();
 
-if (isset($_POST['idLicitacao'])) {
-    $idLicitacao = $_POST['idLicitacao'];
-}
+if (isset($_POST['excluir'])){
+    $idPessoaJuridica = $_POST['idPessoaJuridicaModal'];
 
-$exibir = ' ';
-$resultado = "<td></td>";
-
-if (isset($_POST['procurar'])){
-
-    $cnpj = $_POST['procurar'] ?? NULL;
-
-    if ($cnpj != NULL ) {
-
-        $queryCNPJ = "SELECT id, razao_social, cnpj, email
-                         FROM pessoa_juridicas
-                         WHERE cnpj = '$cnpj'";
-
-        if ($result = mysqli_query($con,$queryCNPJ)) {
-
-            $resultCNPJ = mysqli_num_rows($result);
-
-            if ($resultCNPJ > 0){
-
-                $exibir = true;
-                $resultado = "";
-
-                foreach($result as $pessoa){
-
-                    $resultado .= "<tr>";
-                    $resultado .= "<td>".$pessoa['razao_social']."</td>";
-                    $resultado .= "<td>".$pessoa['cnpj']."</td>";
-                    $resultado .= "<td>".$pessoa['email']."</td>";
-                    $resultado .= "<td>
-                                     <form action='?perfil=contratos/contrato_cadastro' method='post'>
-                                        <input type='hidden' name='idPj' value='".$pessoa['id']."'>
-                                        <input type='hidden' name='idLicitacao' value='".$idLicitacao."'>
-                                        <input type='submit' name='carregar' class='btn btn-primary' name='selecionar' value='Selecionar'>
-                                     </form>
-                               </td>";
-                    $resultado .= "</tr>";
-                }
-            }else {
-
-                $exibir = false;
-                $resultado = "<td colspan='4'>
-                        <span style='margin: 50% 40%;'>Sem resultados</span>
-                      </td>
-                      <td>
-                        <form method='post' action='?perfil=contratos/pj_cadastro'>
-                            <input type='hidden' name='documentacao' value='$cnpj'>
-                            <button class=\"btn btn-primary\" name='adicionar' type='submit'>
-                                <i class=\"glyphicon glyphicon-plus\">        
-                                </i>Adicionar
-                            </button>
-                        </form>
-                      </td>";
-
-            }
-        }
+    $sql = "UPDATE pessoa_juridicas SET publicado = 0 WHERE id = '$idPessoaJuridica'";
+    if (mysqli_query($con,$sql)){
+        $mensagem = mensagem("success","Pessoa Jurídica apagada com sucesso.");
+        gravarLog($sql);
+    }else{
+        $mensagem = mensagem("danger",die(mysqli_errno($con)));
     }
 }
 
+$pessoa_juridica = $conn->query('SELECT * FROM pessoa_juridicas WHERE publicado = 1')->fetchAll();
 ?>
 
-<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Main content -->
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Pesquisar
+        </h1>
+    </section>
+
     <section class="content">
-
-        <!-- START FORM-->
-        <h2 class="page-header">Contratos</h2>
-
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">Procurar pessoa jurídica</h3>
+                        <h3 class="box-title text-left">Lista de Pessoa Jurídica</h3>
+                        <a href="?perfil=administrativo&p=pessoa_juridica&sp=unidade_cadastro" class="text-right btn btn-success" style="float: right">Adicionar Unidade</a>
+                    </div>
+
+                    <div class="row" align="center">
+                        <?php if (isset($mensagem)) {
+                            echo $mensagem;
+                        }; ?>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <form action="?perfil=contratos&p=pesquisa&sp=pj_pesquisa" method="post">
-                            <div class="form-group">
-                                <label for="procurar">Pesquisar por CNPJ:</label>
-                                <div class="input-group">
-                                    <input type="text" data-mask="00.000.000/0000-00" class="form-control" minlength=14 name="procurar" id="cnpj" value="<?= isset($cnpj) ? $cnpj : NULL ?>">
-                                    <input type='hidden' name='idLicitacao' value="<?= $idLicitacao ?>">
-                                    <span class="input-group-btn">
-                                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i> Procurar</button>
-                                    </span>
-                                </div>
-                            </div>
-                        </form>
-
-                        <div class="panel panel-default">
-                            <!-- Default panel contents -->
-                            <!-- Table -->
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>Razão Social</th>
-                                    <th>CNPJ</th>
-                                    <th>E-mail</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php
-                                if ($exibir){
-                                    echo $resultado;
-                                }elseif(!$exibir){
-                                    echo $resultado;
-                                }else{
-                                    echo $resultado;
-                                }
+                        <table id="tblPj" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>Razão Social</th>
+                                <th>CNPJ</th>
+                                <th>E-mail</th>
+                                <th>Ação</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            foreach ($pessoa_juridica as $pj)
+                            {
                                 ?>
-                                </tbody>
-                            </table>
-                        </div>
+                                <tr>
+                                    <td><?=$pj['razao_social']?></td>
+                                    <td><?=$pj['cnpj']?></td>
+                                    <td><?=$pj['email']?></td>
+                                    <td>
+                                        <form action="?perfil=contratos&p=pessoa_juridica&sp=pj_edita" method="post">
+                                            <input type="hidden" name="idPessoaJuridica" id="idPessoaJuridica" value="<?=$pj['id']?>">
+                                            <input type="hidden" name="carregar" id="carregar">
+                                            <input class="btn btn-primary" type="submit" value="Editar">
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exclusao" data-nome="<?=$pj['razao_social']?>" data-id="<?=$pj['id']?>">Apagar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Razão Social</th>
+                                <th>CNPJ</th>
+                                <th>E-mail</th>
+                                <th>Ação</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+
                     </div>
                     <!-- /.box-body -->
                 </div>
@@ -127,7 +90,56 @@ if (isset($_POST['procurar'])){
             <!-- /.col -->
         </div>
         <!-- /.row -->
-        <!-- END ACCORDION & CAROUSEL-->
+        <!--.modal-->
+        <div id="exclusao" class="modal modal-danger modal fade in" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Confirmação de Exclusão</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Tem certeza que deseja excluir a pessoa jurídica?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <form action="?perfil=contratos&p=pesquisa&sp=pj_pesquisa" method="post">
+                            <input type="hidden" name="idPessoaJuridicaModal" id="idPessoaJuridicaModal" value="">
+                            <input type="hidden" name="apagar" id="apagar">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                            <input class="btn btn-danger btn-outline" type="submit" name="excluir" value="Apagar">
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </section>
     <!-- /.content -->
 </div>
+
+<script defer src="../visual/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script defer src="../visual/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+<script defer>
+    $(function () {
+        $('#tblPj').DataTable({
+            "language": {
+                "url": 'bower_components/datatables.net/Portuguese-Brasil.json'
+            },
+            "responsive": true,
+            "dom": "<'row'<'col-sm-6'l><'col-sm-6 text-right'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7 text-right'p>>",
+        });
+
+        $('#exclusao').on('show.bs.modal', function (e) {
+            let nome = $(e.relatedTarget).attr('data-nome');
+            let id = $(e.relatedTarget).attr('data-id');
+
+            $(this).find('p').text(`Tem certeza que deseja excluir a pessoa jurídica ${nome} ?`);
+            $(this).find('#idPessoaJuridicaModal').attr('value', `${id}`);
+        })
+    })
+</script>
