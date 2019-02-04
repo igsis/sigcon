@@ -28,9 +28,10 @@ if (isset($_POST['documentacao'])) {
                                     <label for="razao_social">Razão Social *</label>
                                     <input type="text" class="form-control" id="razao_social" name="razao_social" maxlength="170" required>
                                 </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-3 has-feedback" id="divCNPJ">
                                     <label for="cnpj">CNPJ *</label>
                                     <input type="text" data-mask="00.000.000/0000-00" minlength="18" class="form-control" id="cnpj" name="cnpj" value="<?= isset($cnpj) ? $cnpj : NULL?>" required onblur="validacao()">
+                                    <span class="help-block" id="spanHelp"></span>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cep">CEP *</label>
@@ -101,7 +102,10 @@ if (isset($_POST['documentacao'])) {
 
 <script>
     function validarCNPJ(cnpj) {
-
+        if (cnpj.length !== 14)
+        {
+            return false;
+        }
         // Elimina CNPJs invalidos conhecidos
         if (cnpj == "00000000000000" ||
             cnpj == "11111111111111" ||
@@ -148,25 +152,21 @@ if (isset($_POST['documentacao'])) {
     }
 
     function validacao(){
-
-        var cnpj = document.querySelector('#cnpj').value
-
-        console.log(cnpj);
+        var divCNPJ = document.querySelector('#divCNPJ');
+        var cnpj = document.querySelector('#cnpj').value;
 
         // tira os pontos do valor, ficando apenas os numeros
         cnpj = cnpj.replace(/[^\d]+/g,'');
 
-        //console.log(cnpj);
-
         var validado = validarCNPJ(cnpj);
 
-        //console.log(teste);
-
         if(!validado){
-            alert('CNPJ inválido');
-
+            divCNPJ.classList.add('has-error');
+            document.getElementById("spanHelp").innerHTML = "CNPJ Inválido";
             document.querySelector("#cadastra").disabled = true;
         }else if(validado){
+            divCNPJ.classList.remove('has-error');
+            document.getElementById("spanHelp").innerHTML = "";
             document.querySelector("#cadastra").disabled = false;
         }
     }

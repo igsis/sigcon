@@ -144,7 +144,6 @@ if (isset($_POST['documentacao'])) {
         if(!validado){
             divCPF.classList.add("has-error");
             document.getElementById("spanHelp").innerHTML = "CPF Inválido";
-
             document.querySelector("#cadastrar").disabled = true;
         }else if(validado){
             divCPF.classList.remove("has-error");
