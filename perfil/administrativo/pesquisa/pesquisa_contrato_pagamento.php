@@ -67,10 +67,10 @@ $count = $queryCount->rowCount();
 
                                     if ($contrato['tipo_pessoa_id'] == 1) {
 
-                                        $pessoa = $conn->query("SELECT nome as nome, cpf as documento FROM pessoas_fisicas WHERE id = '" . $contrato['pessoa_id'] . "'")->fetchAll();
+                                        $pessoa = $conn->query("SELECT nome as nome, cpf as documento FROM pessoa_fisicas WHERE id = '" . $contrato['pessoa_id'] . "'")->fetchAll();
 
                                     } else {
-                                        $pessoa = $conn->query("SELECT razao_social as nome, CNPJ as documento FROM pessoas_juridicas WHERE id='" . $contrato['pessoa_id'] . "'")->fetchAll();
+                                        $pessoa = $conn->query("SELECT razao_social as nome, CNPJ as documento FROM pessoa_juridicas WHERE id='" . $contrato['pessoa_id'] . "'")->fetchAll();
                                     }
                                     ?>
                                     <tr>

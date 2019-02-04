@@ -52,9 +52,9 @@ $count = $queryCount->rowCount();
                             if ($count>0) {
                                 foreach ($pagamentos as $pagamento) {
                                     if ($pagamento['pessoa_id'] == 1) {
-                                        $pessoa = $conn->query("SELECT nome, cpf as documento FROM pessoas_fisicas WHERE id='" . $pagamento['pessoa_id'] . "'")->fetchAll();
+                                        $pessoa = $conn->query("SELECT nome, cpf as documento FROM pessoa_fisicas WHERE id='" . $pagamento['pessoa_id'] . "'")->fetchAll();
                                     } else {
-                                        $pessoa = $conn->prepare("SELECT razao_social as nome, CNPJ as documento FROM pessoas_juridicas WHERE id='" . $pagamento['pessoa_id'] . "'")->fetchAll();
+                                        $pessoa = $conn->prepare("SELECT razao_social as nome, CNPJ as documento FROM pessoa_juridicas WHERE id='" . $pagamento['pessoa_id'] . "'")->fetchAll();
                                     }
                                     ?>
                                     <tr>
