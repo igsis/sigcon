@@ -74,7 +74,6 @@ $licitacoes = $conn->query("
                                 }
                                 ?>
                                 <tr>
-                                    <!--    @TODO: Terminar de colocar o resultado nos campos -->
                                     <td><?= $licitacao['numero_processo'] ?></td>
                                     <td><?= $licitacao['termo_contrato'] ?></td>
                                     <td><?= $licitacao['objeto'] ?></td>
@@ -137,7 +136,4 @@ $licitacoes = $conn->query("
                 "<'row'<'col-sm-5'i><'col-sm-7 text-right'p>>",
         });
     });
-
 </script>
-
-
