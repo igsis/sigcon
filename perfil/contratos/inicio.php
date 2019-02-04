@@ -20,7 +20,8 @@ $licitacoes_homologadas = $conn->query($sqlHomologacao)->fetchAll();
 
 
 //Contratos com vencimento menor que 45 dias
-$sqlContrato = "SELECT cont.id, cont.licitacao_id, lici.numero_processo, lici.objeto, termo_contrato, tipo_pessoa_id, pessoa_id, vencimento, cont.publicado 
+$sqlContrato = "SELECT cont.id, cont.licitacao_id, lici.numero_processo, lici.objeto, termo_contrato, 
+                tipo_pessoa_id, pessoa_id, vencimento, cont.publicado 
                 FROM contratos as cont LEFT JOIN licitacoes as lici ON cont.licitacao_id = lici.id 
                 WHERE cont.publicado = 1 ORDER BY vencimento";
 
@@ -73,7 +74,7 @@ $qtdeAvencer = count($contratosAvencer);
                             if($qtdeAvencer > 0)
                             {
                                 ?>
-                                    <table id="tblLicitacao" class="table table-bordered table-striped">
+                                    <table class='table table-striped table-bordered table-responsive list_info'>
                                     <thead>
                                     <tr>
                                         <th>Nº SEI administrativo</th>
@@ -110,6 +111,7 @@ $qtdeAvencer = count($contratosAvencer);
                                             <td>
                                                 <form action="?perfil=contratos&p=contrato_edita" method='POST'>
                                                     <input type="hidden" name='carregar' value='<?= $contrato['id'] ?>'>
+                                                    <input type="hidden" name="idLicitacao" value="<?= $contrato['licitacao_id'] ?>">
                                                     <button type='submit' class='btn btn-info'> Carregar</button>
                                                 </form>
                                             </td>
@@ -147,7 +149,7 @@ $qtdeAvencer = count($contratosAvencer);
                             {
                                 ?>
 
-                                <table id="tblLicitacao" class="table table-bordered table-striped">
+                                <table class='table table-striped table-bordered table-responsive list_info'>
                                     <thead>
                                     <tr>
                                         <th>Nº SEI administrativo</th>
