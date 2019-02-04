@@ -215,6 +215,7 @@ $queryPf = $con->query($sqlPf);
                                                 <form action="?perfil=contratos&p=contrato_cadastro"
                                                       method="post">
                                                     <input type="hidden" name="idPf" id="idPf" value="<?= $pf['id'] ?>">
+                                                    <input type="hidden" name="idLicitacao" id="idLicitacao" value="<?= $_POST['idLicitacao'] ?>">
                                                     <input type="hidden" name="carregar" id="carregar">
                                                     <input class="btn btn-warning" type="submit" value="Selecionar">
                                                 </form>
