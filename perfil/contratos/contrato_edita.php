@@ -4,20 +4,25 @@ include "../perfil/includes/menu.php";
 $con = bancoMysqli();
 $conn = bancoPDO();
 
-$tipoPessoa = $_POST['tipoPessoa'] ?? NULL;
-$idPessoa = $_POST['idPessoa'] ?? NULL;
+if (isset($_POST['idPf'])) {
+    $tipoPessoa = 1;
+    $idPessoa = $_POST['idPf'];
+
+    $pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoa)['cpf'];
+
+} elseif (isset($_POST['idPj'])) {
+    $tipoPessoa = 2;
+    $idPessoa = $_POST['idPj'];
+
+    $pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoa)['cnpj'];
+}
 
 if(isset($_POST['carregar'])){
     $id = $_POST['carregar'];
-    $idContrato = recuperaDados('contratos', 'id', $id)['id'];
-}
-
-if ($tipoPessoa == 1) {
-    $pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoa)['cpf'];
-
-} elseif ($tipoPessoa == 2) {
-    $pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoa)['cnpj'];
-
+    $contrato = recuperaDados('contratos', 'id', $id);
+    $idContrato = $contrato['id'];
+    $idPessoa = $contrato['pessoa_id'];
+    $tipoPessoa = $contrato['tipo_pessoa_id'];
 }
 
 $idLicitacao = $_POST['idLicitacao'];
@@ -369,7 +374,7 @@ $numEquips = mysqli_num_rows($queryEquips);
                                             <!-- Campo populado de acordo com a escolha da unidade -->
                                             <label for="equipamento">Equipamentos atendidos</label> <br>
                                             <select class="form-control" id="equipamento"
-                                                    name="equipamento[<?=$count++?>]">
+                                                    name="equipamento[0]">
                                                 <option value="">Selecione...</option>
                                                 <?php
                                                 geraOpcao("equipamentos");
@@ -500,6 +505,9 @@ $numEquips = mysqli_num_rows($queryEquips);
 
 
 <script>
+
+    var qtde = "<?=$count++?>";
+    var id = "<?=$equipamento['id']?>"
 
     $('#addInput').on('click', function(e) {
         let i = $('.equipamentos').length;

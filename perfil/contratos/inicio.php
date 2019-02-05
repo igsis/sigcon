@@ -112,6 +112,7 @@ $qtdeAvencer = count($contratosAvencer);
                                                 <form action="?perfil=contratos&p=contrato_edita" method='POST'>
                                                     <input type="hidden" name='carregar' value='<?= $contrato['id'] ?>'>
                                                     <input type="hidden" name="idLicitacao" value="<?= $contrato['licitacao_id'] ?>">
+                                                    <input type="text" name="tipoPessoa" value="<?= $contrato['tipo_pessoa_id'] ?>">
                                                     <button type='submit' class='btn btn-info'> Carregar</button>
                                                 </form>
                                             </td>
