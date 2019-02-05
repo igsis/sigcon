@@ -110,10 +110,10 @@ $qtdeAvencer = count($contratosAvencer);
                                             <td><?= exibirDataBr($contrato['vencimento']) ?></td>
                                             <td>
                                                 <form action="?perfil=contratos&p=contrato_edita" method='POST'>
-                                                    <input type="hidden" name='carregar' value='<?= $contrato['id'] ?>'>
+                                                    <input type="hidden" name='idContrato' value='<?= $contrato['id'] ?>'>
                                                     <input type="hidden" name="idLicitacao" value="<?= $contrato['licitacao_id'] ?>">
-                                                    <input type="text" name="tipoPessoa" value="<?= $contrato['tipo_pessoa_id'] ?>">
-                                                    <button type='submit' class='btn btn-info'> Carregar</button>
+                                                    <input type="hidden" name="tipoPessoa" value="<?= $contrato['tipo_pessoa_id'] ?>">
+                                                    <button type='submit' name="carregar" class='btn btn-info'> Carregar</button>
                                                 </form>
                                             </td>
                                         </tr>

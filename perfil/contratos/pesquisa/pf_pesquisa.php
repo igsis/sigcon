@@ -217,7 +217,7 @@ $queryPf = $con->query($sqlPf);
                                                     <input type="hidden" name="tipoPessoa" value="1">
                                                     <input type="hidden" name="idPf" id="idPf" value="<?= $pf['id'] ?>">
                                                     <input type="hidden" name="idLicitacao" id="idLicitacao" value="<?= $_POST['idLicitacao'] ?>">
-                                                    <input class="btn btn-warning" type="submit" value="Selecionar">
+                                                    <input class="btn btn-warning" name="selecionar" type="submit" value="Selecionar">
                                                 </form>
                                             </div>
                                             <?php

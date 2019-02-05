@@ -74,7 +74,7 @@ $pessoa_juridica = $conn->query('SELECT * FROM pessoa_juridicas WHERE publicado 
                                                     <input type="hidden" name="tipoPessoa" value="2">
                                                     <input type="hidden" name="idPj" id="idPj" value="<?= $pj['id'] ?>">
                                                     <input type="hidden" name="idLicitacao" id="idLicitacao" value="<?= $_POST['idLicitacao'] ?>">
-                                                    <input class="btn btn-warning" type="submit" value="Selecionar">
+                                                    <input class="btn btn-warning" name="selecionar" type="submit" value="Selecionar">
                                                 </form>
                                             </div>
                                             <?php

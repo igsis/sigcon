@@ -4,29 +4,41 @@ include "../perfil/includes/menu.php";
 $con = bancoMysqli();
 $conn = bancoPDO();
 
-if (isset($_POST['idPf'])) {
-    $tipoPessoa = 1;
-    $idPessoa = $_POST['idPf'];
-
-    $pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoa)['cpf'];
-
-} elseif (isset($_POST['idPj'])) {
-    $tipoPessoa = 2;
-    $idPessoa = $_POST['idPj'];
-
-    $pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoa)['cnpj'];
-}
-
-if(isset($_POST['carregar'])){
-    $id = $_POST['carregar'];
-    $contrato = recuperaDados('contratos', 'id', $id);
-    $idContrato = $contrato['id'];
-    $idPessoa = $contrato['pessoa_id'];
-    $tipoPessoa = $contrato['tipo_pessoa_id'];
-}
-
 $idLicitacao = $_POST['idLicitacao'];
 $licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
+
+if (isset($_POST['selecionar'])) {
+
+    if (isset($_POST['idPf'])) {
+        $tipoPessoa = 1;
+        $idPessoa = $_POST['idPf'];
+
+        $pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoa)['cpf'];
+
+    } elseif (isset($_POST['idPj'])) {
+        $tipoPessoa = 2;
+        $idPessoa = $_POST['idPj'];
+        $pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoa)['cnpj'];
+    }
+
+}
+
+
+if(isset($_POST['carregar'])){
+    $idContrato = $_POST['idContrato'];
+    $contrato = recuperaDados('contratos', 'id', $idContrato);
+    $idPessoa = $contrato['pessoa_id'];
+    $tipoPessoa = $contrato['tipo_pessoa_id'];
+
+    if ($tipoPessoa == 1) {
+        $pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoa)['cpf'];
+
+    }else {
+        $pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoa)['cnpj'];
+    }
+
+}
+
 
 if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $idContrato = $_POST['idContrato'] ?? NULL;
@@ -93,7 +105,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                              VALUES   ('$idLicitacao', 
                                                        '$termo_contrato',
                                                        '$tipo_servico',
-                                                       '$tipoPessoa',
+                                                       '$tipoPessoa', 
                                                        '$idPessoa',
                                                        '$idUnidade',
                                                        '$idFiscal',
@@ -278,7 +290,7 @@ $numEquips = mysqli_num_rows($queryEquips);
 
                                     <?php
 
-                                }else {
+                                }elseif ($tipoPessoa == 2) {
 
                                     ?>
 
