@@ -2,9 +2,17 @@
 include "../perfil/includes/menu.php";
 
 $con = bancoMysqli();
+$conn =bancoPDO();
+
+$idContrato = $_POST['idContrato'];
+$idPessoa = $_POST['pessoaId'];
+$tipoPessoa = $_POST['tipoPessoaId'];
+
+$sql = "SELECT li.numero_processo FROM licitacoes as li INNER JOIN contratos as co on li.id = co.licitacao_id WHERE co.id='$idContrato'";
+
+$numeroProcesso = $conn->query($sql)->fetch()['numero_processo'];
 
 ?>
-
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Main content -->
@@ -22,12 +30,12 @@ $con = bancoMysqli();
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=administrativo&p=pagamentos&sp=pagamento_editar" role="form">
+                    <form method="POST" action="?perfil=administrativo&p=pagamentos&sp=pagamento_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="nProcessoPagamento">Número do processo de pagamento *</label>
-                                    <input type="text" id="nProcessoPagamento" name="nProcessoPagamento" class="form-control" maxlength="19" placeholder="0000.0000/0000000-0">
+                                    <input type="text" id="nProcessoPagamento" name="nProcessoPagamento" class="form-control" maxlength="19" placeholder="0000.0000/0000000-0" readonly value="<?= $numeroProcesso?>">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="notaFiscal">Número da nota fiscal *</label>
@@ -69,6 +77,9 @@ $con = bancoMysqli();
 
                             <div class="box-footer">
                                 <a class="btn btn-default" onclick="window.history.back()">Voltar</a>
+                                <input type="hidden" name="idContrato" value="<?= $idContrato?>">
+                                <input type="hidden" name="pessoaId" value="<?= $idPessoa?>">
+                                <input type="hidden" name="tipoPessoaId" value="<?= $tipoPessoa?>">
                                 <button type="submit" name="cadastrar" class="btn btn-primary pull-right">Cadastrar</button>
                             </div>
                     </form>

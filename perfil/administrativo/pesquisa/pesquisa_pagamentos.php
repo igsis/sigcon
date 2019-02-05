@@ -51,20 +51,20 @@ $count = $queryCount->rowCount();
                             <?php
                             if ($count>0) {
                                 foreach ($pagamentos as $pagamento) {
-                                    if ($pagamento['pessoa_id'] == 1) {
-                                        $pessoa = $conn->query("SELECT nome, cpf as documento FROM pessoa_fisicas WHERE id='" . $pagamento['pessoa_id'] . "'")->fetchAll();
+                                    if ($pagamento['tipo_pessoa_id'] == 1) {
+                                        $fisica = recuperaDados("pessoa_fisicas","id",$pagamento['pessoa_id']);
                                     } else {
-                                        $pessoa = $conn->prepare("SELECT razao_social as nome, CNPJ as documento FROM pessoa_juridicas WHERE id='" . $pagamento['pessoa_id'] . "'")->fetchAll();
+                                        $juridica = recuperaDados("pessoa_juridicas","id",$pagamento['pessoa_id']);
                                     }
                                     ?>
                                     <tr>
                                         <td><?= $pagamento['numero_processo'] ?></td>
-                                        <td><?= $pessoa['documento'] ?></td>
-                                        <td><?= $pessoa['nome'] ?></td>
+                                        <td><?= ($pagamento['tipo_pessoa_id'] == 1)? $fisica['cpf']:$juridica['cnpj'] ?></td>
+                                        <td><?= ($pagamento['tipo_pessoa_id'] == 1)? $fisica['nome']:$juridica['razao_social'] ?></td>
                                         <td>
-                                            <form action="" method="post">
-                                                <input type="hidden" value="<?= $pagamento['id'] ?>">
-                                                <button class="btn btn-primary" type="submit">Visualizar</button>
+                                            <form action="?perfil=administrativo&p=pagamentos&sp=pagamento_edita" method="post">
+                                                <input type="hidden" name="idPagamento" value="<?= $pagamento['id'] ?>">
+                                                <button class="btn btn-primary" type="submit" name="visualizar">Visualizar</button>
                                             </form>
                                         </td>
                                     </tr>

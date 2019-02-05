@@ -1,5 +1,6 @@
 <?php
 $conn = bancoPDO();
+$con = bancoMysqli();
 
 $sql = "SELECT  	co.id,
                     li.numero_processo,
@@ -56,49 +57,47 @@ $count = $queryCount->rowCount();
                             </thead>
                             <tbody>
                             <?php
-                            if ($count > 0) {
+//                            if ($count > 0) {
 
                                 foreach ($contratos as $contrato) {
-                                    $unidade = recuperaDados('unidades', 'id', $contrato['unidade_id'])['nome'];
+                                    $unidade = recuperaDados("unidades","id",$contrato['unidade_id'])['nome'];
 
-                                    $equipamentos = $conn->query("SELECT equipamento_id FROM contrato_equipamento WHERE contrato_id ='" . $contrato['id'] . "'");
-
-                                    $equipamento = recuperaDados('equipamentos', 'id', $equipamentos['equipamento_id'])['nome'];
+                                    $equipamento = recuperaDados("equipamentos","id","SELECT equipamento_id FROM contrato_equipamento WHERE contrato_id = ".$contrato['id'].")")['nome'];
 
                                     if ($contrato['tipo_pessoa_id'] == 1) {
-
-                                        $pessoa = $conn->query("SELECT nome as nome, cpf as documento FROM pessoa_fisicas WHERE id = '" . $contrato['pessoa_id'] . "'")->fetchAll();
-
+                                        $fisica = recuperaDados("pessoa_fisicas","id",$contrato['pessoa_id']);
                                     } else {
-                                        $pessoa = $conn->query("SELECT razao_social as nome, CNPJ as documento FROM pessoa_juridicas WHERE id='" . $contrato['pessoa_id'] . "'")->fetchAll();
+                                        $juridica = recuperaDados("pessoa_juridicas","id",$contrato['pessoa_id']);
                                     }
                                     ?>
                                     <tr>
-                                        <form action="?perfil=administrativo&p=pagamentos&sp=pagamentos_cadastro"
+                                        <form action="?perfil=administrativo&p=pagamentos&sp=pagamento_cadastro"
                                               method="post">
                                             <td><?= $contrato['numero_processo'] ?></td>
-                                            <td><?= $pessoa['documento'] ?></td>
-                                            <td><?= $pessoa['nome'] ?></td>
+                                            <td><?= ($contrato['tipo_pessoa_id'] == 1)? $fisica['cpf']:$juridica['cnpj'] ?></td>
+                                            <td><?= ($contrato['tipo_pessoa_id'] == 1)? $fisica['nome']:$juridica['razao_social'] ?></td>
                                             <td><?= $contrato['termo_contrato'] ?></td>
                                             <td><?= $contrato['objeto'] ?></td>
                                             <td><?= $unidade ?></td>
-                                            <td><?= $equipamento ?></td>
+                                            <td></td>
                                             <td><?= $contrato['tipo_servico'] ?></td>
                                             <td>
                                                 <input type="hidden" name="idContrato" value="<?= $contrato['id'] ?>">
+                                                <input type="hidden" name="tipoPessoaId" value="<?= $contrato['tipo_pessoa_id'] ?>">
+                                                <input type="hidden" name="pessoaId" value="<?= $contrato['pessoa_id'] ?>">
                                                 <button class="btn btn-primary" type="submit">Selecionar</button>
                                             </td>
                                         </form>
                                     </tr>
                                     <?php
                                 }
-                            } else {
-                                ?>
-                                <tr>
-                                    <td colspan="9" class="text-center">Não há contratos cadastrados</td>
-                                </tr>
-                                <?php
-                            }
+//                            } else {
+//                                ?>
+<!--                                <tr>-->
+<!--                                    <td colspan="9" class="text-center">Não há contratos cadastrados</td>-->
+<!--                                </tr>-->
+<!--                                --><?php
+//                            }
                             ?>
                             </tbody>
                             <tfoot>
@@ -106,8 +105,12 @@ $count = $queryCount->rowCount();
                                 <th>Nº do processo administrativo</th>
                                 <th>CPF/CNPJ</th>
                                 <th>Nome/Razão social</th>
-                                <th>Pagamentos</th>
-                                <th>Adicionar</th>
+                                <th>Termo de Contrato</th>
+                                <th>Objeto</th>
+                                <th>Unidade</th>
+                                <th>Equipamento</th>
+                                <th>Tipo servoço</th>
+                                <th>Ação</th>
                             </tr>
                             </tfoot>
 
