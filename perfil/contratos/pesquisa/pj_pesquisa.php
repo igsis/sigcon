@@ -2,6 +2,10 @@
 $conn = bancoPDO();
 $con = bancoMysqli();
 
+if (isset($_POST['idLicitacao'])) {
+    $idLicitacao = $_POST['idLicitacao'];
+}
+
 if (isset($_POST['excluir'])){
     $idPessoaJuridica = $_POST['idPessoaJuridicaModal'];
 
@@ -60,12 +64,33 @@ $pessoa_juridica = $conn->query('SELECT * FROM pessoa_juridicas WHERE publicado 
                                     <td><?=$pj['cnpj']?></td>
                                     <td><?=$pj['email']?></td>
                                     <td>
-                                        <form action="?perfil=contratos&p=pessoa_juridica&sp=pj_edita" method="post">
-                                            <input type="hidden" name="idPessoaJuridica" id="idPessoaJuridica" value="<?=$pj['id']?>">
-                                            <input type="hidden" name="carregar" id="carregar">
-                                            <input class="btn btn-primary" type="submit" value="Editar">
-                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exclusao" data-nome="<?=$pj['razao_social']?>" data-id="<?=$pj['id']?>">Apagar</button>
-                                        </form>
+                                        <?php
+                                        if (isset($_POST['idLicitacao']))
+                                        {
+                                            ?>
+                                            <div id="FormSelecionar" style="float: left; padding: 5px;">
+                                                <form action="?perfil=contratos&p=contrato_cadastro"
+                                                      method="post">
+                                                    <input type="hidden" name="idPj" id="idPj" value="<?= $pj['id'] ?>">
+                                                    <input type="hidden" name="idLicitacao" id="idLicitacao" value="<?= $_POST['idLicitacao'] ?>">
+                                                    <input type="hidden" name="carregar" id="carregar">
+                                                    <input class="btn btn-warning" type="submit" value="Selecionar">
+                                                </form>
+                                            </div>
+                                            <?php
+                                        }
+                                        ?>
+                                        <div id="FormAcao" style="padding: 5px;">
+                                            <form action="?perfil=contratos&p=pessoa_juridica&sp=pj_edita" method="post">
+                                                <input type="hidden" name="idPj" id="idPj" value="<?= $pj['id'] ?>">
+                                                <input type="hidden" name="carregar" id="carregar">
+                                                <input class="btn btn-info" type="submit" value="Editar">
+                                                <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                        data-target="#exclusao" data-nome="<?= $pj['nome'] ?>"
+                                                        data-id="<?= $pj['id'] ?>">Apagar
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                                 <?php

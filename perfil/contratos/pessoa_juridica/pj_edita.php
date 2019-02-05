@@ -3,9 +3,7 @@
 $con = bancoMysqli();
 $conn = bancoPDO();
 
-if(isset($_POST['idPessoaJuridica'])){
-    $idPessoaJuridica = $_POST['idPessoaJuridica'];
-}
+$idPessoaJuridica = $_POST['idPj'];
 
 if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $idPessoaJuridica = $_POST['idPessoaJuridica'] ?? NULL;
