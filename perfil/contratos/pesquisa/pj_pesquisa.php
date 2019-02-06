@@ -35,7 +35,7 @@ $pessoa_juridica = $conn->query('SELECT * FROM pessoa_juridicas WHERE publicado 
                 <div class="box">
                     <div class="box-header">
                         <h3 class="box-title text-left">Lista de Pessoa Jurídica</h3>
-                        <a href="?perfil=administrativo&p=pessoa_juridica&sp=unidade_cadastro" class="text-right btn btn-success" style="float: right">Adicionar Unidade</a>
+                        <a href="?perfil=contratos&p=pessoa_juridica&sp=pj_cadastro" class="text-right btn btn-success" style="float: right">Adicionar Pessoa Jurídica</a>
                     </div>
 
                     <div class="row" align="center">
@@ -86,7 +86,7 @@ $pessoa_juridica = $conn->query('SELECT * FROM pessoa_juridicas WHERE publicado 
                                                 <input type="hidden" name="carregar" id="carregar">
                                                 <input class="btn btn-info" type="submit" value="Editar">
                                                 <button type="button" class="btn btn-danger" data-toggle="modal"
-                                                        data-target="#exclusao" data-nome="<?= $pj['nome'] ?>"
+                                                        data-target="#exclusao" data-nome="<?= $pj['razao_social'] ?>"
                                                         data-id="<?= $pj['id'] ?>">Apagar
                                                 </button>
                                             </form>
