@@ -37,8 +37,8 @@
             <li class="treeview">
                 <a href=""> <i class="fa fa-circle-o text-lime"></i> <span>Pagamento</span> <i class="fa fa-angle-left pull-right"></i> </a>
                 <ul class="treeview-menu">
-                    <li><a href=""><i class="fa fa-circle-o text-lime"></i> <span>Cadastrar</span></a></li>
-                    <li><a href=""><i class="fa fa-circle-o text-lime"></i> <span>Pesquisar</span></a></li>
+                    <li><a href="?perfil=contratos&p=pagamentos&sp=pagamento_cadastro"><i class="fa fa-circle-o text-lime"></i> <span>Cadastrar</span></a></li>
+                    <li><a href="?perfil=contratos&p=pesquisa&sp=pesquisa_pagamentos"><i class="fa fa-circle-o text-lime"></i> <span>Pesquisar</span></a></li>
                 </ul>
             </li>
             <li class="header">MAIS</li>
