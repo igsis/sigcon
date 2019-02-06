@@ -202,8 +202,8 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-4">
-                                    <label for="logradouro">Rua</label>
-                                    <input type="text" class="form-control" id="logradouro" name="logradouro" maxlength="200" readonly value="<?= $pj_endereco['logradouro'] ?>">
+                                    <label for="rua">Rua</label>
+                                    <input type="text" class="form-control" id="rua" name="logradouro" maxlength="200" readonly value="<?= $pj_endereco['logradouro'] ?>">
                                 </div>
                                 <div class="form-group col-md-1">
                                     <label for="numero">Número *</label>
@@ -222,8 +222,8 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                     <input type="text" class="form-control" id="cidade" name="cidade" readonly value="<?= $pj_endereco['cidade'] ?>">
                                 </div>
                                 <div class="form-group col-md-1">
-                                    <label for="uf">Estado</label>
-                                    <input type="text" class="form-control" id="uf" name="uf" readonly value="<?= $pj_endereco['estado'] ?>">
+                                    <label for="estado">Estado</label>
+                                    <input type="text" class="form-control" id="estado" name="uf" readonly value="<?= $pj_endereco['estado'] ?>">
                                 </div>
                             </div>
 

@@ -41,8 +41,8 @@ if (isset($_POST['documentacao'])) {
 
                             <div class="row">
                                 <div class="form-group col-md-4">
-                                    <label for="logradouro">Rua</label>
-                                    <input type="text" class="form-control" id="logradouro" name="logradouro" maxlength="200" readonly>
+                                    <label for="rua">Rua</label>
+                                    <input type="text" class="form-control" id="rua" name="logradouro" maxlength="200" readonly>
                                 </div>
                                 <div class="form-group col-md-1">
                                     <label for="numero">Número *</label>
@@ -61,8 +61,8 @@ if (isset($_POST['documentacao'])) {
                                     <input type="text" class="form-control" id="cidade" name="cidade" readonly>
                                 </div>
                                 <div class="form-group col-md-1">
-                                    <label for="uf">Estado</label>
-                                    <input type="text" class="form-control" id="uf" name="uf" readonly>
+                                    <label for="estado">Estado</label>
+                                    <input type="text" class="form-control" id="estado" name="uf" readonly>
                                 </div>
                             </div>
 
