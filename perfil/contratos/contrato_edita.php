@@ -13,12 +13,10 @@ if (isset($_POST['selecionar'])) {
         $tipoPessoa = 1;
         $idPessoa = $_POST['idPf'];
 
-        $pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoa)['cpf'];
 
     } elseif (isset($_POST['idPj'])) {
         $tipoPessoa = 2;
         $idPessoa = $_POST['idPj'];
-        $pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoa)['cnpj'];
     }
 
 }
@@ -42,6 +40,8 @@ if(isset($_POST['carregar'])){
 
 if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $idContrato = $_POST['idContrato'] ?? NULL;
+    $tipoPessoa = $_POST['tipoPessoa'] ?? NULL;
+    $idPessoa = $_POST['idPessoa'] ?? NULL;
     $termo_contrato = $_POST['termo_contrato'] ?? NULL;
     $tipo_servico = $_POST['tipo_servico'] ?? NULL;
     $objeto = $_POST['objeto'] ?? NULL;
@@ -162,8 +162,6 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
     if (isset($_POST['edita'])){
 
-        print_r ($equipamentos);
-
         foreach ($equipamentos as $idEquip => $equipamento) {
               $sqlEquips = "UPDATE contrato_equipamento SET
                                        equipamento_id = '$equipamento'
@@ -229,6 +227,9 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                     }
     }
 }
+
+$pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoa)['cpf'];
+$pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoa)['cnpj'];
 
 $contrato = recuperaDados("contratos", "id", $idContrato);
 $idFiscal = $contrato['fiscal_id'];
