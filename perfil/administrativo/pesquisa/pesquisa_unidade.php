@@ -9,7 +9,7 @@ if (isset($_POST['excluir'])){
 
     $sql = "UPDATE unidades SET publicado = 0 WHERE id = '$idUnidade'";
     if (mysqli_query($con,$sql)){
-        $mensagem = mensagem("success","Uniadde apagada com sucesso.");
+        $mensagem = mensagem("success","Unidade apagada com sucesso.");
         gravarLog($sql);
     }else{
         $mensagem = mensagem("danger",die(mysqli_errno($con)));

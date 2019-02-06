@@ -20,6 +20,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $analise_edital = isset($_POST['analise_edital']) ? 1 : 0;
     $licitacao = $_POST['licitacao'];
     $obs_licitacao = $_POST['obs_licitacao'] ?? NULL;
+
     $homologacao = isset($_POST['homologacao']) ? 1 : 0;
     $obs_homologacao = $_POST['obs_homologacao'] ?? NULL;
     $empenho = isset($_POST['empenho']) ? 1 : 0;
