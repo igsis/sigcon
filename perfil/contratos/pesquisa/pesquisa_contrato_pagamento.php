@@ -71,7 +71,7 @@ $count = $queryCount->rowCount();
                                     }
                                     ?>
                                     <tr>
-                                        <form action="?perfil=administrativo&p=pagamentos&sp=pagamento_cadastro"
+                                        <form action="?perfil=contratos&p=pagamentos&sp=pagamento_cadastro"
                                               method="post">
                                             <td><?= $contrato['numero_processo'] ?></td>
                                             <td><?= ($contrato['tipo_pessoa_id'] == 1)? $fisica['cpf']:$juridica['cnpj'] ?></td>

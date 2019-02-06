@@ -30,7 +30,7 @@ $numeroProcesso = $conn->query($sql)->fetch()['numero_processo'];
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=administrativo&p=pagamentos&sp=pagamento_edita" role="form">
+                    <form method="POST" action="?perfil=contratos&p=pagamentos&sp=pagamento_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-6">

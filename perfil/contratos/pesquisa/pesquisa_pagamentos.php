@@ -27,7 +27,7 @@ $count = $queryCount->rowCount();
                 <div class="box">
                     <div class="box-header">
                         <h3 class="box-title text-left">Pesquisa de Pagamentos</h3>
-                        <a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_contrato_pagamento"
+                        <a href="?perfil=contratos&p=pesquisa&sp=pesquisa&sp=pesquisa_contrato_pagamento"
                            class="text-right btn btn-success" style="float: right">Adicionar Pagamento</a>
                     </div>
 
@@ -62,7 +62,7 @@ $count = $queryCount->rowCount();
                                         <td><?= ($pagamento['tipo_pessoa_id'] == 1)? $fisica['cpf']:$juridica['cnpj'] ?></td>
                                         <td><?= ($pagamento['tipo_pessoa_id'] == 1)? $fisica['nome']:$juridica['razao_social'] ?></td>
                                         <td>
-                                            <form action="?perfil=administrativo&p=pagamentos&sp=pagamento_edita" method="post">
+                                            <form action="?perfil=contratos&p=pagamentos&sp=pagamento_edita" method="post">
                                                 <input type="hidden" name="idPagamento" value="<?= $pagamento['id'] ?>">
                                                 <button class="btn btn-primary" type="submit" name="visualizar">Visualizar</button>
                                             </form>

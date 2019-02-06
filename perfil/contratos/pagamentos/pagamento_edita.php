@@ -83,12 +83,12 @@ if (isset($_POST['visualizar'])){
                     ?>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=administrativo&p=pagamentos&sp=pagamento_edita" role="form">
+                    <form method="POST" action="?perfil=contratos&p=pagamentos&sp=pagamento_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="nProcessoPagamento">Número do processo de pagamento *</label>
-                                    <input type="text" id="nProcessoPagamento" name="nProcessoPagamento" class="form-control" maxlength="19" placeholder="0000.0000/0000000-0" value="<?= $numeroProcesso?>" disabled>
+                                    <input type="text" id="nProcessoPagamento" name="nProcessoPagamento" class="form-control" maxlength="19" placeholder="0000.0000/0000000-0" value="<?= $numeroProcesso?>" readonly>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="notaFiscal">Número da nota fiscal *</label>
