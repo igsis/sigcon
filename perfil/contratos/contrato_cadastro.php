@@ -15,11 +15,18 @@ $conn = bancoPDO();
 
         $pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoa)['cpf'];
 
+        $_SESSION['tipoPessoa'] = $tipoPessoa;
+        $_SESSION['idPessoa'] = $idPessoa;
+
     } elseif (isset($_POST['idPj'])) {
         $tipoPessoa = 2;
         $idPessoa = $_POST['idPj'];
 
         $pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoa)['cnpj'];
+
+
+        $_SESSION['tipoPessoa'] = $tipoPessoa;
+        $_SESSION['idPessoa'] = $idPessoa;
     }
 
 ?>

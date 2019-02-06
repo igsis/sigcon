@@ -4,6 +4,10 @@ include "../perfil/includes/menu.php";
 $con = bancoMysqli();
 $conn = bancoPDO();
 
+
+$tipoPessoa = $_SESSION['tipoPessoa'];
+$idPessoa = $_SESSION['idPessoa'];
+
 $idLicitacao = $_POST['idLicitacao'];
 $licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
 
@@ -70,14 +74,14 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                            publicado)
                                   VALUES  ('$fiscal', 
                                            '$contatoFiscal',
-                                           '1')";
+                                           '1');";
 
         $sqlSuplente = "INSERT INTO suplentes (nome_suplente, 
                                            contato_suplente, 
                                            publicado)
                                   VALUES  ('$suplente', 
                                            '$contatoSuplente',
-                                           '1')";
+                                           '1');";
 
         if (mysqli_query($con, $sqlSuplente) && mysqli_query($con, $sqlFiscal)) {
 
