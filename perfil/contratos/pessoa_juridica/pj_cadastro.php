@@ -24,7 +24,7 @@ if (isset($_POST['documentacao'])) {
                     <form method="POST" action="?perfil=contratos&p=pessoa_juridica&sp=pj_edita" role="form">
                         <div class="box-body">
                             <div class="row">
-                                <div class="form-group col-md-5">
+                                <div class="form-group col-md-7">
                                     <label for="razao_social">Razão Social *</label>
                                     <input type="text" class="form-control" id="razao_social" name="razao_social" maxlength="170" required>
                                 </div>
@@ -37,38 +37,39 @@ if (isset($_POST['documentacao'])) {
                                     <label for="cep">CEP *</label>
                                     <input type="text" class="form-control" id="cep" name="cep" data-mask="00000-000" minlength="9" required>
                                 </div>
-                                <div class="form-group col-md-2">
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label for="logradouro">Rua</label>
+                                    <input type="text" class="form-control" id="logradouro" name="logradouro" maxlength="200" readonly>
+                                </div>
+                                <div class="form-group col-md-1">
                                     <label for="numero">Número *</label>
                                     <input type="number" class="form-control" id="numero" name="numero" required>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-5">
-                                    <label for="logradouro">Rua</label>
-                                    <input type="text" class="form-control" id="rua" name="logradouro" maxlength="200" readonly>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="bairro">Bairro</label>
-                                    <input type="text" class="form-control" id="bairro" name="bairro" readonly>
+                                <div class="form-group col-md-2">
+                                    <label for="complemento">Complemento</label>
+                                    <input type="text" class="form-control" id="complemento" name="complemento" maxlength="25">
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label for="uf">Estado</label>
-                                    <input type="text" class="form-control" id="estado" name="uf" readonly>
+                                    <label for="bairro">Bairro</label>
+                                    <input type="text" class="form-control" id="bairro" name="bairro" readonly>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cidade">Cidade</label>
                                     <input type="text" class="form-control" id="cidade" name="cidade" readonly>
                                 </div>
+                                <div class="form-group col-md-1">
+                                    <label for="uf">Estado</label>
+                                    <input type="text" class="form-control" id="uf" name="uf" readonly>
+                                </div>
                             </div>
 
                             <div class="row">
-                                <div class="form-group col-md-5">
+                                <div class="form-group col-md-4">
                                     <label for="email">E-mail * </label>
                                     <input type="email" class="form-control" id="email" name="email" maxlength="60" required>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="complemento">Complemento</label>
-                                    <input type="text" class="form-control" id="complemento" name="complemento" maxlength="25">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="telefone">Telefone #1 * </label>
@@ -78,19 +79,16 @@ if (isset($_POST['documentacao'])) {
                                     <label for="celular">Telefone #2 </label>
                                     <input type="text" data-mask="(00) 00000-0000" class="form-control" id="celular" name="telefone[1]">
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="form-group col-md-2">
                                     <label for="recado">Telefone #3 </label>
                                     <input type="text" data-mask="(00) 00000-0000" class="form-control" id="recado" name="telefone[2]">
                                 </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-2">
                                     <label for="contato">Contato na empresa *</label>
                                     <input type="text" class="form-control" id="contato" name="contato" maxlength="150" required>
                                 </div>
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-default">Cancelar</button>
                                 <button type="submit" name="cadastra" id="cadastra" class="btn btn-primary pull-right" disabled="true"> Cadastrar </button>
                             </div>
                     </form>

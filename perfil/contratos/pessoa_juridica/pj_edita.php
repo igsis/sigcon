@@ -187,7 +187,7 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                     <form method="POST" action="?perfil=contratos&p=pessoa_juridica&sp=pj_edita" role="form">
                         <div class="box-body">
                             <div class="row">
-                                <div class="form-group col-md-5">
+                                <div class="form-group col-md-7">
                                     <label for="razao_social">Razão Social *</label>
                                     <input type="text" class="form-control" id="razao_social" name="razao_social" maxlength="170" value="<?= $pessoa_juridica['razao_social'] ?>" required>
                                 </div>
@@ -199,39 +199,38 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                     <label for="cep">CEP *</label>
                                     <input type="text" class="form-control" id="cep" name="cep" data-mask="00000-000" minlength="9" value="<?= $pj_endereco['cep'] ?>" required>
                                 </div>
-                                <div class="form-group col-md-2">
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-4">
+                                    <label for="logradouro">Rua</label>
+                                    <input type="text" class="form-control" id="logradouro" name="logradouro" maxlength="200" readonly value="<?= $pj_endereco['logradouro'] ?>">
+                                </div>
+                                <div class="form-group col-md-1">
                                     <label for="numero">Número *</label>
                                     <input type="number" class="form-control" id="numero" name="numero" value="<?= $pj_endereco['numero'] ?>" required>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-5">
-                                    <label for="logradouro">Rua</label>
-                                    <input type="text" class="form-control" id="rua" name="logradouro" maxlength="200" readonly value="<?= $pj_endereco['logradouro'] ?>">
+                                <div class="form-group col-md-2">
+                                    <label for="complemento">Complemento </label>
+                                    <input type="text" class="form-control" id="complemento" name="complemento" maxlength="25" value="<?= $pj_endereco['complemento'] ?>">
                                 </div>
-
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-2">
                                     <label for="bairro">Bairro</label>
                                     <input type="text" class="form-control" id="bairro" name="bairro" readonly value="<?= $pj_endereco['bairro'] ?>">
-                                </div>
-
-                                <div class="form-group col-md-2">
-                                    <label for="uf">Estado</label>
-                                    <input type="text" class="form-control" id="estado" name="uf" readonly value="<?= $pj_endereco['estado'] ?>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="cidade">Cidade</label>
                                     <input type="text" class="form-control" id="cidade" name="cidade" readonly value="<?= $pj_endereco['cidade'] ?>">
                                 </div>
+                                <div class="form-group col-md-1">
+                                    <label for="uf">Estado</label>
+                                    <input type="text" class="form-control" id="uf" name="uf" readonly value="<?= $pj_endereco['estado'] ?>">
+                                </div>
                             </div>
+
                             <div class="row">
-                                <div class="form-group col-md-5">
+                                <div class="form-group col-md-4">
                                     <label for="email">E-mail * </label>
                                     <input type="email" class="form-control" id="email" name="email" maxlength="60" value="<?= $pessoa_juridica['email'] ?>" required>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="complemento">Complemento </label>
-                                    <input type="text" class="form-control" id="complemento" name="complemento" maxlength="25" value="<?= $pj_endereco['complemento'] ?>">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="telefone">Telefone #1 * </label>
@@ -239,23 +238,19 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="celular">Telefone #2 </label>
-                                    <?php if (isset($arrayTelefones[2])) {
-                                        ?>
+                                    <?php
+                                    if (isset($arrayTelefones[2])) {
+                                    ?>
                                         <input type="text" data-mask="(00)00000-0000" class="form-control" id="celular" name="telefone[<?= $arrayTelefones[1]['id'] ?>]" value="<?= $arrayTelefones[1]['telefone']; ?>">
-
-                                        <?php
+                                    <?php
                                     } else {
-                                        ?>
-
+                                    ?>
                                         <input type="text" data-mask="(00) 00000-0000" class="form-control" id="celular" name="telefone2">
-
-                                        <?php
+                                    <?php
                                     }
                                     ?>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2">
                                     <label for="recado">Telefone #3</label>
                                     <?php if (isset($arrayTelefones[2])) {
                                         ?>
@@ -271,15 +266,14 @@ $pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
                                     }
                                     ?>
                                 </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-2">
                                     <label for="contato">Contato na empresa: </label>
                                     <input type="text" class="form-control" id="contato" name="contato" maxlength="150" value="<?= $pessoa_juridica['contato'] ?>" required>
                                 </div>
                             </div>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-default">Cancelar</button>
                                 <input type="hidden" name="idPessoaJuridica" value="<?= $idPessoaJuridica ?>">
-                                <button type="submit" name="edita" id="edita" class="btn btn-primary pull-right"> Salvar </button>
+                                <button type="submit" name="edita" id="edita" class="btn btn-primary pull-right"> Gravar </button>
                             </div>
                     </form>
                 </div>
