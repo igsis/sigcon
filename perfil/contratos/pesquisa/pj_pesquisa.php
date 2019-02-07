@@ -6,6 +6,97 @@ if (isset($_POST['idLicitacao'])) {
     $idLicitacao = $_POST['idLicitacao'];
 }
 
+if (isset($_POST['cadastra']))
+{
+    $idPessoaJuridica = $_POST['idPessoaJuridica'] ?? NULL;
+    $razao_social = addslashes($_POST['razao_social']);
+    $cnpj = $_POST['cnpj'];
+    $email = $_POST['email'];
+    $telefones = $_POST['telefone'];
+    $cep = $_POST['cep'];
+    $logradouro = $_POST['logradouro'];
+    $bairro = $_POST['bairro'];
+    $numero = $_POST['numero'];
+    $complemento = $_POST['complemento'] ?? NULL;
+    $uf = $_POST['uf'];
+    $cidade = $_POST['cidade'];
+    $contato = $_POST['contato'];
+    // cadastrar endereco de pj
+
+    $sqlConsultaPj = "SELECT `id` FROM `pessoa_juridicas` WHERE `cnpj` = '$cnpj'";
+    if ($con->query($sqlConsultaPj)->num_rows == 0)
+    {
+        $sqlEndereco = "INSERT INTO enderecos
+                                        (cep,
+                                         logradouro,
+                                         bairro,
+                                         cidade,
+                                         estado,
+                                         numero,
+                                         complemento)
+                                  VALUES ('$cep',
+                                          '$logradouro',
+                                          '$bairro',
+                                          '$cidade',
+                                          '$uf',
+                                          '$numero',
+                                          '$complemento')";
+
+        if (mysqli_query($con, $sqlEndereco)) {
+
+            gravarLog($sqlEndereco);
+
+            $endereco_id = recuperaUltimo("enderecos");
+
+            $sql = "INSERT INTO pessoa_juridicas
+                                    (razao_social,
+                                     cnpj,
+                                     email,
+                                     contato,
+                                     endereco_id,
+                                     publicado)
+                              VALUES ('$razao_social',
+                                      '$cnpj',
+                                      '$email',
+                                      '$contato',
+                                      '$endereco_id',
+                                      '1')";
+
+            if (mysqli_query($con, $sql)) {
+
+                $idPessoaJuridica = recuperaUltimo('pessoa_juridicas');
+
+                foreach ($telefones as $telefone) {
+                    if ($telefone != '') {
+                        // cadastrar o telefone de pj
+                        $sqlTelefone = "INSERT INTO pj_telefones
+                                          (pessoa_juridica_id,
+                                           telefone)
+                                  VALUES  ('$idPessoaJuridica',
+                                           '$telefone')";
+
+
+                        if (mysqli_query($con, $sqlTelefone)) {
+
+                            gravarLog($sqlTelefone);
+
+                            $mensagem = mensagem("success", "Cadastrado com sucesso!");
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
+        }
+    }
+    else
+    {
+        $mensagem = mensagem("danger", "CNPJ já cadastrado no sistema.");
+    }
+}
+
 if (isset($_POST['excluir'])){
     $idPessoaJuridica = $_POST['idPessoaJuridicaModal'];
 

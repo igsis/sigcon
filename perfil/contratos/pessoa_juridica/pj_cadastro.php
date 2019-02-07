@@ -21,7 +21,7 @@ if (isset($_POST['documentacao'])) {
                         <h3 class="box-title">Informações Pessoa Jurídica</h3>
                     </div>
 
-                    <form method="POST" action="?perfil=contratos&p=pessoa_juridica&sp=pj_edita" role="form">
+                    <form method="POST" action="?perfil=contratos&p=pesquisa&sp=pj_pesquisa" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-7">

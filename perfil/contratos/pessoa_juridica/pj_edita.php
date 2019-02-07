@@ -7,8 +7,7 @@ if(isset($_POST['idPj'])){
     $idPessoaJuridica = $_POST['idPj'];
 }
 
-
-if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
+if (isset($_POST['edita'])) {
     $idPessoaJuridica = $_POST['idPessoaJuridica'] ?? NULL;
     $razao_social = addslashes($_POST['razao_social']);
     $cnpj = $_POST['cnpj'];
@@ -23,119 +22,50 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $cidade = $_POST['cidade'];
     $contato = $_POST['contato'];
 
-    if (isset($_POST['cadastra'])) {
-        // cadastrar endereco de pj
-        $sqlEndereco = "INSERT INTO enderecos
-                                    (cep,
-                                     logradouro,
-                                     bairro,
-                                     cidade,
-                                     estado,
-                                     numero,
-                                     complemento)
-                              VALUES ('$cep',
-                                      '$logradouro',
-                                      '$bairro',
-                                      '$cidade',
-                                      '$uf',
-                                      '$numero',
-                                      '$complemento')";
-
-        if (mysqli_query($con, $sqlEndereco)) {
-
-            gravarLog($sqlEndereco);
-
-            $endereco_id = recuperaUltimo("enderecos");
-
-            $sql = "INSERT INTO pessoa_juridicas
-                                (razao_social,
-                                 cnpj,
-                                 email,
-                                 contato,
-                                 endereco_id,
-                                 publicado)
-                          VALUES ('$razao_social',
-                                  '$cnpj',
-                                  '$email',
-                                  '$contato',
-                                  '$endereco_id',
-                                  '1')";
-
-            if (mysqli_query($con, $sql)) {
-
-                $idPessoaJuridica = recuperaUltimo('pessoa_juridicas');
-
-                foreach ($telefones as $telefone) {
-                    if ($telefone != '') {
-                        // cadastrar o telefone de pj
-                        $sqlTelefone = "INSERT INTO pj_telefones
-                                      (pessoa_juridica_id,
-                                       telefone)
-                              VALUES  ('$idPessoaJuridica',
-                                       '$telefone')";
-
-
-                        if (mysqli_query($con, $sqlTelefone)) {
-
-                            gravarLog($sqlTelefone);
-
-                            $mensagem = mensagem("success", "Cadastrado com sucesso!");
-                        }
-                    }
-                }
-            }
-        } else {
-            $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
-
-        }
-    }
-
-    if (isset($_POST['edita'])) {
-
-        $sql = "UPDATE pessoa_juridicas SET
+    $sql = "UPDATE pessoa_juridicas SET
                                  razao_social = '$razao_social',
                                  cnpj = '$cnpj',
                                  email = '$email',
                                  contato = '$contato'
                           WHERE id = '$idPessoaJuridica'";
 
-        $pj = recuperaDados('pessoa_juridicas', 'id', $idPessoaJuridica);
-        $endereco_id = $pj['endereco_id'];
+    $pj = recuperaDados('pessoa_juridicas', 'id', $idPessoaJuridica);
+    $endereco_id = $pj['endereco_id'];
 
-        if (isset($_POST['telefone2'])) {
-            $telefone2 = $_POST['telefone2'];
-            $sqlTelefone2 = "INSERT INTO pj_telefones (pessoa_juridica_id, telefone) VALUES ('$idPessoaJuridica', '$telefone2')";
-            $query = mysqli_query($con, $sqlTelefone2);
-        }
+    if (isset($_POST['telefone2'])) {
+        $telefone2 = $_POST['telefone2'];
+        $sqlTelefone2 = "INSERT INTO pj_telefones (pessoa_juridica_id, telefone) VALUES ('$idPessoaJuridica', '$telefone2')";
+        $query = mysqli_query($con, $sqlTelefone2);
+    }
 
-        if (isset($_POST['telefone3'])) {
-            $telefone3 = $_POST['telefone3'];
-            $sqlTelefone3 = "INSERT INTO pj_telefones (pessoa_juridica_id, telefone) VALUES ('$idPessoaJuridica', '$telefone3')";
-            $query = mysqli_query($con, $sqlTelefone3);
-        }
+    if (isset($_POST['telefone3'])) {
+        $telefone3 = $_POST['telefone3'];
+        $sqlTelefone3 = "INSERT INTO pj_telefones (pessoa_juridica_id, telefone) VALUES ('$idPessoaJuridica', '$telefone3')";
+        $query = mysqli_query($con, $sqlTelefone3);
+    }
 
-        if (mysqli_query($con, $sql)) {
+    if (mysqli_query($con, $sql)) {
 
-            foreach ($telefones as $idTelefone => $telefone) {
+        foreach ($telefones as $idTelefone => $telefone) {
 
-                if (!strlen($telefone)) {
-                    // Deletar telefone do banco se for apagado.
-                    $sqlDelete = "DELETE FROM pj_telefones WHERE id = '$idTelefone'";
-                    mysqli_query($con, $sqlDelete);
-                    gravarLog($sqlDelete);
-                }
-
-                if ($telefone != '') {
-                    // editar o telefone de pj
-                    $sqlTelefone = "UPDATE  pj_telefones SET
-                                          telefone = '$telefone'
-                                  WHERE id = '$idTelefone'";
-                    mysqli_query($con, $sqlTelefone);
-                    gravarLog($sqlTelefone);
-                }
+            if (!strlen($telefone)) {
+                // Deletar telefone do banco se for apagado.
+                $sqlDelete = "DELETE FROM pj_telefones WHERE id = '$idTelefone'";
+                mysqli_query($con, $sqlDelete);
+                gravarLog($sqlDelete);
             }
 
-            $sqlEndereco = "UPDATE enderecos SET
+            if ($telefone != '') {
+                // editar o telefone de pj
+                $sqlTelefone = "UPDATE  pj_telefones SET
+                                          telefone = '$telefone'
+                                  WHERE id = '$idTelefone'";
+                mysqli_query($con, $sqlTelefone);
+                gravarLog($sqlTelefone);
+            }
+        }
+
+        $sqlEndereco = "UPDATE enderecos SET
                                   cep = '$cep',
                                   logradouro = '$logradouro',
                                   estado= '$uf',
@@ -145,18 +75,18 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                   complemento = '$complemento'
                                   WHERE id = '$endereco_id'";
 
-            if (mysqli_query($con, $sqlEndereco)) {
+        if (mysqli_query($con, $sqlEndereco)) {
 
-                $mensagem = mensagem("success", "Atualizado com sucesso!");
+            $mensagem = mensagem("success", "Atualizado com sucesso!");
 
-                //gravarLog($sql);
-            } else {
-                $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
-                //gravarLog($sql);
-            }
+            //gravarLog($sql);
+        } else {
+            $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
+            //gravarLog($sql);
         }
     }
 }
+
 
 $sqlTelefones = "SELECT * FROM pj_telefones WHERE pessoa_juridica_id = '$idPessoaJuridica'";
 $arrayTelefones = $conn->query($sqlTelefones)->fetchAll();
@@ -272,6 +202,7 @@ $pj_endereco = recuperaDados("enderecos", "id", $pessoa_juridica['endereco_id'])
                                 </div>
                             </div>
                             <div class="box-footer">
+                                <a href="?perfil=contratos&p=pesquisa&sp=pj_pesquisa" class="btn btn-default">Voltar a Pesquisa</a>
                                 <input type="hidden" name="idPessoaJuridica" value="<?= $idPessoaJuridica ?>">
                                 <button type="submit" name="edita" id="edita" class="btn btn-primary pull-right"> Gravar </button>
                             </div>
