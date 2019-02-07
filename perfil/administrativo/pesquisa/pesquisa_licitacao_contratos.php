@@ -1,4 +1,5 @@
 <?php
+include "../perfil/includes/menu.php";
 $conn = bancoPDO();
 
 if (isset($_POST['excluirLicitacao'])) {
@@ -13,12 +14,12 @@ if (isset($_POST['excluirLicitacao'])) {
     }
 }
 
-$licitacoes = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1'")->fetchAll();
+$licitacoes = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1' AND empenho = '1' ")->fetchAll();
 ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <h1>Pesquisar</h1>
+        <h1>Cadastrar Contrato</h1>
     </section>
 
     <section class="content">
@@ -27,8 +28,6 @@ $licitacoes = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1'")->
                 <div class="box">
                     <div class="box-header">
                         <h3 class="box-title text-left">Lista de Licitações</h3>
-                        <a href="?perfil=administrativo&p=licitacao&sp=licitacao_cadastro"
-                           class="text-right btn btn-success" style="float: right">Adicionar Licitação</a>
                     </div>
 
                     <div class="row" align="center">
@@ -46,7 +45,7 @@ $licitacoes = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1'")->
                                 <th>Unidade</th>
                                 <th>Status</th>
                                 <th>Editar</th>
-                                <th>Cancelar</th>
+    
                             </tr>
                             </thead>
                             <tbody>
@@ -61,15 +60,11 @@ $licitacoes = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1'")->
                                     <td><?= $unidade ?></td>
                                     <td><?= $status ?></td>
                                     <td>
-                                        <form action="?perfil=administrativo&p=licitacao&sp=licitacao_edita" method='POST'>
-                                            <input type="hidden" name='editarLicitacao' value='<?= $licitacao['id'] ?>'>
-                                            <button type='submit' class='btn btn-info'> Carregar</button>
+                                        <form action="?perfil=contratos/tipo_pessoa" method='POST'>
+                                            <input type="hidden" name='idLicitacao' value='<?= $licitacao['id'] ?>'>
+                                            <button type='submit' class='btn btn-info'> Carregar </button>
                                         </form>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#excluirLicitacao" data-id='<?= $licitacao['id'] ?>' data-objeto='<?= $licitacao['objeto'] ?>' <?php if($licitacao['licitacao_status_id'] == 3) echo "disabled" ?> > Cancelar
-                                        </button>
-                                    </td>
+                                    </td>                                
                                 </tr>
                                 <?php
                             }
@@ -81,8 +76,7 @@ $licitacoes = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1'")->
                                 <th>Objeto</th>
                                 <th>Unidade</th>
                                 <th>Status</th>
-                                <th>Editar</th>
-                                <th>Cancelar</th>
+                                <th>Editar</th>                            
                             </tr>
                             </tfoot>
 
@@ -103,16 +97,16 @@ $licitacoes = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1'")->
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span></button>
-                        <h4 class="modal-title">Confirma o Cancelamento da Licitação?</h4>
+                        <h4 class="modal-title">Cancelar Licitação</h4>
                     </div>
                     <div class="modal-body">
-                        <p>Tem certeza que deseja cancelar a licitação <span> </span> </p>
+                        <p>Tem certeza que deseja cancelar a licitação? <span> </span> </p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Sair</button>
                         <form method='POST' id='formExcliuir'>
                             <input type="hidden" name='excluirLicitacao' value="<?= $licitacao['id'] ?>" >
-                            <button type='submit' class="btn btn-outline"> Sim </button>
+                            <button type='submit' class="btn btn-outline"> Cancelar </button>
                         </form>
                     </div>
                 </div>
@@ -145,4 +139,3 @@ $licitacoes = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1'")->
     });
 
 </script>
-
