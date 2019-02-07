@@ -164,15 +164,15 @@ $arrayTelefones = $conn->query("SELECT * FROM pf_telefones WHERE pessoa_fisica_i
                                     <input type="email" class="form-control" id="email" name="email" maxlength="60" value="<?=$pessoa_fisica['email']; ?>">
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label for="telefone">Telefone fixo * </label>
+                                    <label for="telefone">Telefone #1 * </label>
                                     <input type="text" data-mask="(00)0000-0000" class="form-control" id="telefone" name="telefone[<?= $arrayTelefones[0]['id'] ?>]" value="<?= $arrayTelefones[0]['telefone']; ?>">
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label for="celular">Celular *</label>
+                                    <label for="celular">Telefone #2 *</label>
                                     <input type="text" data-mask="(00)00000-0000" class="form-control" id="celular" name="telefone[<?= $arrayTelefones[1]['id'] ?>]" value="<?= $arrayTelefones[1]['telefone']; ?>">
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="recado">Recado (opcional) </label>
+                                    <label for="recado">Telefone #3 (opcional) </label>
                                     <?php if (isset($arrayTelefones[2])) {
                                     ?>
 

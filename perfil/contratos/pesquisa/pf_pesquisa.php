@@ -126,6 +126,7 @@ if (isset($_POST['cadastrar'])) {
                     if ($con->query($sqlTelefone))
                     {
                         gravarLog($sqlTelefone);
+                        $mensagem = mensagem("success", "Pessoa Física cadastrada com sucesso!");
                     }
                 }
             }
@@ -149,7 +150,7 @@ if (isset($_POST['apagar']))
     if ($con->query($sqlApagar))
     {
         gravarLog($sqlApagar);
-        $mensagem = mensagem("success", "Pessoa Fisica apagada com sucesso!");
+        $mensagem = mensagem("warning", "Pessoa Fisica apagada com sucesso!");
     }
     else
     {

@@ -68,15 +68,15 @@ if (isset($_POST['documentacao'])) {
                                     <input type="email" class="form-control" id="email" name="email" maxlength="60" required>
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label for="telefone">Telefone fixo *</label>
+                                    <label for="telefone">Telefone #1 *</label>
                                     <input type="text" data-mask="(00) 0000-0000" class="form-control" id="telefone" name="telefone[0]" required>
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <label for="celular">Celular *</label>
+                                    <label for="celular">Telefone #2 *</label>
                                     <input type="text" data-mask="(00) 00000-0000" class="form-control" id="celular" name="telefone[1]" required>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="recado">Recado (opcional) </label>
+                                    <label for="recado">Telefone #3 (opcional) </label>
                                     <input type="text" data-mask="(00) 0000-00000" class="form-control" id="recado" name="telefone[2]">
                                 </div>
                             </div>
