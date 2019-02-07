@@ -88,7 +88,7 @@ if (isset($_POST['visualizar'])){
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="nProcessoPagamento">Número do processo de pagamento *</label>
-                                    <input type="text" id="nProcessoPagamento" name="nProcessoPagamento" class="form-control" maxlength="19" placeholder="0000.0000/0000000-0" value="<?= $numeroProcesso?>" readonly>
+                                    <input type="text" data-mask="0000.0000/0000000-0" id="nProcessoPagamento" name="nProcessoPagamento" class="form-control" maxlength="19" placeholder="0000.0000/0000000-0" value="<?= $numeroProcesso?>">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="notaFiscal">Número da nota fiscal *</label>

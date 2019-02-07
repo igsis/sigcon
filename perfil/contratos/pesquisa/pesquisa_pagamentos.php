@@ -4,7 +4,9 @@ $conn = bancoPDO();
 $sql = "SELECT    pa.id,
                   pa.tipo_pessoa_id,
                   pa.pessoa_id,
-                  li.numero_processo
+                  pa.numero_processo_pagamento,
+                  li.numero_processo,
+                  li.objeto
         FROM pagamentos pa INNER JOIN contratos c2 on pa.contrato_id = c2.id 
         INNER JOIN licitacoes li on li.id = c2.licitacao_id";
 
@@ -42,6 +44,8 @@ $count = $queryCount->rowCount();
                             <thead>
                             <tr>
                                 <th>Nº do processo administrativo</th>
+                                <th>Nº do processo de pagamento</th>
+                                <th>Objeto</th>
                                 <th>CPF/CNPJ</th>
                                 <th>Nome/Razão social</th>
                                 <th></th>
@@ -59,6 +63,8 @@ $count = $queryCount->rowCount();
                                     ?>
                                     <tr>
                                         <td><?= $pagamento['numero_processo'] ?></td>
+                                        <td><?= $pagamento['numero_processo_pagamento'] ?></td>
+                                        <td><?= $pagamento['objeto'] ?></td>
                                         <td><?= ($pagamento['tipo_pessoa_id'] == 1)? $fisica['cpf']:$juridica['cnpj'] ?></td>
                                         <td><?= ($pagamento['tipo_pessoa_id'] == 1)? $fisica['nome']:$juridica['razao_social'] ?></td>
                                         <td>
