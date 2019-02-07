@@ -162,7 +162,7 @@ $sqlTelefones = "SELECT * FROM pj_telefones WHERE pessoa_juridica_id = '$idPesso
 $arrayTelefones = $conn->query($sqlTelefones)->fetchAll();
 
 $pessoa_juridica = recuperaDados("pessoa_juridicas", "id", $idPessoaJuridica);
-$pj_endereco = recuperaDados("enderecos", "id", $endereco_id);
+$pj_endereco = recuperaDados("enderecos", "id", $pessoa_juridica['endereco_id']);
 
 ?>
 <script language="JavaScript" >
