@@ -77,58 +77,68 @@ if (isset($_POST['cadastrar'])) {
     $uf = $_POST['uf'];
     $cidade = addslashes($_POST['cidade']);
 
-    // cadastrar endereco de pf
-    $sqlEndereco = "INSERT INTO `enderecos`
-                                (`cep`,
-                                 `logradouro`,
-                                 `bairro`,
-                                 `cidade`,
-                                 `estado`,
-                                 `numero`,
-                                 `complemento`)
-                          VALUES ('$cep',
-                                  '$logradouro',
-                                  '$bairro',
-                                  '$cidade',
-                                  '$uf',
-                                  '$numero',
-                                  '$complemento')";
+    $sqlConsultaPf = "SELECT `id` FROM `pessoa_fisicas` WHERE `cpf` = '$cpf'";
 
-    if ($con->query($sqlEndereco))
+    if ($con->query($sqlConsultaPf)->num_rows == 0)
     {
-        gravarLog($sqlEndereco);
-        $endereco_id = $con->insert_id;
 
-        $sqlPf = "INSERT INTO `pessoa_fisicas`
-                            (`nome`,
-                             `cpf`,
-                             `email`,
-                             `endereco_id`,
-                             `publicado`)
-                      VALUES ('$nome_pf',
-                              '$cpf',
-                              '$email',
-                              '$endereco_id',
-                              '1')";
+        // cadastrar endereco de pf
+        $sqlEndereco = "INSERT INTO `enderecos`
+                                    (`cep`,
+                                     `logradouro`,
+                                     `bairro`,
+                                     `cidade`,
+                                     `estado`,
+                                     `numero`,
+                                     `complemento`)
+                              VALUES ('$cep',
+                                      '$logradouro',
+                                      '$bairro',
+                                      '$cidade',
+                                      '$uf',
+                                      '$numero',
+                                      '$complemento')";
 
-        if ($con->query($sqlPf))
+        if ($con->query($sqlEndereco))
         {
-            gravarLog($sqlPf);
-            $idPf = $con->insert_id;
+            gravarLog($sqlEndereco);
+            $endereco_id = $con->insert_id;
 
-            foreach ($telefones as $telefone)
+            $sqlPf = "INSERT INTO `pessoa_fisicas`
+                                (`nome`,
+                                 `cpf`,
+                                 `email`,
+                                 `endereco_id`,
+                                 `publicado`)
+                          VALUES ('$nome_pf',
+                                  '$cpf',
+                                  '$email',
+                                  '$endereco_id',
+                                  '1')";
+
+            if ($con->query($sqlPf))
             {
-                if ($telefone != '')
-                {
-                    // cadastrar o telefone de pf
-                    $sqlTelefone = "INSERT INTO `pf_telefones` (`pessoa_fisica_id`, `telefone`) VALUES ('$idPf', '$telefone')";
+                gravarLog($sqlPf);
+                $idPf = $con->insert_id;
 
-                    if ($con->query($sqlTelefone))
+                foreach ($telefones as $telefone)
+                {
+                    if ($telefone != '')
                     {
-                        gravarLog($sqlTelefone);
-                        $mensagem = mensagem("success", "Pessoa Física cadastrada com sucesso!");
+                        // cadastrar o telefone de pf
+                        $sqlTelefone = "INSERT INTO `pf_telefones` (`pessoa_fisica_id`, `telefone`) VALUES ('$idPf', '$telefone')";
+
+                        if ($con->query($sqlTelefone))
+                        {
+                            gravarLog($sqlTelefone);
+                            $mensagem = mensagem("success", "Pessoa Física cadastrada com sucesso!");
+                        }
                     }
                 }
+            }
+            else
+            {
+                $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
             }
         }
         else
@@ -138,7 +148,7 @@ if (isset($_POST['cadastrar'])) {
     }
     else
     {
-        $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
+        $mensagem = mensagem("danger", "CPF já cadastrado no sistema.");
     }
 }
 
