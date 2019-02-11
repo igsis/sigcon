@@ -4,6 +4,8 @@ include "includes/menu.php";
 $con = bancoMysqli();
 $conn = bancoPDO();
 
+$url = 'http://'.$_SERVER['HTTP_HOST'].'/sigcon/funcoes/api_equipamentos.php';
+
     if (isset($_POST['idLicitacao'])) {
         $idLicitacao = $_POST['idLicitacao'];
         $licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
@@ -116,10 +118,7 @@ $conn = bancoPDO();
                                                 <!-- Campo populado de acordo com a escolha da unidade -->
                                                 <label for="equipamento">Equipamentos atendidos</label> <br>
                                                 <select class="form-control" id="equipamento" name="equipamento[0]" required>
-                                                    <option value="">Selecione...</option>
-                                                    <?php
-                                                    geraOpcao("equipamentos")
-                                                    ?>
+                                                    <!-- Populando por js -->
                                                 </select>
                                             </div>
                                         </div>
@@ -247,10 +246,6 @@ $conn = bancoPDO();
         }
     });
 
-
-    $('#num_processo').mask('0000.0000/0000000-0', {reverse: true});
-
-
     function habilitaCampo(id) {
         if(document.getElementById(id).disabled==true){document.getElementById(id).disabled=false}
     }
@@ -302,5 +297,50 @@ $conn = bancoPDO();
             a.value += r + l.substr(u - 2, u)
         }
         return !1
+    }
+
+
+    const url = `<?=$url?>`;
+
+    let unidade = document.querySelector("#unidade");
+
+    unidade.addEventListener('change', async e => {
+        let idUnidade = $('#unidade option:checked').val();
+        getEquipamento(idUnidade, '')
+
+        let i = $('.equipamentos').length;
+        do{
+            if (i > 1){
+                $('.equipamentos').last().remove();
+                i--;
+            }
+        }while(i > 1)
+
+        fetch(`${url}?unidade_id=${idUnidade}`)
+            .then(response => response.json())
+            .then(equipamentos => {
+                $('#equipamento option').remove();
+                $('#equipamento').append('<option value="">Selecione... </option>');
+
+                for (const equipamento of equipamentos) {
+                    $('#equipamento').append(`<option value='${equipamento.id}'>${equipamento.nome}</option>`).focus();;
+                }
+            })
+    })
+
+    function getEquipamento(idUnidade, selectedId){
+        fetch(`${url}?unidade_id=${idUnidade}`)
+            .then(response => response.json())
+            .then(equipamentos => {
+                $('#equipamento option').remove();
+
+                for (const equipamento of equipamentos) {
+                    if(selectedId == equipamento.id){
+                        $('#equipamento').append(`<option value='${equipamento.id}' selected>${equipamento.nome}</option>`).focus();;
+                    }else{
+                        $('#equipamento').append(`<option value='${equipamento.id}'>${equipamento.nome}</option>`).focus();;
+                    }
+                }
+            })
     }
 </script>

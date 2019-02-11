@@ -4,6 +4,7 @@ include "includes/menu.php";
 $con = bancoMysqli();
 $conn = bancoPDO();
 
+$url = 'http://'.$_SERVER['HTTP_HOST'].'/sigcon/funcoes/api_equipamentos.php';
 
 $tipoPessoa = $_SESSION['tipoPessoa'];
 $idPessoa = $_SESSION['idPessoa'];
@@ -599,4 +600,49 @@ $numEquips = mysqli_num_rows($queryEquips);
         return !1
     }
 
+
+
+    const url = `<?=$url?>`;
+
+    let unidade = document.querySelector("#unidade");
+
+    unidade.addEventListener('change', async e => {
+        let idUnidade = $('#unidade option:checked').val();
+        getEquipamento(idUnidade, '')
+
+        let i = $('.equipamentos').length;
+        do{
+            if (i > 1){
+                $('.equipamentos').last().remove();
+                i--;
+            }
+        }while(i > 1)
+
+        fetch(`${url}?unidade_id=${idUnidade}`)
+            .then(response => response.json())
+            .then(equipamentos => {
+                $('#equipamento option').remove();
+                $('#equipamento').append('<option value="">Selecione... </option>');
+
+                for (const equipamento of equipamentos) {
+                    $('#equipamento').append(`<option value='${equipamento.id}'>${equipamento.nome}</option>`).focus();;
+                }
+            })
+    })
+
+    function getEquipamento(idUnidade, selectedId){
+        fetch(`${url}?unidade_id=${idUnidade}`)
+            .then(response => response.json())
+            .then(equipamentos => {
+                $('#equipamento option').remove();
+
+                for (const equipamento of equipamentos) {
+                    if(selectedId == equipamento.id){
+                        $('#equipamento').append(`<option value='${equipamento.id}' selected>${equipamento.nome}</option>`).focus();;
+                    }else{
+                        $('#equipamento').append(`<option value='${equipamento.id}'>${equipamento.nome}</option>`).focus();;
+                    }
+                }
+            })
+    }
 </script>
