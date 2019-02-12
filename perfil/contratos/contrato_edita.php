@@ -6,11 +6,6 @@ $conn = bancoPDO();
 
 $url = 'http://'.$_SERVER['HTTP_HOST'].'/sigcon/funcoes/api_equipamentos.php';
 
-$tipoPessoa = $_SESSION['tipoPessoa'];
-$idPessoa = $_SESSION['idPessoa'];
-
-$idLicitacao = $_POST['idLicitacao'];
-$licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
 
 if (isset($_POST['selecionar'])) {
 
@@ -33,6 +28,9 @@ if(isset($_POST['carregar'])){
     $idPessoa = $contrato['pessoa_id'];
     $tipoPessoa = $contrato['tipo_pessoa_id'];
 
+    $idLicitacao = $contrato['licitacao_id'];
+    $licitacao = recuperaDados('licitacoes', 'id', $idLicitacao);
+
     if ($tipoPessoa == 1) {
         $pessoa_fisica = recuperaDados("pessoa_fisicas", "id", $idPessoa)['cpf'];
 
@@ -44,6 +42,12 @@ if(isset($_POST['carregar'])){
 
 
 if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
+    $tipoPessoa = $_SESSION['tipoPessoa'];
+    $idPessoa = $_SESSION['idPessoa'];
+
+    $idLicitacao = $_POST['idLicitacao'];
+    $licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
+
     $idContrato = $_POST['idContrato'] ?? NULL;
     $tipoPessoa = $_POST['tipoPessoa'] ?? NULL;
     $idPessoa = $_POST['idPessoa'] ?? NULL;
