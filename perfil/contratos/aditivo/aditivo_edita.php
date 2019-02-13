@@ -80,7 +80,7 @@ $conn = bancoPDO();
                                       valor_reajuste = '$reajuste',
                                       valor_anual = '$valor_anual'
                                       WHERE id = '$idAditivo'";
-            
+
             if (mysqli_query($con, $sql)) {
                 gravarLog($sql);
 
@@ -90,6 +90,10 @@ $conn = bancoPDO();
                 $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
             }
         }
+    }
+
+    if(isset($_POST['visualizar'])){
+        $idAditivo = $_POST['idAditivo'];
     }
 
     $aditivo = recuperaDados("aditivos", "id", $idAditivo);
