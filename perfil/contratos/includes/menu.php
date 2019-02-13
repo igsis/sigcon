@@ -30,8 +30,8 @@
             <li class="treeview">
                 <a href=""> <i class="fa fa-circle-o text-orange"></i> <span>Aditivo</span> <i class="fa fa-angle-left pull-right"></i> </a>
                 <ul class="treeview-menu">
-                    <li><a href="?perfil=contratos&p=aditivo&sp=aditivo_cadastro"><i class="fa fa-circle-o text-orange"></i> <span>Cadastrar</span></a></li>
-                    <li><a href=""><i class="fa fa-circle-o text-orange"></i> <span>Pesquisar</span></a></li>
+                    <li><a href="?perfil=contratos&p=pesquisa&sp=pesquisa_contrato_aditivo"><i class="fa fa-circle-o text-orange"></i> <span>Cadastrar</span></a></li>
+                    <li><a href="?perfil=contratos&p=pesquisa&sp=pesquisa_aditivo"><i class="fa fa-circle-o text-orange"></i> <span>Pesquisar</span></a></li>
                 </ul>
             </li>
             <li class="treeview">
