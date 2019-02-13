@@ -37,7 +37,7 @@ $numeroProcesso = $conn->query($sql)->fetch()['numero_processo'];
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label for="nProcessoPagamento">Número do processo de pagamento *</label>
+                                    <label for="nProcessoPagamento">Número do processo de pagamento</label>
                                     <input type="text" data-mask="0000.0000/0000000-0" id="nProcessoPagamento" name="nProcessoPagamento" class="form-control" readonly value="<?= $licitacao['numero_processo'] ?>">
                                 </div>
                                 <div class="form-group col-md-6">
