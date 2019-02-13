@@ -71,7 +71,7 @@ $count = mysqli_num_rows($result);
                                         <form action="?perfil=administrativo&p=unidades&sp=unidade_edita" method="post">
                                             <input type="hidden" name="idUnidade" id="idUnidade" value="<?=$unidade['id']?>">
                                             <input type="hidden" name="carregar" id="carregar">
-                                            <input class="btn btn-primary" type="submit" value="Editar">
+                                            <input class="btn btn-info" type="submit" value="Editar">
                                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exclusao" data-nome="<?=$unidade['nome']?>" data-id="<?=$unidade['id']?>">Apagar</button>
                                         </form>
                                     </td>
