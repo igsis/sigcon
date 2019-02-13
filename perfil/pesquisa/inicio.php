@@ -17,6 +17,9 @@ $licitacoes = $conn->query("
   SELECT lic.id AS idLicitacao, licitacao_id, numero_processo, termo_contrato, objeto, lic.unidade_id, tipo_pessoa_id, pessoa_id, licitacao_status_id FROM `licitacoes` AS lic 
     LEFT JOIN (SELECT * FROM contratos WHERE publicado = '1') As con ON lic.id = con.licitacao_id 
   WHERE lic.publicado = '1'")->fetchAll();
+
+
+
 ?>
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -56,6 +59,7 @@ $licitacoes = $conn->query("
                             <tbody>
                             <?php
                             foreach ($licitacoes as $licitacao) {
+
                                 $unidade = recuperaDados('unidades', 'id', $licitacao['unidade_id'])['nome'];
                                 $status = recuperaDados('licitacao_status', 'id', $licitacao['licitacao_status_id'])['status'];
                                 if($licitacao['tipo_pessoa_id'] != NULL){
@@ -85,6 +89,9 @@ $licitacoes = $conn->query("
                                     <td>
                                         <form action="?perfil=pesquisa&p=pesquisa_carregar" method='POST'>
                                             <input type="hidden" name='idLicitacao' value='<?= $licitacao['idLicitacao'] ?>'>
+                                            <input type="hidden" name="proponente" value="<?= $proponente ?>">
+                                            <input type="hidden" name="documento" value="<?= $documento ?>">
+                                            <input type="hidden" name="tipoPessoa" value="<?= $licitacao['tipo_pessoa_id'] ?>">
                                             <button type='submit' class='btn btn-info'> Carregar</button>
                                         </form>
                                     </td>
