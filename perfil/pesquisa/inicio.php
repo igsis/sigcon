@@ -127,7 +127,6 @@ $licitacoes = $conn->query("
         <!-- /.row -->
 
 
-
         <div class="row">
             <div class="col-xs-12">
                 <div class="box box-primary">
@@ -213,9 +212,7 @@ $licitacoes = $conn->query("
                                 <th>Ação</th>
                             </tr>
                             </tfoot>
-
                         </table>
-
                     </div>
                     <!-- /.box-body -->
                 </div>
