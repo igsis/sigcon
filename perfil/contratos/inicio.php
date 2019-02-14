@@ -214,7 +214,6 @@ $qtdeAvencer = count($contratosAvencer);
                                         <th>Status</th>
                                     </tr>
                                     </thead>
-
                                     <tbody>
                                     <?php
                                     foreach ($licitacoes_homologadas as $licitacao) {
