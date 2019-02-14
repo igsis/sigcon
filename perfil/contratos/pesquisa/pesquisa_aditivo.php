@@ -26,8 +26,8 @@ $count = $queryCount->rowCount();
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title text-left">Pesquisa de Pagamentos</h3>
-                        <a href=""?perfil=contratos&p=pesquisa&sp=pesquisa_contrato_aditivo""
+                        <h3 class="box-title text-left">Pesquisa de Aditivos</h3>
+                        <a href="?perfil=contratos&p=pesquisa&sp=pesquisa_contrato_aditivo"
                            class="text-right btn btn-success" style="float: right">Adicionar Aditivo</a>
                     </div>
 
@@ -38,7 +38,7 @@ $count = $queryCount->rowCount();
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table id="tblLicitacao" class="table table-bordered table-striped">
+                        <table id="lblAditivo" class="table table-bordered table-striped">
                             <thead>
                             <tr>
                                 <th>Nº do processo administrativo</th>
@@ -91,21 +91,21 @@ $count = $queryCount->rowCount();
         </div>
         <!-- /.row -->
         <!--.modal-->
-        <div class="modal modal-danger fade in" id="excluirLicitacao">
+        <div class="modal modal-danger fade in" id="excluirAditivo">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span></button>
-                        <h4 class="modal-title">Cancelar Licitação</h4>
+                        <h4 class="modal-title">Cancelar Aditivo</h4>
                     </div>
                     <div class="modal-body">
-                        <p>Tem certeza que deseja cancelar a licitação? <span> </span></p>
+                        <p>Tem certeza que deseja cancelar o aditivo? <span> </span></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Sair</button>
                         <form method='POST' id='formExcliuir'>
-                            <input type="hidden" name='excluirLicitacao' value="<?= $licitacao['id'] ?>">
+                            <input type="hidden" name='excluirLicitacao' value="<?= $aditivo['id'] ?>">
                             <button type='submit' class="btn btn-outline"> Cancelar</button>
                         </form>
                     </div>
@@ -121,8 +121,8 @@ $count = $queryCount->rowCount();
 <script type="text/javascript">
 
     $('#excluirLicitacao').on('show.bs.modal', (e) => {
-        document.querySelector('#excluirLicitacao .modal-body p span').innerHTML = ` ${e.relatedTarget.dataset.objeto}?`
-        document.querySelector('#formExcliuir input[name="excluirLicitacao"]').value = e.relatedTarget.dataset.id
+        document.querySelector('#excluirAditivo .modal-body p span').innerHTML = ` ${e.relatedTarget.dataset.objeto}?`
+        document.querySelector('#formExcliuir input[name="excluirAditivo"]').value = e.relatedTarget.dataset.id
     });
 
     $(function () {
