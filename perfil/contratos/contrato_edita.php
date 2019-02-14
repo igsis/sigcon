@@ -171,16 +171,6 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
     if (isset($_POST['edita'])){
 
-        foreach ($equipamentos as $idEquip => $equipamento) {
-              $sqlEquips = "UPDATE contrato_equipamento SET
-                                       equipamento_id = '$equipamento'
-                                 WHERE id = '$idEquip'";
-
-               mysqli_query($con, $sqlEquips);
-               gravarLog($sqlEquips);
-         }
-
-
         $sqlInfo = "UPDATE informacoes_do_contrato SET 
                                           inicio_vigencia = '$inicio_vigencia',
                                           fim_vigencia = '$fim_vigencia',
@@ -272,6 +262,10 @@ $numEquips = mysqli_num_rows($queryEquips);
                             <?= "Número do processo administrativo: " . $licitacao['numero_processo']?>
                         </h3>
                     </div>
+                    <form method="POST" action="?perfil=contratos&p=pesquisa&sp=pesquisa_contrato_equipamentos" role="form">
+                        <input type="hidden" name="idContrato" value="<?= $idContrato ?>">
+                        <button type="submit" name="listaEquipamentos" class="btn btn-primary pull-right">Listar Equipamentos</button>
+                    </form>
                     <div class="row" align="center">
                         <?php if (isset($mensagem)) {
                             echo $mensagem;
@@ -340,86 +334,6 @@ $numEquips = mysqli_num_rows($queryEquips);
                                     </select>
                                 </div>
                             </div>
-
-                            <?php
-
-                                if ($numEquips > 0) {
-                                    $count = 0;
-                                    while ($equipamento = mysqli_fetch_array($queryEquips)) {
-
-                                        ?>
-                                        <div class="row">
-                                            <div class="form-group">
-                                                <div class="col-md-12">
-                                                    <div class="equipamentos">
-                                                        <hr>
-                                                        <!-- Campo populado de acordo com a escolha da unidade -->
-                                                        <label for="equipamento">Equipamentos atendidos</label> <br>
-                                                        <select class="form-control" id="equipamento" name="equipamento[<?=$equipamento['id']?>]">
-                                                            <option value="">Selecione...</option>
-                                                            <?php
-                                                            geraOpcao("equipamentos", $equipamento['equipamento_id']);
-                                                            ?>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <?php
-                                        $count++;
-                                    }
-                                    ?>
-
-                                     <hr class="botoes">
-                                        <div class="row">
-                                            <div class="form-group col-md-offset-2 col-md-4">
-                                                <a class="btn btn-info btn-block" href="#void" id="addInput">Adicionar
-                                                    Equipamento</a>
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <a class="btn btn-info btn-block" href="#void" id="remInput">Remover
-                                                    Ultimo Equipamento</a>
-                                            </div>
-                                        </div>
-
-                                    <?php
-
-                                } else {
-
-                                    ?>
-
-                            <div class="row">
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <div class="equipamentos">
-                                            <hr>
-                                            <!-- Campo populado de acordo com a escolha da unidade -->
-                                            <label for="equipamento">Equipamentos atendidos</label> <br>
-                                            <select class="form-control" id="equipamento"
-                                                    name="equipamento[0]">
-                                                <option value="">Selecione...</option>
-                                                <?php
-                                                geraOpcao("equipamentos");
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <hr class="botoes">
-                            <div class="row">
-                                <div class="form-group col-md-offset-2 col-md-4">
-                                    <a class="btn btn-info btn-block" href="#void" id="addInput">Adicionar Equipamento</a>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <a class="btn btn-info btn-block" href="#void" id="remInput">Remover Último Equipamento</a>
-                                </div>
-                            </div>
-                                <?php
-                                }
-                            ?>
-
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="fiscal">Fiscal</label>
@@ -527,24 +441,6 @@ $numEquips = mysqli_num_rows($queryEquips);
 
 
 <script>
-
-    var qtde = "<?=$count++?>";
-    var id = "<?=$equipamento['id']?>"
-
-    $('#addInput').on('click', function(e) {
-        let i = $('.equipamentos').length;
-        $('.equipamentos').first().clone().find("select").attr('name', function(idx, attrVal) {
-            return attrVal.replace('[0]','')+'['+i+']';
-        }).end().insertBefore('.botoes');
-    });
-
-    $('#remInput').on('click', function(e) {
-        let i = $('.equipamentos').length;
-        if (i > 1){
-            $('.equipamentos').last().remove();
-        }
-    });
-
     $('#num_processo').mask('0000.0000/0000000-0', {reverse: true});
 
 
@@ -602,51 +498,5 @@ $numEquips = mysqli_num_rows($queryEquips);
             a.value += r + l.substr(u - 2, u)
         }
         return !1
-    }
-
-
-
-    const url = `<?=$url?>`;
-
-    let unidade = document.querySelector("#unidade");
-
-    unidade.addEventListener('change', async e => {
-        let idUnidade = $('#unidade option:checked').val();
-        getEquipamento(idUnidade, '')
-
-        let i = $('.equipamentos').length;
-        do{
-            if (i > 1){
-                $('.equipamentos').last().remove();
-                i--;
-            }
-        }while(i > 1)
-
-        fetch(`${url}?unidade_id=${idUnidade}`)
-            .then(response => response.json())
-            .then(equipamentos => {
-                $('#equipamento option').remove();
-                $('#equipamento').append('<option value="">Selecione... </option>');
-
-                for (const equipamento of equipamentos) {
-                    $('#equipamento').append(`<option value='${equipamento.id}'>${equipamento.nome}</option>`).focus();;
-                }
-            })
-    })
-
-    function getEquipamento(idUnidade, selectedId){
-        fetch(`${url}?unidade_id=${idUnidade}`)
-            .then(response => response.json())
-            .then(equipamentos => {
-                $('#equipamento option').remove();
-
-                for (const equipamento of equipamentos) {
-                    if(selectedId == equipamento.id){
-                        $('#equipamento').append(`<option value='${equipamento.id}' selected>${equipamento.nome}</option>`).focus();;
-                    }else{
-                        $('#equipamento').append(`<option value='${equipamento.id}'>${equipamento.nome}</option>`).focus();;
-                    }
-                }
-            })
     }
 </script>

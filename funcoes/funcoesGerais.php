@@ -374,6 +374,26 @@ function geraOpcaoLocais ($tabela, $select = '')
 		}
 	}
 
+function geraOpcaoEquipamento($unidade, $select)
+{
+    //gera os options de um select
+    $sql = "SELECT * FROM equipamentos WHERE publicado = '1' AND unidade_id = $unidade ORDER BY 2";
+
+    $con = bancoMysqli();
+    $query = mysqli_query($con,$sql);
+    while($option = mysqli_fetch_row($query))
+    {
+        if($option[0] == $select)
+        {
+            echo "<option value='".$option[0]."' selected >".$option[1]."</option>";
+        }
+        else
+        {
+            echo "<option value='".$option[0]."'>".$option[1]."</option>";
+        }
+    }
+}
+
 
 	function geraOpcaoUsuario($tabela, $cargo,$select)
 	{
