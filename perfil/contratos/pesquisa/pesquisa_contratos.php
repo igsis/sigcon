@@ -45,13 +45,12 @@ $count = $queryCount->rowCount();
                             <thead>
                             <tr>
                                 <th>Nº do processo administrativo</th>
-                                <th>CPF/CNPJ</th>
                                 <th>Nome/Razão social</th>
+                                <th>CPF/CNPJ</th>
                                 <th>Termo de Contrato</th>
                                 <th>Objeto</th>
                                 <th>Unidade</th>
-                                <th>Equipamento</th>
-                                <th>Tipo servoço</th>
+                                <th>Tipo serviço</th>
                                 <th>Ação</th>
                             </tr>
                             </thead>
@@ -74,12 +73,11 @@ $count = $queryCount->rowCount();
                                         <form action="?perfil=contratos&p=contrato_edita"
                                               method="post">
                                             <td><?= $contrato['numero_processo'] ?></td>
-                                            <td><?= ($contrato['tipo_pessoa_id'] == 1)? $fisica['cpf']:$juridica['cnpj'] ?></td>
                                             <td><?= ($contrato['tipo_pessoa_id'] == 1)? $fisica['nome']:$juridica['razao_social'] ?></td>
+                                            <td><?= ($contrato['tipo_pessoa_id'] == 1)? $fisica['cpf']:$juridica['cnpj'] ?></td>
                                             <td><?= $contrato['termo_contrato'] ?></td>
                                             <td><?= $contrato['objeto'] ?></td>
                                             <td><?= $unidade ?></td>
-                                            <td></td>
                                             <td><?= $contrato['tipo_servico'] ?></td>
                                             <td>
                                                 <input type="hidden" name="idContrato" value="<?= $contrato['id'] ?>">
@@ -103,13 +101,12 @@ $count = $queryCount->rowCount();
                             <tfoot>
                             <tr>
                                 <th>Nº do processo administrativo</th>
-                                <th>CPF/CNPJ</th>
                                 <th>Nome/Razão social</th>
+                                <th>CPF/CNPJ</th>
                                 <th>Termo de Contrato</th>
                                 <th>Objeto</th>
                                 <th>Unidade</th>
-                                <th>Equipamento</th>
-                                <th>Tipo servoço</th>
+                                <th>Tipo serviço</th>
                                 <th>Ação</th>
                             </tr>
                             </tfoot>
