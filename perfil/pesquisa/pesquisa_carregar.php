@@ -8,6 +8,12 @@ $tipoPessoa = $_POST['tipoPessoa'];
 $licitacao = recuperaDados('licitacoes', 'id', $idLicitacao);
 $status = recuperaDados("licitacao_status","id",$licitacao['licitacao_status_id']);
 $unidade = recuperaDados("unidades","id",$licitacao['unidade_id']);
+$contrato = recuperaDados("contratos", "licitacao_id", $idLicitacao);
+$fiscal = recuperaDados("fiscais", "id", $contrato['fiscal_id']);
+$suplente = recuperaDados("suplentes", "id", $contrato['suplente_id']);
+$informacoes = recuperaDados("informacoes_do_contrato", "contrato_id", $contrato['id']);
+
+
 
 function sim_nao($licitacao_atributo){
     if($licitacao_atributo == 1) {
@@ -45,9 +51,13 @@ function sim_nao($licitacao_atributo){
                         <p><strong>Reserva?</strong> <?= sim_nao($licitacao['reserva']) ?></p>
                         <p><strong>Elaboração de Edital?</strong> <?= sim_nao($licitacao['elaboracao_edital']) ?></p>
                         <p><strong>Análise / Ajuste do Edital?</strong> <?= sim_nao($licitacao['analise_edital']) ?></p>
-                        <p><strong>Data da Licitação:</strong> <?= sim_nao($licitacao['licitacao']) ?> <?= $licitacao['licitacao_observacao'] ?? NULL ?></p>
-                        <p><strong>Homologação / Recurso?</strong> <?= sim_nao($licitacao['homologacao']) ?> <?= $licitacao['homologacao_observacao'] ?? NULL ?></p>
-                        <p><strong>Empenho?</strong> <?= sim_nao($licitacao['empenho']) ?> <?= $licitacao['empenho_observacao'] ?? NULL ?></p>
+
+                        <?php if ($licitacao['licitacao'] != "0000-00-00") {echo "<p><strong>Licitação: </strong>" . exibirDataBr($licitacao['licitacao']); }else {echo "<p><strong>Licitação Observação: </strong>" . $licitacao['licitacao_observacao'];} ?>
+
+                        <?php if ($licitacao['homologacao'] == 1) {echo "<p><strong>Homologação: </strong>" . sim_nao($licitacao['homologacao']); } else { echo "<p><strong>Homologação Observação: </strong>" . $licitacao['homologacao_observacao'];} ?>
+
+                        <?php if ($licitacao['empenho'] == 1) {echo "<p><strong>Empenho: </strong>" . sim_nao($licitacao['empenho']); } else { echo "<p><strong>Empenho Observação: </strong>" . $licitacao['homologacao_observacao'];} ?>
+
                         <p><strong>Entrega?</strong> <?= sim_nao($licitacao['entrega']) ?></p>
                         <p><strong>Ordem de Início:</strong> <?= exibirDataBr($licitacao['ordem_inicio']) ?>
                         <p><strong>Observação:</strong> <?= $licitacao['observacao'] ?>
@@ -64,8 +74,6 @@ function sim_nao($licitacao_atributo){
                 INNER JOIN equipamentos AS equips ON contratc_equips.equipamento_id = equips.id WHERE contrato_id = '$idContrato'";
                 $queryEquips = mysqli_query($con, $sql);
                 $num = mysqli_num_rows($queryEquips);
-
-                var_dump($queryEquips);
 
                 ?>
 
@@ -108,47 +116,49 @@ function sim_nao($licitacao_atributo){
                             <p><strong>Termo de contrato:</strong> <?= $contrato['termo_contrato'] ?></p>
                             <p><strong>Tipo de serviço:</strong> <?= $contrato['tipo_servico'] ?></p>
                             <p><strong>Unidade:</strong> <?= $unidade['sigla'] . " - " . $unidade['nome'] ?></p>
+                            <p><strong>Equipamentos atendidos: </strong>
 
                             <?php
                                 if($num > 0) {
                                     while($equip = mysqli_fetch_array($queryEquips)) {
-
-
                                         ?>
-                                        <p><strong>Equipamentos atendidos:</strong> <?= $equip['nome'] ?></p>
-
-                                    <?php }
+                                         <?=$equip['nome'] . "; "?>
+                                    <?php
+                                    }
                                 }
                                 ?>
+                            </p>
 
+                            <p><strong>Fiscal:</strong> <?= $fiscal['nome_fiscal'] ?> </p>
+                            <p><strong>Contato do fiscal:</strong> <?= $fiscal['contato_fiscal'] ?></p>
+                            <p><strong>Suplente: </strong> <?= $suplente['nome_suplente'] ?>
+                            </p>
+                            <p><strong>Contato do suplente:</strong> <?= $suplente['contato_suplente'] ?>
+                            </p>
+                             <?php if ($licitacao['licitacao'] != "0000-00-00") {echo "<p><strong>Licitação:</strong>" . exibirDataBr($licitacao['licitacao']); } else { echo "<p><strong>Licitação Observação:</strong>" . $licitacao['licitacao_observacao'];} ?>
+                            <p><strong>Garantia?</strong> <?= sim_nao($contrato['garantia']) ?>
+                            </p>
 
-                            <p><strong>Levantamento de preço?</strong> <?= sim_nao($licitacao['levantamento_preco']) ?>
-                            </p>
-                            <p><strong>Reserva?</strong> <?= sim_nao($licitacao['reserva']) ?></p>
-                            <p><strong>Elaboração de Edital?</strong> <?= sim_nao($licitacao['elaboracao_edital']) ?>
-                            </p>
-                            <p><strong>Análise / Ajuste do Edital?</strong> <?= sim_nao($licitacao['analise_edital']) ?>
-                            </p>
-                            <p><strong>Data da
-                                    Licitação:</strong> <?= sim_nao($licitacao['licitacao']) ?> <?= $licitacao['licitacao_observacao'] ?? NULL ?>
-                            </p>
-                            <p><strong>Homologação /
-                                    Recurso?</strong> <?= sim_nao($licitacao['homologacao']) ?> <?= $licitacao['homologacao_observacao'] ?? NULL ?>
-                            </p>
-                            <p>
-                                <strong>Empenho?</strong> <?= sim_nao($licitacao['empenho']) ?> <?= $licitacao['empenho_observacao'] ?? NULL ?>
-                            </p>
-                            <p><strong>Entrega?</strong> <?= sim_nao($licitacao['entrega']) ?></p>
-                            <p><strong>Ordem de Início:</strong> <?= exibirDataBr($licitacao['ordem_inicio']) ?>
-                            <p><strong>Observação:</strong> <?= $licitacao['observacao'] ?>
+                            <p><strong>Negociações/Reajustes:</strong> <?= $contrato['negociacoes_reajustes'] ?></p>
+                            <p><strong>Nível de risco:</strong> <?= $contrato['nivel_de_risco'] ?></p>
+                            <p><strong>Observação:</strong> <?= $contrato['observacao'] ?></p>
+                        <hr>
+
+                            <div class="text-center">
+                                <p><strong>Informações do contrato</strong></p>
+                            </div>
+
+                            <p class="text-center">
+                                <strong>Vigência início:</strong> <?= exibirDataBr($informacoes['inicio_vigencia']) ?> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                <strong>Vigência fim:</strong> <?= exibirDataBr($informacoes['fim_vigencia']) ?> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                <strong>DOU:</strong> <?= exibirDataBr($informacoes['DOU']) ?> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                <strong>Valor mensal:</strong> <?= $informacoes['valor_mensal'] ?> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                                <strong>Valor anual:</strong> <?= $informacoes['valor_anual'] ?></p>
                         </div>
                     </div>
                 </div>
-
-
                 <?php
             }
-
             ?>
 
         </div>
