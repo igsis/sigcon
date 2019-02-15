@@ -23,6 +23,10 @@ if(isset($_POST['cadastra'])){
     }
 }
 
+    if(isset($_POST['altera'])){
+        $idContratoEquipamento = $_POST['idContratoEquipamento'];
+    }
+
 
 
    if (isset($_POST['edita'])){

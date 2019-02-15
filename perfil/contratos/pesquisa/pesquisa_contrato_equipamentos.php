@@ -4,6 +4,19 @@ include "../perfil/includes/menu.php";
 $conn = bancoPDO();
 $con = bancoMysqli();
 
+if(isset($_POST['excluirEquipamento'])){
+    $idContratoEquipamento = $_POST['excluirEquipamento'];
+    $sql = "UPDATE contrato_equipamento SET publicado = 0 WHERE id = '$idContratoEquipamento'";
+
+    if(mysqli_query($con, $sql)){
+        gravarLog($sql);
+
+        $mensagem = mensagem("success", "Equipamento removido com sucesso!");
+    } else{
+        $mensagem = mensagem("danger", "Erro ao remover equipamento! Tente novamente.");
+    }
+}
+
 $idContrato = $_POST['idContrato'];
 
 $sql = "SELECT ce.id, equipamento.nome, unidade.nome unidade_nome FROM contrato_equipamento ce INNER JOIN equipamentos equipamento ON ce.equipamento_id = equipamento.id INNER JOIN unidades unidade ON equipamento.unidade_id = unidade.id WHERE ce.publicado = 1 AND ce.contrato_id = '$idContrato'";
@@ -60,9 +73,14 @@ $count = $queryCount->rowCount();
 
                                             <td>
                                                 <input type="hidden" name="idContratoEquipamento" value="<?= $equipamento['id'] ?>">
-                                                <button class="btn btn-primary" type="submit" name="alterar">Alterar</button>
-                                            </td>
+                                                <button class="btn btn-primary" type="submit" name="altera">Alterar</button>
                                         </form>
+                                                <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                        data-target="#exclusao" data-nome="<?= $equipamento['nome'] ?>"
+                                                        data-id="<?= $equipamento['id'] ?>" data-idContrato="<?= $idContrato ?>">Remover
+                                                </button>
+                                            </td>
+
                                     </tr>
                                     <?php
                                 }
@@ -87,22 +105,23 @@ $count = $queryCount->rowCount();
         </div>
         <!-- /.row -->
         <!--.modal-->
-        <div class="modal modal-danger fade in" id="excluirLicitacao">
+        <div class="modal modal-danger fade in" id="exclusao">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span></button>
-                        <h4 class="modal-title">Cancelar Licitação</h4>
+                        <h4 class="modal-title">Remover equipamento</h4>
                     </div>
                     <div class="modal-body">
-                        <p>Tem certeza que deseja cancelar a licitação? <span> </span></p>
+                        <p>Tem certeza que deseja remover o equipamento? <span> </span></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Sair</button>
                         <form method='POST' id='formExcliuir'>
-                            <input type="hidden" name='excluirLicitacao' value="<?= $licitacao['id'] ?>">
-                            <button type='submit' class="btn btn-outline"> Cancelar</button>
+                            <input type="hidden" name='excluirEquipamento' value="<?= $equipamento['id'] ?>">
+                            <input type="hidden" name="idContrato" id="idContrato" value="<?= $idContrato ?>">
+                            <button type='submit' class="btn btn-outline"> Remover</button>
                         </form>
                     </div>
                 </div>
@@ -117,8 +136,10 @@ $count = $queryCount->rowCount();
 <script type="text/javascript">
 
     $('#excluirLicitacao').on('show.bs.modal', (e) => {
-        document.querySelector('#excluirLicitacao .modal-body p span').innerHTML = ` ${e.relatedTarget.dataset.objeto}?`
-        document.querySelector('#formExcliuir input[name="excluirLicitacao"]').value = e.relatedTarget.dataset.id
+        document.querySelector('#excluirEquipamento .modal-body p span').innerHTML = ` ${e.relatedTarget.dataset.objeto}?`
+        document.querySelector('#formExcliuir input[name="excluirEquipamento"]').value = e.relatedTarget.dataset.id
+        document.querySelector('#formExcliuir input[name="idContrato"]').value = e.relatedTarget.dataset.idContrato
+
     });
 
     $(function () {
