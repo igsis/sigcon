@@ -4,11 +4,31 @@ include "../perfil/includes/menu.php";
 $con = bancoMysqli();
 $conn = bancoPDO();
 
-$idContratoEquipamento = $_POST['idContratoEquipamento'];
+if(isset($_POST['cadastra'])){
+    $equipamentoId = $_POST['equipamento'];
+    $idContrato = $_POST['idContrato'];
+
+    $sql = "INSERT INTO contrato_equipamento (contrato_id, equipamento_id) VALUES ('$idContrato', '$equipamentoId')";
+
+    if(mysqli_query($con, $sql)){
+
+        gravarLog($sql);
+
+        $idContratoEquipamento = recuperaUltimo('contrato_equipamento');
+
+        $mensagem = mensagem("success", "Gravado com sucesso!");
+
+    } else {
+        $mensagem = mensagem("danger", "Erro ao gravar! Tente novamente.");
+    }
+}
+
+
 
    if (isset($_POST['edita'])){
 
     $equipamentoId = $_POST['equipamento'];
+    $idContratoEquipamento = $_POST['idContratoEquipamento'];
 
     $sql = "UPDATE contrato_equipamento SET 
                                       equipamento_id = '$equipamentoId'

@@ -29,7 +29,7 @@ $count = $queryCount->rowCount();
                         <h3 class="box-title text-left">Equipamentos Atendidos</h3>
                         <form method="POST" action="?perfil=contratos&p=equipamentos&sp=equipamento_cadastra" role="form">
                             <input type="hidden" name="idContrato" value="<?= $idContrato ?>">
-                            <button type="submit" name="listaEquipamentos" class="btn btn-primary pull-right">Listar Equipamentos</button>
+                            <button type="submit" name="listaEquipamentos" class="btn btn-primary pull-right">Adicionar Equipamento</button>
                         </form>
                     </div>
 
