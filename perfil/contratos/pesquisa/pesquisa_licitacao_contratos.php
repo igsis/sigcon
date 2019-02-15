@@ -27,7 +27,7 @@ $licitacoes = $conn->query("SELECT * FROM `licitacoes` WHERE publicado = '1' AND
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title text-left">Lista de Licitações</h3>
+                        <h3 class="box-title text-left">Lista de Licitações com Empenho</h3>
                     </div>
 
                     <div class="row" align="center">

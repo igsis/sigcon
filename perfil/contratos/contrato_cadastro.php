@@ -100,7 +100,7 @@ $url = 'http://'.$_SERVER['HTTP_HOST'].'/sigcon/funcoes/api_equipamentos.php';
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="unidade">Unidade *</label>
-                                    <select class="form-control" id="unidade" name="unidade">
+                                    <select class="form-control" id="unidade" name="unidade" required>
                                         <option value="">Selecione...</option>
                                         <?php
                                         geraOpcao("unidades")
