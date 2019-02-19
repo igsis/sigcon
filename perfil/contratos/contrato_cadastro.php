@@ -157,7 +157,7 @@ $url = 'http://'.$_SERVER['HTTP_HOST'].'/sigcon/funcoes/api_equipamentos.php';
 
                             <div class="row">
                                 <div class="form-group col-md-12" align="center" style="margin-top: 10px">
-                                    <label for="garantia">Garatia? </label> <br>
+                                    <label for="garantia">Garantia? </label> <br>
                                     <label><input type="radio" name="garantia" value="1"> Sim </label>&nbsp;&nbsp;
                                     <label><input type="radio" name="garantia" value="0"> Não </label>
                                 </div>
@@ -196,11 +196,11 @@ $url = 'http://'.$_SERVER['HTTP_HOST'].'/sigcon/funcoes/api_equipamentos.php';
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="negociacoes_reajustes">Negociações / Reajuste</label>
-                                    <textarea type="text" id="negociacoes_reajustes" name="negociacoes_reajustes" class="form-control" rows="3" maxlength="125" required></textarea>
+                                    <textarea type="text" id="negociacoes_reajustes" name="negociacoes_reajustes" class="form-control" rows="3" maxlength="125"></textarea>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="nivel_risco">Nível de risco</label>
-                                    <textarea type="text" id="nivel_risco" name="nivel_risco" class="form-control" maxlength="250" rows="3" required></textarea>
+                                    <textarea type="text" id="nivel_risco" name="nivel_risco" class="form-control" maxlength="250" rows="3"></textarea>
                                 </div>
                             </div>
 

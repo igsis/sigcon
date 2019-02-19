@@ -261,11 +261,19 @@ $numEquips = mysqli_num_rows($queryEquips);
                         <h3 class="box-title">
                             <?= "Número do processo administrativo: " . $licitacao['numero_processo']?>
                         </h3>
+                        <div class="box-tools pull-right">
+                            <form method="POST" action="?perfil=contratos&p=pesquisa&sp=pesquisa_contrato_equipamentos"
+                                  role="form">
+                                <div class="form-group"><input type="hidden" name="idContrato" value="<?= $idContrato ?>">
+                                    <button type="submit" name="listaEquipamentos" class="btn btn-primary">
+                                        Listar
+                                        Equipamentos
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <form method="POST" action="?perfil=contratos&p=pesquisa&sp=pesquisa_contrato_equipamentos" role="form">
-                        <input type="hidden" name="idContrato" value="<?= $idContrato ?>">
-                        <button type="submit" name="listaEquipamentos" class="btn btn-primary pull-right">Listar Equipamentos</button>
-                    </form>
+
                     <div class="row" align="center">
                         <?php if (isset($mensagem)) {
                             echo $mensagem;
@@ -273,7 +281,7 @@ $numEquips = mysqli_num_rows($queryEquips);
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=contratos/contrato_edita" role="form">
+                    <form method="POST" action="?perfil=contratos&p=contrato_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-3">
@@ -421,6 +429,7 @@ $numEquips = mysqli_num_rows($queryEquips);
                         </div>
                         <!-- /.box-body -->
                         <div class="box-footer">
+                            <a href="?perfil=contratos&p=pesquisa&sp=pesquisa_contratos" class="btn btn-default">Voltar a Pesquisa</a>
                             <input type="hidden" name="idContrato" value="<?= $idContrato ?>">
                             <input type="hidden" name="tipoPessoa" value="<?= $tipoPessoa ?>">
                             <input type="hidden" name="idPessoa" value="<?= $idPessoa ?>">

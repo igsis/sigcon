@@ -249,6 +249,7 @@ $status = recuperaDados("licitacao_status","id",$licitacao['licitacao_status_id'
                         <!-- /.box-body -->
 
                         <div class="box-footer">
+                            <a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_licitacao" class="btn btn-default">Voltar a Pesquisa</a>
                             <input type="hidden" name="idLicitacao" value="<?= $idLicitacao ?>">
                             <button type="submit" name="edita" class="btn btn-info pull-right">Editar</button>                            
                         </div>

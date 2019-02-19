@@ -19,7 +19,14 @@ if(isset($_POST['excluirEquipamento'])){
 
 $idContrato = $_POST['idContrato'];
 
-$sql = "SELECT ce.id, equipamento.nome, unidade.nome unidade_nome FROM contrato_equipamento ce INNER JOIN equipamentos equipamento ON ce.equipamento_id = equipamento.id INNER JOIN unidades unidade ON equipamento.unidade_id = unidade.id WHERE ce.publicado = 1 AND ce.contrato_id = '$idContrato'";
+$sql = "SELECT
+          ce.id,
+          equipamento.nome,
+          unidade.nome AS unidade_nome
+        FROM contrato_equipamento AS ce
+          INNER JOIN equipamentos equipamento ON ce.equipamento_id = equipamento.id
+          INNER JOIN unidades unidade ON equipamento.unidade_id = unidade.id
+        WHERE ce.publicado = 1 AND ce.contrato_id = '$idContrato'";
 
 $equipamentos = $conn->query($sql)->fetchAll();
 
@@ -40,10 +47,14 @@ $count = $queryCount->rowCount();
                 <div class="box">
                     <div class="box-header">
                         <h3 class="box-title text-left">Equipamentos Atendidos</h3>
-                        <form method="POST" action="?perfil=contratos&p=equipamentos&sp=equipamento_cadastra" role="form">
-                            <input type="hidden" name="idContrato" value="<?= $idContrato ?>">
-                            <button type="submit" name="listaEquipamentos" class="btn btn-primary pull-right">Adicionar Equipamento</button>
-                        </form>
+                        <div class="box-tools pull-right">
+                            <form method="POST" action="?perfil=contratos&p=equipamentos&sp=equipamento_cadastra" role="form">
+                                <input type="hidden" name="idContrato" value="<?= $idContrato ?>">
+                                <button type="submit" name="listaEquipamentos" class="form-control btn btn-primary">
+                                    Adicionar Equipamento
+                                </button>
+                            </form>
+                        </div>
                     </div>
 
                     <div class="row" align="center">
