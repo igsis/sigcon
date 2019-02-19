@@ -18,4 +18,4 @@ else
     include "contratos/".$p.".php";
 }
 
-include "contratos/includes/menu.php";
+include "../perfil/menu.php";

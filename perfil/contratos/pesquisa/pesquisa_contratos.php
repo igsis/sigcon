@@ -70,7 +70,7 @@ $count = $queryCount->rowCount();
                                     }
                                     ?>
                                     <tr>
-                                        <form action="?perfil=contratos&p=contrato_edita"
+                                        <form action="<?= ($_SESSION['nivelAcesso'] == 2) ? "?perfil=contratos&p=contrato_edita" : "?perfil=administrativo&p=contratos&sp=contrato_resumo" ?>"
                                               method="post">
                                             <td><?= $contrato['numero_processo'] ?></td>
                                             <td><?= ($contrato['tipo_pessoa_id'] == 1)? $fisica['nome']:$juridica['razao_social'] ?></td>

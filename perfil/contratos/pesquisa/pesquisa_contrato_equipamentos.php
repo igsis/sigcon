@@ -50,7 +50,7 @@ $count = $queryCount->rowCount();
                         <div class="box-tools pull-right">
                             <form method="POST" action="?perfil=contratos&p=equipamentos&sp=equipamento_cadastra" role="form">
                                 <input type="hidden" name="idContrato" value="<?= $idContrato ?>">
-                                <button type="submit" name="listaEquipamentos" class="form-control btn btn-primary">
+                                <button type="submit" name="listaEquipamentos" class="btn btn-primary">
                                     Adicionar Equipamento
                                 </button>
                             </form>

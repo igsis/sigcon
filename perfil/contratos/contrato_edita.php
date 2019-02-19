@@ -266,8 +266,7 @@ $numEquips = mysqli_num_rows($queryEquips);
                                   role="form">
                                 <div class="form-group"><input type="hidden" name="idContrato" value="<?= $idContrato ?>">
                                     <button type="submit" name="listaEquipamentos" class="btn btn-primary">
-                                        Listar
-                                        Equipamentos
+                                        Listar Equipamentos
                                     </button>
                                 </div>
                             </form>

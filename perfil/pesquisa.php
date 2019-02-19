@@ -9,4 +9,5 @@ else
     $p = "inicio";
 }
 include "pesquisa/".$p.".php";
-include "pesquisa/includes/menu.php";
+
+include "../perfil/menu.php";

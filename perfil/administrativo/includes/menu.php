@@ -12,7 +12,7 @@
                 <a href=""> <i class="fa fa-search"></i> <span>Pesquisar</span> <i class="fa fa-angle-left pull-right"></i> </a>
                 <ul class="treeview-menu">
                     <li><a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_licitacao"><i class="fa fa-circle-o text-red"></i> <span>Licitação</span></a></li>
-                    <li><a href="?perfil=administrativo&p=pesquisa&sp=pesquisa_licitacao_contratos"><i class="fa fa-circle-o text-red"></i> <span>Contratos</span></a></li>
+                    <li><a href="?perfil=contratos&p=pesquisa&sp=pesquisa_contratos"><i class="fa fa-circle-o text-red"></i> <span>Contratos</span></a></li>
                 </ul>
             </li>
 

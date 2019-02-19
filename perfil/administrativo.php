@@ -15,4 +15,4 @@ else
     include "administrativo/".$p.".php";
 }
 
-include "administrativo/includes/menu.php";
+include "../perfil/menu.php";
