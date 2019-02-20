@@ -24,6 +24,9 @@ body {
   overflow-y: auto;
 }
 /* Layout */
+.no-resize {
+  resize: none;
+}
 .wrapper {
   height: 100%;
   position: relative;
