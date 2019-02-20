@@ -41,9 +41,6 @@ if(isset($_POST['carregar'])){
 
 
 if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
-    $tipoPessoa = $_SESSION['tipoPessoa'];
-    $idPessoa = $_SESSION['idPessoa'];
-
     $idLicitacao = $_POST['idLicitacao'];
     $licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
 
