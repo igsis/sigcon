@@ -57,7 +57,7 @@ $count = $queryCount->rowCount();
                                         <td>
                                             <form action="?perfil=contratos&p=aditivo&sp=aditivo_edita" method="post">
                                                 <input type="hidden" name="idAditivo" value="<?= $aditivo['id'] ?>">
-                                                <button class="btn btn-primary" type="submit" name="visualizar">Visualizar</button>
+                                                <button class="btn btn-primary" type="submit" name="carregar">Editar</button>
                                             </form>
                                         </td>
                                     </tr>

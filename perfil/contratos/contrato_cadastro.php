@@ -1,5 +1,4 @@
 <?php
-include "includes/menu.php";
 
 $con = bancoMysqli();
 $conn = bancoPDO();
@@ -232,6 +231,10 @@ $url = 'http://'.$_SERVER['HTTP_HOST'].'/sigcon/funcoes/api_equipamentos.php';
 
 <script>
 
+    function validaFim(inicio, fim) {
+        let dataI
+    }
+
     $('#addInput').on('click', function(e) {
         let i = $('.equipamentos').length;
         $('.equipamentos').first().clone().find("select").attr('name', function(idx, attrVal) {
@@ -253,14 +256,6 @@ $url = 'http://'.$_SERVER['HTTP_HOST'].'/sigcon/funcoes/api_equipamentos.php';
     function desabilitarCampo(id){
         if(document.getElementById(id).disabled==false){document.getElementById(id).disabled=true}
     }
-
-    /* function habilitarRadio (valor) {
-         if (valor == 2) {
-             document.status.disabled = false;
-         } else {
-             document.status.disabled = true;
-         }
-     }*/
 
     function moeda(a, e, r, t) {
         let n = ""
@@ -326,7 +321,7 @@ $url = 'http://'.$_SERVER['HTTP_HOST'].'/sigcon/funcoes/api_equipamentos.php';
                     $('#equipamento').append(`<option value='${equipamento.id}'>${equipamento.nome}</option>`).focus();;
                 }
             })
-    })
+    });
 
     function getEquipamento(idUnidade, selectedId){
         fetch(`${url}?unidade_id=${idUnidade}`)

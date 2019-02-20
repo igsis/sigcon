@@ -1,5 +1,4 @@
 <?php
-include "../perfil/includes/menu.php";
 $conn = bancoPDO();
 
 if (isset($_POST['excluirLicitacao'])) {

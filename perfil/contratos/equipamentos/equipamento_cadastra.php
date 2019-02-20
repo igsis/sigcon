@@ -1,5 +1,4 @@
 <?php
-include "../perfil/includes/menu.php";
 
 $idContrato = $_POST['idContrato'];
 

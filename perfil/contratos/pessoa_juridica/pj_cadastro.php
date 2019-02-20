@@ -1,5 +1,4 @@
 <?php
-include "../perfil/includes/menu.php";
 
 if (isset($_POST['documentacao'])) {
     $cnpj = $_POST['documentacao'];

@@ -1,102 +1,102 @@
 <?php
-include "../perfil/includes/menu.php";
 
 $con = bancoMysqli();
 $conn = bancoPDO();
 
-    if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
+if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
-        $idContrato = $_POST['idContrato'];
+    $idContrato = $_POST['idContrato'];
 
-        $sqlAditivo = "SELECT * FROM aditivos WHERE contrato_id = '$idContrato'";
-        $queryADT = mysqli_query($con, $sqlAditivo);
-        $num_rows = mysqli_num_rows($queryADT);
+    $sqlAditivo = "SELECT * FROM aditivos WHERE contrato_id = '$idContrato'";
+    $queryADT = mysqli_query($con, $sqlAditivo);
+    $num_rows = mysqli_num_rows($queryADT);
 
-        if ($num_rows > 0) {
-            $sqlZerarUltimo = "UPDATE aditivos SET valor_reajuste = '0.00' WHERE contrato_id = '$idContrato' AND aditivo_numero = '$num_rows'";
-            mysqli_query($con, $sqlZerarUltimo);
-            $qtde = ++$num_rows;
-        } else {
-            $qtde = 1;
-        }
-
-        $sqlInformacoesAditivo = "SELECT * FROM informacoes_do_contrato WHERE contrato_id = '$idContrato'";
-        $queryInfoADT = mysqli_query($con, $sqlInformacoesAditivo);
-        $followingdata = $queryInfoADT->fetch_assoc();
-
-        $contratoValorMensal = $followingdata['valor_mensal'];
-
-        $idAditivo = $_POST['idAditivo'] ?? NULL;
-        $inicio_vigencia = $_POST['inicio_vigencia'];
-        $fim_vigencia = $_POST['fim_vigencia'];
-        $DOU = $_POST['dou'];
-        $valor_mensal = dinheiroDeBr($_POST['valor_mensal']);
-        $valor_anual = dinheiroDeBr($_POST['valor_anual']);
-        $reajuste = (float) $valor_mensal - $contratoValorMensal;
-
-        if (isset($_POST['cadastra'])) {
-            $sql = "INSERT INTO aditivos 
-                                      (contrato_id,
-                                      aditivo_numero,
-                                      inicio_vigencia, 
-                                      fim_vigencia,
-                                      DOU,
-                                      valor_mensal,
-                                      valor_reajuste,
-                                      valor_anual,
-                                      publicado)
-                              VALUES ('$idContrato', 
-                                      '$qtde', 
-                                      '$inicio_vigencia',
-                                      '$fim_vigencia',
-                                      '$DOU', 
-                                      '$valor_mensal',
-                                      '$reajuste',
-                                      '$valor_anual',
-                                      '1')";
-
-            if (mysqli_query($con, $sql)) {
-                gravarLog($sql);
-
-                $idAditivo = recuperaUltimo("aditivos");
-
-                $mensagem = mensagem("success", "Aditivo cadastrado com sucesso!");
-
-            } else {
-                $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
-            }
-
-        }
-
-        if (isset($_POST['edita'])) {
-
-            $sql = "UPDATE aditivos SET 
-                                      contrato_id = '$idContrato',
-                                      aditivo_numero = '$qtde',
-                                      inicio_vigencia = '$inicio_vigencia', 
-                                      fim_vigencia = '$fim_vigencia',
-                                      DOU = '$DOU',
-                                      valor_mensal = '$valor_mensal',
-                                      valor_reajuste = '$reajuste',
-                                      valor_anual = '$valor_anual'
-                                      WHERE id = '$idAditivo'";
-
-            if (mysqli_query($con, $sql)) {
-                gravarLog($sql);
-
-                $mensagem = mensagem("success", "Atualizado com sucesso!");
-
-            } else {
-                $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
-            }
-        }
+    if ($num_rows > 0) {
+        $sqlZerarUltimo = "UPDATE aditivos SET valor_reajuste = '0.00' WHERE contrato_id = '$idContrato' AND aditivo_numero = '$num_rows'";
+        mysqli_query($con, $sqlZerarUltimo);
+        $qtde = ++$num_rows;
+    } else {
+        $qtde = 1;
     }
 
-    if(isset($_POST['visualizar'])){
+    $sqlInformacoesAditivo = "SELECT * FROM informacoes_do_contrato WHERE contrato_id = '$idContrato'";
+    $queryInfoADT = mysqli_query($con, $sqlInformacoesAditivo);
+    $followingdata = $queryInfoADT->fetch_assoc();
+
+    $contratoValorMensal = $followingdata['valor_mensal'];
+
+    $idAditivo = $_POST['idAditivo'] ?? NULL;
+    $inicio_vigencia = $_POST['inicio_vigencia'];
+    $fim_vigencia = $_POST['fim_vigencia'];
+    $DOU = $_POST['dou'];
+    $valor_mensal = dinheiroDeBr($_POST['valor_mensal']);
+    $valor_anual = dinheiroDeBr($_POST['valor_anual']);
+    $reajuste = (float) $valor_mensal - $contratoValorMensal;
+
+    if (isset($_POST['cadastra'])) {
+        $sql = "INSERT INTO aditivos 
+                                  (contrato_id,
+                                  aditivo_numero,
+                                  inicio_vigencia, 
+                                  fim_vigencia,
+                                  DOU,
+                                  valor_mensal,
+                                  valor_reajuste,
+                                  valor_anual,
+                                  publicado)
+                          VALUES ('$idContrato', 
+                                  '$qtde', 
+                                  '$inicio_vigencia',
+                                  '$fim_vigencia',
+                                  '$DOU', 
+                                  '$valor_mensal',
+                                  '$reajuste',
+                                  '$valor_anual',
+                                  '1')";
+
+        if (mysqli_query($con, $sql)) {
+            gravarLog($sql);
+
+            $idAditivo = recuperaUltimo("aditivos");
+
+            $mensagem = mensagem("success", "Aditivo cadastrado com sucesso!");
+
+        } else {
+            $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
+        }
+
+    }
+
+    if (isset($_POST['edita'])) {
+
+        $sql = "UPDATE aditivos SET 
+                                  contrato_id = '$idContrato',
+                                  aditivo_numero = '$qtde',
+                                  inicio_vigencia = '$inicio_vigencia', 
+                                  fim_vigencia = '$fim_vigencia',
+                                  DOU = '$DOU',
+                                  valor_mensal = '$valor_mensal',
+                                  valor_reajuste = '$reajuste',
+                                  valor_anual = '$valor_anual'
+                                  WHERE id = '$idAditivo'";
+
+        if (mysqli_query($con, $sql)) {
+            gravarLog($sql);
+
+            $mensagem = mensagem("success", "Atualizado com sucesso!");
+
+        } else {
+            $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
+        }
+    }
+}
+
+    if(isset($_POST['carregar'])){
         $idAditivo = $_POST['idAditivo'];
     }
 
     $aditivo = recuperaDados("aditivos", "id", $idAditivo);
+    $idContrato = $aditivo['contrato_id'];
 
 
 ?>
@@ -155,7 +155,7 @@ $conn = bancoPDO();
                             <!-- /.box-body -->
                             <div class="box-footer">
                                 <input type="hidden" name="idContrato" id="idContrato" value="<?= $idContrato ?>">
-                                <input type="hidden" name="idAditivo" id="idAditivo" value="<?= $idAditivo ?>"></input>
+                                <input type="hidden" name="idAditivo" id="idAditivo" value="<?= $idAditivo ?>">
                                 <button type="submit" name="edita" class="btn btn-info pull-right">Salvar</button>
                             </div>
                     </form>
