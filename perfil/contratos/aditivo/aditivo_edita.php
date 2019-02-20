@@ -154,6 +154,7 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">
+                                <a href="?perfil=contratos&p=pesquisa&sp=pesquisa_aditivo" class="btn btn-default">Voltar a Pesquisa</a>
                                 <input type="hidden" name="idContrato" id="idContrato" value="<?= $idContrato ?>">
                                 <input type="hidden" name="idAditivo" id="idAditivo" value="<?= $idAditivo ?>">
                                 <button type="submit" name="edita" class="btn btn-info pull-right">Salvar</button>

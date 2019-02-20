@@ -74,12 +74,15 @@ if (isset($_POST['visualizar'])){
                     <div class="box-header with-border">
                         <h3 class="box-title">Pagamento</h3>
                     </div>
-                    <?php
-                        if (isset($mensagem)){
-                            echo $mensagem;
-                        }
+                    <div class="row" align="center">
+                        <?php
+                            if (isset($mensagem))
+                            {
+                                echo $mensagem;
+                            }
 
-                    ?>
+                        ?>
+                    </div>
                     <!-- /.box-header -->
                     <!-- form start -->
                     <form method="POST" action="?perfil=contratos&p=pagamentos&sp=pagamento_edita" role="form">
@@ -87,35 +90,35 @@ if (isset($_POST['visualizar'])){
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="nProcessoPagamento">Número do processo de pagamento *</label>
-                                    <input type="text" data-mask="0000.0000/0000000-0" id="nProcessoPagamento" name="nProcessoPagamento" class="form-control" maxlength="19" placeholder="0000.0000/0000000-0" value="<?= $numeroProcesso?>">
+                                    <input type="text" data-mask="0000.0000/0000000-0" id="nProcessoPagamento" name="nProcessoPagamento" class="form-control" maxlength="19" placeholder="0000.0000/0000000-0" value="<?= $numeroProcesso?>" required>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="notaFiscal">Número da nota fiscal *</label>
-                                    <input type="text" id="notaFiscal" class="form-control" maxlength="10" name="notaFiscal" value="<?= $notaFiscal?>">
+                                    <input type="text" id="notaFiscal" class="form-control" maxlength="10" name="notaFiscal" value="<?= $notaFiscal?>" required>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="valor">Valor *</label>
-                                    <input type="text" id="valor" class="form-control" placeholder="10,00" name="valor" value="<?= $valor?>">
+                                    <input type="text" id="valor" class="form-control" placeholder="10,00" name="valor" value="<?= $valor?>" required>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="mesReferencia">Mês de referência *</label>
-                                    <input type="date" class="form-control" name="mesReferencia" value="<?= $mesReferencia?>">
+                                    <input type="date" class="form-control" name="mesReferencia" value="<?= $mesReferencia?>" required>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="dataRecebimento">Data de recebimento *</label>
-                                    <input type="date" name="dataRecebimento" class="form-control" value="<?= $dataRecebimento?>">
+                                    <input type="date" name="dataRecebimento" class="form-control" value="<?= $dataRecebimento?>" required>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="dataEncaminhamentoPg">Data de encaminhamento para pagamento *</label>
-                                    <input type="date" class="form-control" name="dataEncaminhamento" value="<?= $dataEmcaminhamento?>">
+                                    <input type="date" class="form-control" name="dataEncaminhamento" value="<?= $dataEmcaminhamento?>" required>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="dataPagamento">Data do pagamento *</label>
-                                    <input type="date" class="form-control" name="dataPagamento" value="<?= $dataPagamento?>">
+                                    <input type="date" class="form-control" name="dataPagamento" value="<?= $dataPagamento?>" required>
                                 </div>
                             </div>
                             <div class="row">
@@ -125,13 +128,13 @@ if (isset($_POST['visualizar'])){
                                 </div>
                             </div>
                         </div>
-                            <!-- /.box-body -->
+                        <!-- /.box-body -->
 
-                            <div class="box-footer">
-                                <a class="btn btn-default" onclick="window.history.back()">Voltar</a>
-                                <input type="hidden" name="idContrato" value="<?= $idContrato ?>">
-                                <button type="submit" name="editar" class="btn btn-primary pull-right">Atualizar</button>
-                            </div>
+                        <div class="box-footer">
+                            <a href="?perfil=contratos&p=pesquisa&sp=pesquisa_pagamentos" class="btn btn-default">Voltar a Pesquisa</a>
+                            <input type="hidden" name="idContrato" value="<?= $idContrato ?>">
+                            <button type="submit" name="editar" class="btn btn-primary pull-right">Atualizar</button>
+                        </div>
                     </form>
                 </div>
                 <!-- /.box -->

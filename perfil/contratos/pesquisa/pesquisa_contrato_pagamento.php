@@ -24,6 +24,7 @@ $count = $queryCount->rowCount();
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>Pesquisar</h1>
+
     </section>
 
     <section class="content">
