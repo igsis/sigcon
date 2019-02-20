@@ -79,7 +79,7 @@ $numEquips = mysqli_num_rows($queryEquips);
                         <div class="row">
                             <div class="form-group col-md-3">
                                 <label for="num_processo">Número do processo administrativo</label>
-                                <input readonly type="text" data-mask="0000.0000/0000000-0" id="num_processo" name="num_processo" class="form-control" maxlength="20" value="<?= $licitacao['numero_processo'];  ?>" readonly>
+                                <input readonly type="text" data-mask="0000.0000/0000000-0" id="num_processo" name="num_processo" class="form-control" maxlength="20" value="<?= $licitacao['numero_processo'];  ?>">
                             </div>
                             <?php
 
@@ -90,7 +90,7 @@ $numEquips = mysqli_num_rows($queryEquips);
                                 <div class="form-group col-md-3">
                                     <label for="cpf">CPF: </label>
                                     <input readonly type="text" data-mask="000.000.000-00" id="cpf" name="cpf"
-                                           class="form-control" value="<?= $pessoa_fisica ?>" readonly>
+                                           class="form-control" value="<?= $pessoa_fisica ?>">
                                 </div>
 
                                 <?php
@@ -102,7 +102,7 @@ $numEquips = mysqli_num_rows($queryEquips);
                                 <div class="form-group col-md-3">
                                     <label for="cnpj">CNPJ: </label>
                                     <input readonly type="text" data-mask="00.000.000/0000-00" id="cnpj" name="cnpj"
-                                           class="form-control" value="<?= $pessoa_juridica ?>" readonly>
+                                           class="form-control" value="<?= $pessoa_juridica ?>">
                                 </div>
 
                                 <?php
@@ -111,7 +111,7 @@ $numEquips = mysqli_num_rows($queryEquips);
                             ?>
                             <div class="form-group col-md-6">
                                 <label for="objeto">Objeto *</label>
-                                <input readonly type="text" id="objeto" name="objeto" class="form-control" maxlength="100" value="<?= $licitacao['objeto']; ?>" readonly>
+                                <input readonly type="text" id="objeto" name="objeto" class="form-control" maxlength="100" value="<?= $licitacao['objeto']; ?>">
                             </div>
                         </div>
 
@@ -201,7 +201,7 @@ $numEquips = mysqli_num_rows($queryEquips);
                             </div>
                             <div class="form-group col-md-3" style="margin-top: 25px">
                                 <label for="vencimento">Vencimento</label>
-                                <input readonly type="text" id="vencimento" name="vencimento" class="form-control" maxlength="60" readonly value="<?= exibirDataBr($contrato['vencimento']) ?>">
+                                <input readonly type="text" id="vencimento" name="vencimento" class="form-control" maxlength="60" value="<?= exibirDataBr($contrato['vencimento']) ?>">
                             </div>
                             <div class="form-group col-md-3" style="margin-top: 25px">
                                 <label for="status">Status *</label>
