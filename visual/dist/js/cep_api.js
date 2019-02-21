@@ -33,10 +33,23 @@ $(document).ready(function() {
 
                     if (!("erro" in dados)) {
                         //Atualiza os campos com os valores da consulta.
+                        $("#rua").prop('readonly', true);
+                        $("#bairro").prop('readonly', true);
+                        $("#cidade").prop('readonly', true);
+                        $("#estado").prop('readonly', true);
+
                         $("#rua").val(dados.logradouro);
                         $("#bairro").val(dados.bairro);
                         $("#cidade").val(dados.localidade);
                         $("#estado").val(dados.uf);
+
+                        if(dados.logradouro == ""){
+                            alert("Por favor preencha o formulário");
+                            $("#rua").prop('readonly', false);
+                            $("#bairro").prop('readonly', false);
+                            $("#cidade").prop('readonly', false);
+                            $("#estado").prop('readonly', false);   
+                        }
                     }
                     else {
                         //CEP pesquisado não foi encontrado.
