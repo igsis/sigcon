@@ -47,7 +47,7 @@ $url = 'http://'.$_SERVER['HTTP_HOST'].'/sigcon/funcoes/api_equipamentos.php';
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
-                    <form method="POST" action="?perfil=contratos/contrato_edita" role="form">
+                    <form method="POST" action="?perfil=contratos&p=contrato_edita" role="form">
                         <div class="box-body">
                             <div class="row">
                                 <div class="form-group col-md-3">

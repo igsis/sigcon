@@ -40,7 +40,8 @@ if(isset($_POST['carregar'])){
 }
 
 
-if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
+if (isset($_POST['cadastra']) || isset($_POST['edita']))
+{
     $idLicitacao = $_POST['idLicitacao'];
     $licitacao = recuperaDados("licitacoes", "id", $idLicitacao);
 
@@ -68,23 +69,15 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
     $vencimento = $fim_vigencia;
     $status = $_POST['status'] ?? NULL;
 
-    if(isset($_POST['cadastra'])) {
+    if(isset($_POST['cadastra']))
+    {
 
-        $sqlFiscal = "INSERT INTO fiscais (nome_fiscal, 
-                                           contato_fiscal, 
-                                           publicado)
-                                  VALUES  ('$fiscal', 
-                                           '$contatoFiscal',
-                                           '1');";
+        $sqlFiscal = "INSERT INTO fiscais (nome_fiscal, contato_fiscal, publicado) VALUES  ('$fiscal', '$contatoFiscal', '1');";
 
-        $sqlSuplente = "INSERT INTO suplentes (nome_suplente, 
-                                           contato_suplente, 
-                                           publicado)
-                                  VALUES  ('$suplente', 
-                                           '$contatoSuplente',
-                                           '1');";
+        $sqlSuplente = "INSERT INTO suplentes (nome_suplente, contato_suplente, publicado) VALUES  ('$suplente', '$contatoSuplente', '1');";
 
-        if (mysqli_query($con, $sqlSuplente) && mysqli_query($con, $sqlFiscal)) {
+        if (mysqli_query($con, $sqlSuplente) && mysqli_query($con, $sqlFiscal))
+        {
 
             gravarLog($sqlFiscal);
             $idFiscal = recuperaUltimo("fiscais");
@@ -123,47 +116,51 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
                                                        '1',                                                       
                                                        '1')";
 
-            if (mysqli_query($con, $sqlContrato)) {
+            if (mysqli_query($con, $sqlContrato))
+            {
 
                 gravarLog($sqlContrato);
-                $idContrato = recuperaUltimo("contratos");
 
-                foreach ($equipamentos as $equipamento) {
 
-                    $sqlEquipamentos = "INSERT INTO contrato_equipamento  
-                                                    (contrato_id, 
-                                                     equipamento_id)
-                                       VALUES       ('$idContrato',
-                                                     '$equipamento')";
+                $sqlAtualizaLicitacao = "UPDATE licitacoes SET licitacao_status_id = '2' WHERE id = '$idLicitacao'";
 
-                    mysqli_query($con, $sqlEquipamentos);
-                    gravarLog($sqlEquipamentos);
+                if ($con->query($sqlAtualizaLicitacao)) {
+                    $idContrato = recuperaUltimo("contratos");
+                    foreach ($equipamentos as $equipamento) {
+                        $sqlEquipamentos = "INSERT INTO contrato_equipamento  
+                                                        (contrato_id, 
+                                                         equipamento_id)
+                                           VALUES       ('$idContrato',
+                                                         '$equipamento')";
+
+                        mysqli_query($con, $sqlEquipamentos);
+                        gravarLog($sqlEquipamentos);
+                    }
+                    $sqlInfo = "INSERT INTO informacoes_do_contrato (contrato_id, 
+                                                           inicio_vigencia, 
+                                                           fim_vigencia,
+                                                           DOU,
+                                                           valor_mensal,
+                                                           valor_anual)
+                                                 VALUES   ('$idContrato', 
+                                                           '$inicio_vigencia',
+                                                           '$fim_vigencia',
+                                                           '$DOU',
+                                                           '$valor_mensal',
+                                                           '$valor_anual')";
+                    if (mysqli_query($con, $sqlInfo)) {
+
+                        gravarLog($sqlInfo);
+                        $mensagem = mensagem("success", "Cadastrado com sucesso!");
+                    }
                 }
-
-                $sqlInfo = "INSERT INTO informacoes_do_contrato (contrato_id, 
-                                                       inicio_vigencia, 
-                                                       fim_vigencia,
-                                                       DOU,
-                                                       valor_mensal,
-                                                       valor_anual)
-                                             VALUES   ('$idContrato', 
-                                                       '$inicio_vigencia',
-                                                       '$fim_vigencia',
-                                                       '$DOU',
-                                                       '$valor_mensal',
-                                                       '$valor_anual')";
-
-                if (mysqli_query($con, $sqlInfo)) {
-
-                    gravarLog($sqlInfo);
-                    $mensagem = mensagem("success", "Cadastrado com sucesso!");
-                }
-            } else {
+            }
+            else
+            {
                 $mensagem = mensagem("danger", "Erro ao cadastrar! Tente novamente.");
             }
         }
     }
-
 
     if (isset($_POST['edita'])){
 
@@ -213,11 +210,14 @@ if (isset($_POST['cadastra']) || isset($_POST['edita'])) {
 
                     gravarLog($sqlSuplente);
 
-                    if (mysqli_query($con, $sqlContrato) || mysqli_query($con, $sqlFiscal) || mysqli_query($con, $sqlSuplente)) {
+                    if (mysqli_query($con, $sqlContrato) || mysqli_query($con, $sqlFiscal) || mysqli_query($con, $sqlSuplente))
+                    {
 
                         $mensagem = mensagem("success", "Atualizado com sucesso!");
 
-                    } else {
+                    }
+                    else
+                    {
                         $mensagem = mensagem("danger", "Erro ao atualizar! Tente novamente.");
                     }
     }
