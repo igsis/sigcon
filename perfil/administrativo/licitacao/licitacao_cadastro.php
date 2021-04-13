@@ -20,7 +20,7 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="num_processo">Número do processo administrativo *</label>
-                                    <input type="text" data-mask="0000.0000/0000000-0" id="num_processo" name="num_processo" class="form-control" minlength="20" placeholder="0000.0000/0000000-0" required>
+                                    <input type="text" data-mask="0000.0000/0000000-0" id="num_processo" name="num_processo" class="form-control" placeholder="0000.0000/0000000-0" required>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="link_processo">Link do processo administrativo *</label>
